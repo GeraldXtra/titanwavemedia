@@ -1,0 +1,69 @@
+// The About page.
+
+const about = {
+  meta: {
+    title: "About, Titan Wave Media",
+    description: "We are an AI company in Lagos, Nigeria. We build AI systems, tools and data for businesses here and around the world.",
+  },
+
+  hero: {
+    title: "About Titan Wave Media.",
+    text: "We are an AI company in Lagos, Nigeria. We build AI systems, tools and data for businesses here and around the world.",
+  },
+
+  // The "On this page" bar. Each id is the section it jumps to.
+  subnav: [
+    { id: "about-founder", label: "Founder" },
+    { id: "about-what", label: "What we do" },
+    { id: "about-details", label: "Company details" },
+    { id: "about-timeline", label: "Timeline" },
+  ],
+
+  founder: {
+    photo: "[Founder photo]",
+    name: "Eberechukwu Gerald",
+    role: "Founder",
+    story: "[Your story in two or three lines]",
+  },
+
+  what: {
+    title: "What we do",
+    cards: [
+      { icon: "dash", title: "AI setup", text: "We set up AI that works inside your business." },
+      { icon: "tool", title: "AI tools", text: "We build tools anyone can use." },
+      { icon: "shield", title: "Privacy", text: "We keep personal details out of AI." },
+      { icon: "data", title: "Synthetic data", text: "We make realistic data with no real people in it." },
+    ],
+  },
+
+  details: {
+    title: "Company details",
+    text: "Titan Wave Media LTD. Private company registered with the Corporate Affairs Commission, Nigeria.",
+    items: [
+      { label: "Registered name", value: "Titan Wave Media LTD" },
+      { label: "Registration number", value: "RC {rc}" },
+      { label: "Company type", value: "Private company limited by shares" },
+      { label: "Registered", value: "1 April 2026" },
+      { label: "Registered with", value: "Corporate Affairs Commission, Nigeria" },
+      { label: "Based in", value: "Lagos, Nigeria" },
+    ],
+  },
+
+  timeline: {
+    title: "Timeline",
+    // "since" counts the days from that date to today; {days} shows the count.
+    items: [
+      {
+        date: "1 April 2026",
+        datetime: "2026-04-01",
+        title: "Registered",
+        text: "Titan Wave Media LTD was certified by the Corporate Affairs Commission as a private company. That was {days} days ago.",
+        since: "2026-04-01",
+      },
+      { date: "[DATE]", title: "[First product launches]", text: "[One line about it]" },
+      { date: "[DATE]", title: "[Next milestone]", text: "[One line about it]" },
+    ],
+  },
+};
+
+export default about;
