@@ -19,6 +19,9 @@ const contact = {
     locationValue: "{location}",
     time: "Time in Lagos",
     timeUnit: " WAT",
+    // A line under the list for people who need help rather than a new project.
+    help: "Need help, not a new project?",
+    helpLink: { label: "Go to Support", href: "/support" },
   },
 
   form: {

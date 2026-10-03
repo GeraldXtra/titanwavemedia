@@ -240,7 +240,7 @@ const home = {
 
   // The product cards in this block come from content/products.js.
   tools: {
-    title: "AI tools you can buy and use on your own",
+    title: "AI tools you can use on your own, coming soon",
     link: { label: "See all products", href: "/products" },
     notify: {
       title: "Get told when our first product launches",
@@ -285,7 +285,7 @@ const home = {
 
   // The tiles and posts in these blocks come from content/work.js and content/updates.js.
   work: {
-    title: "See what we have built for clients",
+    title: "See what we have built",
     link: { label: "See all work", href: "/work" },
   },
   updates: {

@@ -19,6 +19,7 @@ const notFound = {
     { label: "AI Setup", href: "/ai-setup" },
     { label: "Products", href: "/products" },
     { label: "Contact", href: "/contact" },
+    { label: "Support", href: "/support" },
   ],
 };
 

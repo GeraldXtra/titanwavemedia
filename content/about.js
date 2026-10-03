@@ -34,12 +34,10 @@ const about = {
       { title: "I build it", text: "I build it, connect it to the tools you already use, and test it on your own examples." },
       { title: "I keep it running", text: "I host it, update it and fix it, so it keeps working while you run your business." },
     ],
-    // Working hours in Lagos time, from Sunday to Saturday: [opening hour, closing hour] on a
-    // 24 hour clock, or null for a closed day.
-    hours: [null, [9, 18], [9, 18], [9, 18], [9, 18], [9, 18], [10, 14]],
-    // The live line under the parts. {time} is the time in Lagos, and it updates every minute.
-    online: "It is {time} in Lagos. I'm online, and I usually reply the same day.",
-    away: "It is {time} in Lagos. I'm away right now, and I'll reply from {next}.",
+    // The live line under the parts follows the working hours in content/site.js. {time} is the
+    // time in Lagos, and it updates every minute.
+    open: "It is {time} in Lagos. I'm online, and I usually reply the same day.",
+    closed: "It is {time} in Lagos. I'm away right now, and I'll reply from {next}.",
     // {next} in the line above is one of these three.
     nextToday: "{time} today",
     nextTomorrow: "{time} tomorrow",

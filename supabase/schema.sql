@@ -1,7 +1,6 @@
--- Titan Wave Media: the tables the website writes to.
--- Run this once in the Supabase SQL editor (see supabase/README.md). Running it again is safe.
+-- Titan Wave Media: the tables the website writes to. Safe to run more than once.
 
--- Messages from the contact form, and contact details the site assistant collected.
+-- Messages from the contact form.
 create table if not exists public.messages (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -15,7 +14,7 @@ create table if not exists public.messages (
   source text not null default 'contact'
 );
 
--- People who asked to hear when a product launches or when there is news. One row per email.
+-- People who asked to hear about launches and news. One row per email.
 create table if not exists public.notify_list (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -23,8 +22,7 @@ create table if not exists public.notify_list (
   source text
 );
 
--- Conversations with the site assistant. Names, phone numbers, account numbers and emails are
--- replaced with [NAME], [PHONE], [ACCOUNT] and [EMAIL] before a row is saved.
+-- Conversations with the site assistant, with personal details taken out.
 create table if not exists public.chat_logs (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -37,8 +35,7 @@ create index if not exists messages_created_at_idx on public.messages (created_a
 create index if not exists notify_list_created_at_idx on public.notify_list (created_at desc);
 create index if not exists chat_logs_session_idx on public.chat_logs (session_id, created_at);
 
--- Only the website's server, which uses the service key, can read or write these tables.
--- Row level security with no policies shuts out the public keys completely.
+-- Only the website's server can read or write these tables.
 alter table public.messages enable row level security;
 alter table public.notify_list enable row level security;
 alter table public.chat_logs enable row level security;

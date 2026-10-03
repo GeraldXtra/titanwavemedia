@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Icon from "./Icon";
 import LagosClock from "./LagosClock";
@@ -176,6 +177,12 @@ export default function ContactBlock({ copy, site, sectors }) {
             </div>
           </li>
         </ul>
+        <p className="contact__help">
+          {copy.side.help}{" "}
+          <Link className="link" href={copy.side.helpLink.href}>
+            {copy.side.helpLink.label}
+          </Link>
+        </p>
       </div>
       <form className="box form" id="contact-form" noValidate onSubmit={onSubmit}>
         <div className="hp" aria-hidden="true">

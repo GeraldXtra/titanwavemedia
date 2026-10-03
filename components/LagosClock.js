@@ -39,9 +39,9 @@ function getSnapshot() {
   return current;
 }
 
-// The server does not know the visitor's moment, so it renders the design's 00:00.
+// The server does not know the visitor's moment, so the time appears once the page runs.
 function getServerSnapshot() {
-  return "00:00";
+  return "";
 }
 
 export default function LagosClock({ as: Tag = "b" }) {

@@ -81,7 +81,7 @@ const assistant = {
     },
     {
       words: ["work", "portfolio", "clients", "projects", "examples", "case study", "case studies"],
-      answer: "Our Work page shows sites, apps and AI systems we have built for clients. You can filter it by AI setup, products and data.",
+      answer: "Our Work page shows sites, apps and AI systems we have built, for clients and as our own projects. You can filter it by AI setup, products and data.",
       link: { label: "See our work", href: "/work" },
     },
     {

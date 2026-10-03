@@ -9,6 +9,8 @@
 // Digits only, with the country code. The NEXT_PUBLIC_WHATSAPP_NUMBER setting overrides it.
 const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "2347064094004";
 const whatsappUrl = `https://wa.me/${whatsapp}`;
+// The same number the way people read it, like +234 706 409 4004.
+const phone = /^234\d{10}$/.test(whatsapp) ? `+234 ${whatsapp.slice(3, 6)} ${whatsapp.slice(6, 9)} ${whatsapp.slice(9)}` : `+${whatsapp}`;
 
 const site = {
   name: "Titan Wave Media",
@@ -18,6 +20,12 @@ const site = {
   location: "Lagos, Nigeria",
   whatsapp,
   whatsappUrl,
+  phone,
+
+  // Working hours in Lagos time, from Sunday to Saturday: [opening hour, closing hour] on a
+  // 24 hour clock, or null for a closed day. The live lines on About and Support follow them,
+  // and the hours written out on Support should match.
+  hours: [null, [9, 18], [9, 18], [9, 18], [9, 18], [9, 18], [10, 14]],
 
   prices: {
     setup: "[SETUP PRICE]",
@@ -68,6 +76,8 @@ const site = {
       { title: "Terms of Service", href: "/terms", words: "terms" },
       { title: "Privacy Policy", href: "/privacy-policy", words: "policy data protection rights" },
       { title: "Refund Policy", href: "/refunds", words: "refund money back cancel" },
+      { title: "Support", href: "/support", words: "help support hours reply urgent refunds your data requests whatsapp email questions" },
+      { title: "Site guide", href: "/guide", words: "guide tour how this website works every page what you can do" },
     ],
   },
 
@@ -94,7 +104,13 @@ const site = {
       },
       {
         title: "Help",
-        links: [{ label: "Contact", href: "/contact" }, { label: "WhatsApp", whatsapp: true }, { email: true }],
+        links: [
+          { label: "Support", href: "/support" },
+          { label: "Site guide", href: "/guide" },
+          { label: "Contact", href: "/contact" },
+          { label: "WhatsApp", whatsapp: true },
+          { email: true },
+        ],
       },
       {
         title: "Legal",

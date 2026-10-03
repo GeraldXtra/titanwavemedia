@@ -1,40 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Icon from "./Icon";
+import WorkingLine from "./WorkingLine";
 import site from "@/content/site";
-import { clock12, workingStatus } from "@/lib/lagos";
-import { emailHref, format } from "@/lib/text";
+import { emailHref } from "@/lib/text";
 
 // The founder on the About page: the photo (or the initials until there is one), the story,
 // three parts that open one at a time, a line that follows the time in Lagos and the working
 // hours, and two ways to get in touch.
 export default function Founder({ copy }) {
   const [openPart, setOpenPart] = useState(0);
-  const [now, setNow] = useState(null);
-
-  // The server does not know the visitor's moment, so the line is worked out in the browser,
-  // then again at the start of every minute.
-  useEffect(() => {
-    let timer;
-    function tick() {
-      setNow(Date.now());
-      timer = setTimeout(tick, 60000 - (Date.now() % 60000) + 50);
-    }
-    tick();
-    return () => clearTimeout(timer);
-  }, []);
-
-  function liveLine(ms) {
-    const s = workingStatus(copy.hours, new Date(ms));
-    if (s.open) return format(copy.online, { time: s.time });
-    const at = clock12(s.hour);
-    let next = format(copy.nextLater, { time: at, day: copy.days[s.day] });
-    if (s.inDays === 0) next = format(copy.nextToday, { time: at });
-    if (s.inDays === 1) next = format(copy.nextTomorrow, { time: at });
-    return format(copy.away, { time: s.time, next });
-  }
 
   return (
     <div className="founder">
@@ -69,9 +46,7 @@ export default function Founder({ copy }) {
             </div>
           ))}
         </div>
-        <p className="founder__live" id="founder-live">
-          {now === null ? " " : liveLine(now)}
-        </p>
+        <WorkingLine copy={copy} className="founder__live" id="founder-live" />
         <div className="btns">
           <a className="btn btn--solid" href={`${site.whatsappUrl}?text=${encodeURIComponent(copy.whatsapp.start)}`} target="_blank" rel="noopener">
             <Icon name="wa" className={null} />

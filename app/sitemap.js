@@ -13,6 +13,8 @@ const PAGES = [
   ["/about", 0.7],
   ["/contact", 0.8],
   ["/updates", 0.6],
+  ["/support", 0.6],
+  ["/guide", 0.5],
   ["/terms", 0.3],
   ["/privacy-policy", 0.3],
   ["/refunds", 0.3],
