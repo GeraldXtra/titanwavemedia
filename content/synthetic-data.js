@@ -9,11 +9,11 @@ const syntheticData = {
   hero: {
     title: "Realistic data. No real people.",
     text: "We make computer generated datasets that look and behave like real data, so you can train AI and test software without exposing anyone's details.",
-    buttons: [{ label: "Talk to us about data", href: "/contact?need=data", style: "dark" }],
+    buttons: [{ label: "Talk to us about data", href: "/contact?need=data", style: "line" }],
   },
 
   who: {
-    title: "Who it is for",
+    title: "Who uses synthetic data, and what for",
     cards: [
       { icon: "layers", title: "AI teams", text: "Train models when real data is scarce or private." },
       { icon: "code", title: "Developers", text: "Test apps with data that looks real." },
@@ -52,14 +52,17 @@ const syntheticData = {
     copy: "Copy as CSV",
     caption: "Sample only. Every row is made up.",
     noFields: "Tick at least one field.",
-    made: "{rows} rows, {fields} fields. All made up.",
+    made: "{rows} rows, {fields}. All made up.",
+    // {fields} in the line above is one of these two.
+    oneField: "1 field",
+    manyFields: "{n} fields",
     copied: "Copied {rows} rows as CSV. Paste it into a spreadsheet.",
     selectToCopy: "Select the text below and copy it.",
     csvLabel: "CSV to copy",
   },
 
   how: {
-    title: "How it works",
+    title: "How you get your dataset in three steps",
     steps: [
       { title: "Tell us the data you need", text: "The fields, the size and what it will be used for." },
       { title: "Check a sample", text: "You review a small set before we make the rest." },
@@ -69,7 +72,7 @@ const syntheticData = {
 
   cta: {
     title: "Tell us what data you need.",
-    buttons: [{ label: "Talk to us", href: "/contact?need=data", style: "dark" }],
+    buttons: [{ label: "Talk to us", href: "/contact?need=data", style: "line" }],
   },
 };
 

@@ -207,7 +207,7 @@ export default function Bento({ copy }) {
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
             />
-            <button className="btn btn--solid btn--sm" type="submit">
+            <button className="btn btn--line btn--sm" type="submit">
               {c.send}
             </button>
           </form>
@@ -230,7 +230,7 @@ export default function Bento({ copy }) {
           </label>
           <textarea className="ta" id="demo-text" maxLength={800} value={message} onChange={(e) => setMessage(e.target.value)} />
           <div className="demo__row">
-            <button className="btn btn--dark btn--sm" type="button" id="demo-run" onClick={() => runPrivacy()}>
+            <button className="btn btn--line btn--sm" type="button" id="demo-run" onClick={() => runPrivacy()}>
               {p.button}
             </button>
             <span className="note" id="demo-count">
@@ -266,7 +266,7 @@ export default function Bento({ copy }) {
                 </option>
               ))}
             </select>
-            <button className="btn btn--dark btn--sm" type="button" id="demo-make" onClick={() => makeRows()}>
+            <button className="btn btn--line btn--sm" type="button" id="demo-make" onClick={() => makeRows()}>
               {d.button}
             </button>
           </div>
@@ -312,7 +312,7 @@ export default function Bento({ copy }) {
                 <tr key={i}>
                   <td className={ph(row.name)}>{row.name}</td>
                   <td className="num">
-                    <span className="tag tag--red">{row.tag}</span>
+                    <span className="tag">{row.tag}</span>
                   </td>
                 </tr>
               ))}
@@ -322,7 +322,7 @@ export default function Bento({ copy }) {
         <span className="tile__foot">{pr.foot}</span>
       </Link>
 
-      <Link className="tile tile--red" href={lagos.href}>
+      <Link className="tile" href={lagos.href}>
         <Icon name="pin" />
         <h3>{lagos.title}</h3>
         <p>{lagos.text}</p>

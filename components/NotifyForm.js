@@ -59,7 +59,7 @@ export default function NotifyForm({ inputId, thanks = copy.thanks, source }) {
             required
           />
         </div>
-        <button className="btn btn--dark" type="submit" aria-disabled={sending || undefined}>
+        <button className="btn btn--line" type="submit" aria-disabled={sending || undefined}>
           {copy.button}
         </button>
       </div>

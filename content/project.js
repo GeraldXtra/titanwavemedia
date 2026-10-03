@@ -14,8 +14,8 @@ const project = {
   },
 
   cta: {
-    title: "Want to be next?",
-    buttons: [{ label: "Start a project", href: "/contact?need=ai-setup", style: "dark" }],
+    title: "Tell us what you want built.",
+    buttons: [{ label: "Start a project", href: "/contact?need=ai-setup", style: "line" }],
   },
 
   pages: {
@@ -38,7 +38,7 @@ const project = {
         { title: "The problem", text: "[What the client needed, and why it mattered]" },
         { title: "What we built", text: "[What we built and how it works, in plain words]" },
         { title: "How we handled the data", text: "[How personal details were kept safe]" },
-        { title: "What changed", text: "[The result, in the client's words or with real numbers]" },
+        { title: "What changed", text: "[The result, with real numbers you can prove]" },
       ],
       secondScreenshot: "[Second screenshot]",
       next: { name: "[Next project name]", href: "/work/example" },

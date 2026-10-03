@@ -12,6 +12,7 @@ export default function ProductsPage() {
     <main className="page" id="main-products">
       <Hero title={products.hero.title} text={products.hero.text} />
       <Section tone="white">
+        <h2 className="sr-only">{products.listTitle}</h2>
         <Filterable
           name="pcard"
           label={f.label}

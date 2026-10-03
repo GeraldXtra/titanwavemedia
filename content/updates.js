@@ -8,9 +8,12 @@ const updates = {
   },
 
   hero: {
-    title: "Updates.",
+    title: "Read what we are building and launching.",
     text: "Product launches, what we are building, and what we learn along the way.",
   },
+
+  // A heading for screen readers over the list below (it is not shown on the page).
+  listTitle: "All updates",
 
   filters: {
     label: "Filter updates",

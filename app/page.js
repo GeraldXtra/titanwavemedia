@@ -11,7 +11,6 @@ import Picker from "@/components/home/Picker";
 import StepsRow from "@/components/home/StepsRow";
 import { BlkHead, Cta, Faq, Gap, Notify, PostList, ProductRow, Section, Strip, WorkTiles } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { RV } from "@/lib/text";
 
 export const metadata = pageMeta({
   title: home.meta.title,
@@ -50,7 +49,7 @@ export default function HomePage() {
       </Section>
 
       <Section tone="black">
-        <div className={`split ${RV}`}>
+        <div className="split">
           <div className="box">
             <h2>{home.dataBlock.title}</h2>
             <p>{home.dataBlock.text}</p>
@@ -68,7 +67,7 @@ export default function HomePage() {
 
       <Section tone="grey">
         <BlkHead title={home.privacy.title} link={home.privacy.link} />
-        <div className={`promises ${RV}`} style={{ "--n": 3 }}>
+        <div className="promises" style={{ "--n": 3 }}>
           {home.privacy.promises.map((p, i) => (
             <details className="promise" key={i}>
               <summary>

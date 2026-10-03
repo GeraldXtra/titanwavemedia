@@ -8,9 +8,12 @@ const work = {
   },
 
   hero: {
-    title: "Our work.",
+    title: "See what we have built for clients.",
     text: "Sites, apps and AI systems we have built for clients.",
   },
+
+  // A heading for screen readers over the list below (it is not shown on the page).
+  listTitle: "All projects",
 
   filters: {
     label: "Filter projects",
@@ -41,8 +44,8 @@ const work = {
   ],
 
   cta: {
-    title: "Want to be next?",
-    buttons: [{ label: "Start a project", href: "/contact?need=ai-setup", style: "dark" }],
+    title: "Tell us what you want built.",
+    buttons: [{ label: "Start a project", href: "/contact?need=ai-setup", style: "line" }],
   },
 };
 

@@ -255,7 +255,7 @@ export default function ChatWidget() {
             onChange={(e) => setInput(e.target.value)}
             ref={inputRef}
           />
-          <button className="btn btn--solid btn--sm" type="submit">
+          <button className="btn btn--line btn--sm" type="submit">
             {assistant.send}
           </button>
         </form>

@@ -38,7 +38,7 @@ export default function Filterable({ name, label, options, searchLabel, searchPl
         {searchLabel && (
           <label className="search">
             <span className="sr-only">{searchLabel}</span>
-            <Icon name="code" className={null} />
+            <Icon name="search" className={null} />
             <input type="search" placeholder={searchPlaceholder} data-search="" value={query} onChange={(e) => setQuery(e.target.value)} />
           </label>
         )}

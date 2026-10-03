@@ -2,39 +2,64 @@
 
 import { useEffect, useRef, useState } from "react";
 import { datasetRow } from "@/lib/fakeData";
-import { format, RV1 } from "@/lib/text";
+import { format } from "@/lib/text";
+import { loadChoice, saveChoice } from "@/lib/choices";
 
 // "Build a sample dataset": pick fields and rows, make made up data, copy it as CSV.
 export default function DatasetBuilder({ copy, initial }) {
   const [fields, setFields] = useState(() => new Set(copy.fields.filter((f) => f.checked).map((f) => f.value)));
   const [count, setCount] = useState(() => (copy.rows.find((r) => r.checked) || copy.rows[0]).value);
   const [data, setData] = useState({ gen: 0, cols: initial.cols, rows: initial.rows, fresh: false });
-  const [msg, setMsg] = useState(format(copy.made, { rows: initial.rows.length, fields: initial.cols.length }));
+  // "5 rows, 1 field" or "5 rows, 2 fields".
+  const made = (rows, n) => format(copy.made, { rows, fields: n === 1 ? copy.oneField : format(copy.manyFields, { n }) });
+  const [msg, setMsg] = useState(made(initial.rows.length, initial.cols.length));
   const [csvText, setCsvText] = useState(null);
   const csvRef = useRef(null);
   const timer = useRef(null);
   const label = (key) => copy.fields.find((f) => f.value === key).label;
 
-  function make() {
-    const cols = copy.fields.filter((f) => fields.has(f.value)).map((f) => f.value);
+  function make(picked = fields, howMany = count) {
+    const cols = copy.fields.filter((f) => picked.has(f.value)).map((f) => f.value);
     if (!cols.length) {
       setMsg(copy.noFields);
       return null;
     }
-    const n = Number(count) || 5;
+    const n = Number(howMany) || 5;
     const rows = Array.from({ length: n }, () => datasetRow(cols));
     setData((d) => ({ gen: d.gen + 1, cols, rows, fresh: true }));
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setData((d) => ({ ...d, fresh: false })), 700);
-    setMsg(format(copy.made, { rows: n, fields: cols.length }));
+    setMsg(made(n, cols.length));
     return { cols, rows };
   }
 
-  // Fresh rows on every visit, like the design.
+  // Fresh rows on every visit, like the design. With "Remember my choices" on (Cookie
+  // preferences), they use the fields and size picked last time.
+  const started = useRef(false);
   useEffect(() => {
-    make();
+    const saved = loadChoice("dataset");
+    let picked = fields;
+    let howMany = count;
+    if (saved) {
+      if (Array.isArray(saved.fields)) {
+        picked = new Set(saved.fields.filter((v) => copy.fields.some((f) => f.value === v)));
+        setFields(picked);
+      }
+      if (copy.rows.some((r) => r.value === saved.count)) {
+        howMany = saved.count;
+        setCount(howMany);
+      }
+    }
+    make(picked, howMany);
     return () => clearTimeout(timer.current);
   }, []);
+  useEffect(() => {
+    if (!started.current) {
+      started.current = true;
+      return;
+    }
+    saveChoice("dataset", { fields: [...fields], count });
+  }, [fields, count]);
 
   function copyCsv() {
     const current = data.rows.length ? data : make() || data;
@@ -57,7 +82,7 @@ export default function DatasetBuilder({ copy, initial }) {
 
   return (
     <div className="cfg">
-      <form className={`box cfg__form ${RV1}`} id="ds-form" noValidate onSubmit={(e) => e.preventDefault()}>
+      <form className="box cfg__form" id="ds-form" noValidate onSubmit={(e) => e.preventDefault()}>
         <fieldset>
           <legend>{copy.fieldsLegend}</legend>
           {copy.fields.map((f) => (
@@ -92,7 +117,7 @@ export default function DatasetBuilder({ copy, initial }) {
           ))}
         </fieldset>
         <div className="btns">
-          <button className="btn btn--dark" type="button" id="ds-make" onClick={make}>
+          <button className="btn btn--line" type="button" id="ds-make" onClick={() => make()}>
             {copy.make}
           </button>
           <button className="btn btn--line" type="button" id="ds-copy" onClick={copyCsv}>
@@ -108,11 +133,11 @@ export default function DatasetBuilder({ copy, initial }) {
             readOnly
             value={csvText}
             aria-label={copy.csvLabel}
-            style={{ width: "100%", minHeight: 120, marginTop: 10, border: "2px solid #0B0B0B", padding: 10, fontSize: 13 }}
+            style={{ width: "100%", minHeight: 120, marginTop: 10, border: "2px solid #0B0B0B", padding: 10, fontSize: 14 }}
           />
         )}
       </form>
-      <div className={`box ${RV1}`}>
+      <div className="box">
         <div className="table-wrap">
           <table className="dt" id="ds-table">
             <caption>{copy.caption}</caption>

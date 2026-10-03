@@ -11,6 +11,7 @@ export default function UpdatesPage() {
     <main className="page" id="main-updates">
       <Hero title={updates.hero.title} text={updates.hero.text} />
       <Section tone="white">
+        <h2 className="sr-only">{updates.listTitle}</h2>
         <Filterable name="post" label={updates.filters.label} options={updates.filters.options}>
           <PostList items={updates.items} />
         </Filterable>

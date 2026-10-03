@@ -1,20 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Icon from "./Icon";
 import site from "@/content/site";
 
-// The red progress line along the top and the back to top button.
+// The back to top button, shown once the page has scrolled 600px.
 export default function ScrollUi() {
   const pathname = usePathname();
-  const barRef = useRef(null);
   const [hidden, setHidden] = useState(true);
 
   useEffect(() => {
     function onScroll() {
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      barRef.current.style.transform = "scaleX(" + (h > 0 ? Math.min(1, window.scrollY / h) : 0).toFixed(4) + ")";
       setHidden(window.scrollY < 600);
     }
     onScroll();
@@ -33,11 +30,8 @@ export default function ScrollUi() {
   }
 
   return (
-    <>
-      <div className="progress" id="progress" aria-hidden="true" ref={barRef} />
-      <button className="totop" id="totop" type="button" aria-label={site.backToTop} hidden={hidden} onClick={toTop}>
-        <Icon name="close" className={null} />
-      </button>
-    </>
+    <button className="totop" id="totop" type="button" aria-label={site.backToTop} hidden={hidden} onClick={toTop}>
+      <Icon name="close" className={null} />
+    </button>
   );
 }

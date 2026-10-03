@@ -1,4 +1,4 @@
-import { Bricolage_Grotesque } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import SvgSprite from "@/components/SvgSprite";
 import SkipLink from "@/components/SkipLink";
@@ -11,13 +11,13 @@ import site from "@/content/site";
 import home from "@/content/home";
 import { siteUrl } from "@/lib/seo";
 
-// Bricolage Grotesque with its optical size axis, as the design loads it. Only the basic Latin
-// file is preloaded; the extended Latin one (with the naira sign, ₦) loads when a page uses it.
-const bricolage = Bricolage_Grotesque({
+// Open Sans in five weights. Only the basic Latin file is preloaded; the extended Latin one
+// (with the naira sign, ₦) loads when a page uses it.
+const openSans = Open_Sans({
   subsets: ["latin"],
-  axes: ["opsz"],
+  weight: ["300", "400", "600", "700", "800"],
   display: "swap",
-  variable: "--font-bricolage",
+  variable: "--font-open-sans",
 });
 
 export const metadata = {
@@ -36,19 +36,13 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0B0B0B",
+  themeColor: "#FFFFFF",
 };
-
-// Runs before the first paint: turns on the motion styles, and turns them off again if the
-// site's scripts have not started after four seconds, so nothing stays hidden.
-const motionFlag =
-  "(function(){var d=document.documentElement;d.classList.add('js');setTimeout(function(){if(!window.__siteReady)d.classList.remove('js')},4000)})()";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={bricolage.variable} suppressHydrationWarning>
+    <html lang="en" className={openSans.variable} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: motionFlag }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(site.organization).replace(/</g, "\\u003c") }}

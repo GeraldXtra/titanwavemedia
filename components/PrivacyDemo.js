@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { RV } from "@/lib/text";
 
 // "See it work": what comes out of the message follows the ticks.
 export default function PrivacyDemo({ copy }) {
@@ -18,7 +17,7 @@ export default function PrivacyDemo({ copy }) {
   }
 
   return (
-    <div className={`split ${RV}`}>
+    <div className="split">
       <form className="box" id="priv-form" noValidate onSubmit={(e) => e.preventDefault()}>
         <h2>{copy.title}</h2>
         <p>{copy.text}</p>

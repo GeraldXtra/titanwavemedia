@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { RV } from "@/lib/text";
 
 // "How we work with you": four steps in a row. Each one opens to say what happens, and the red
 // line above them draws itself as the row scrolls into view (see SiteEffects).
@@ -10,7 +9,7 @@ export default function StepsRow({ copy }) {
   const toggle = (i) => setOpen((list) => (list.includes(i) ? list.filter((x) => x !== i) : [...list, i]));
 
   return (
-    <ol className={`steps steps--row ${RV}`}>
+    <ol className="steps steps--row">
       {copy.steps.map((step, i) => {
         const on = open.includes(i);
         return (

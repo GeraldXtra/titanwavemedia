@@ -1,7 +1,6 @@
 import Hero from "./Hero";
 import Rich from "./Rich";
 import site from "@/content/site";
-import { RV } from "@/lib/text";
 
 // Terms, Privacy Policy and Refund Policy: a contents list that follows you, and the text.
 export default function LegalPage({ id, content }) {
@@ -14,7 +13,7 @@ export default function LegalPage({ id, content }) {
         </p>
       </Hero>
       <section className="mod">
-        <div className={`wrap legal ${RV}`}>
+        <div className="wrap legal">
           <nav aria-label={content.tocLabel || site.onThisPage}>
             <ol className="toc">
               {content.sections.map((s, i) => (

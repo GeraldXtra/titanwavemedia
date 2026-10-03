@@ -11,8 +11,8 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
   const [extraBold, bold, mark] = await Promise.all([
-    font("BricolageGrotesque-ExtraBold.ttf"),
-    font("BricolageGrotesque-Bold.ttf"),
+    font("OpenSans-ExtraBold.ttf"),
+    font("OpenSans-Bold.ttf"),
     brandUri("wave-mark-on-dark.svg"),
   ]);
   return new ImageResponse(
@@ -32,16 +32,16 @@ export default async function OpenGraphImage() {
         <img src={waveSvg(size.width, size.height)} width={size.width} height={size.height} style={{ position: "absolute", left: 0, top: 0 }} />
         <div style={{ display: "flex", alignItems: "center" }}>
           <img src={mark} width={64} height={45} />
-          <div style={{ marginLeft: 18, fontFamily: "Bricolage Bold", fontSize: 38, color: "#FFFFFF", letterSpacing: "-0.02em" }}>{site.name}</div>
+          <div style={{ marginLeft: 18, fontFamily: "Open Sans Bold", fontSize: 38, color: "#FFFFFF", letterSpacing: "-0.01em" }}>{site.name}</div>
         </div>
         <div
           style={{
             display: "flex",
             maxWidth: 940,
-            fontFamily: "Bricolage ExtraBold",
+            fontFamily: "Open Sans ExtraBold",
             fontSize: 128,
-            lineHeight: 0.9,
-            letterSpacing: "-0.05em",
+            lineHeight: 1.05,
+            letterSpacing: "-0.01em",
             color: "#FFFFFF",
           }}
         >
@@ -52,8 +52,8 @@ export default async function OpenGraphImage() {
     {
       ...size,
       fonts: [
-        { name: "Bricolage ExtraBold", data: extraBold, weight: 800, style: "normal" },
-        { name: "Bricolage Bold", data: bold, weight: 700, style: "normal" },
+        { name: "Open Sans ExtraBold", data: extraBold, weight: 800, style: "normal" },
+        { name: "Open Sans Bold", data: bold, weight: 700, style: "normal" },
       ],
     }
   );

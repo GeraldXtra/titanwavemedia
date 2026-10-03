@@ -8,7 +8,7 @@ import WorkTile from "./WorkTile";
 import site from "@/content/site";
 import products from "@/content/products";
 import work from "@/content/work";
-import { cx, format, isPh, ph, RV, RV1 } from "@/lib/text";
+import { format, isPh, ph } from "@/lib/text";
 
 // A full width block. `tone` is white, grey or black.
 export function Section({ tone = "white", id, children }) {
@@ -22,7 +22,7 @@ export function Section({ tone = "white", id, children }) {
 // The big heading at the top of a block, with a line of text or a link beside it.
 export function BlkHead({ title, text, link }) {
   return (
-    <div className={cx("blk__head", RV)}>
+    <div className="blk__head">
       <h2>{title}</h2>
       <div>
         {text && <p>{text}</p>}
@@ -46,7 +46,7 @@ export function Copy({ text, linkClass }) {
 
 export function Cards({ n, cards }) {
   return (
-    <div className={cx("cards", RV)} style={{ "--n": n }}>
+    <div className="cards" style={{ "--n": n }}>
       {cards.map((card, i) => (
         <div className="card" key={i}>
           <Icon name={card.icon} />
@@ -61,7 +61,7 @@ export function Cards({ n, cards }) {
 // A numbered list of steps, as on the AI Setup page.
 export function StepList({ steps }) {
   return (
-    <ol className={cx("steps steps--list", RV)}>
+    <ol className="steps steps--list">
       {steps.map((step, i) => (
         <li key={i}>
           <b aria-hidden="true">{i + 1}</b>
@@ -80,7 +80,7 @@ export function StepList({ steps }) {
 
 export function Faq({ items }) {
   return (
-    <div className={cx("faq", RV)}>
+    <div className="faq">
       {items.map((item, i) => (
         <details key={i}>
           <summary>{item.q}</summary>
@@ -94,9 +94,9 @@ export function Faq({ items }) {
 }
 
 // A thin bar with an icon and a line of text, and a link or button on the right.
-export function Strip({ icon, text, link, button, reveal = true, style, children }) {
+export function Strip({ icon, text, link, button, style, children }) {
   return (
-    <div className={cx("strip", reveal && RV1)} style={style}>
+    <div className="strip" style={style}>
       <p>
         <Icon name={icon} />
         {text}
@@ -106,7 +106,7 @@ export function Strip({ icon, text, link, button, reveal = true, style, children
           {link.label}
         </Link>
       )}
-      {button && <Btn href={button.href} label={button.label} style="dark" size="sm" />}
+      {button && <Btn href={button.href} label={button.label} style="line" size="sm" />}
       {children}
     </div>
   );
@@ -123,7 +123,7 @@ export function Cta({ cta }) {
   return (
     <section className="blk blk--grey">
       <div className="wrap">
-        <div className={cx("cta", RV1)}>
+        <div className="cta">
           <div>
             <h2>{c.title}</h2>
             <p className="note" style={{ marginTop: 14 }}>
@@ -144,7 +144,7 @@ export function Cta({ cta }) {
 // The "Get told when it launches" box with its email form.
 export function Notify({ title, text, thanks, inputId, source }) {
   return (
-    <div className={cx("notify", RV1)}>
+    <div className="notify">
       <div>
         <h3>{title}</h3>
         {text && <p>{text}</p>}
@@ -159,7 +159,7 @@ export function ProductCard({ item }) {
     <div className="pcard" data-cat={item.cat}>
       <div className="pcard__top">
         <Icon name={item.icon || "tool"} />
-        <span className="tag tag--red">{item.tag}</span>
+        <span className="tag">{item.tag}</span>
       </div>
       <h3 className={ph(item.name)}>{item.name}</h3>
       <p className={ph(item.text)}>{item.text}</p>
@@ -175,7 +175,7 @@ export function ProductCard({ item }) {
 // The sideways row of product cards.
 export function ProductRow({ items, list }) {
   return (
-    <div className={cx("row", RV)} data-list={list ? "" : undefined}>
+    <div className="row" data-list={list ? "" : undefined}>
       {items.map((item, i) => (
         <ProductCard key={i} item={item} />
       ))}
@@ -185,7 +185,7 @@ export function ProductRow({ items, list }) {
 
 export function WorkTiles({ items, list }) {
   return (
-    <div className={cx("wtiles", RV)} data-list={list ? "" : undefined}>
+    <div className="wtiles" data-list={list ? "" : undefined}>
       {items.map((item, i) => (
         <WorkTile key={i} item={item} flip={work.flip} />
       ))}
@@ -195,7 +195,7 @@ export function WorkTiles({ items, list }) {
 
 export function PostList({ items }) {
   return (
-    <ul className={cx("posts", RV)} data-list="">
+    <ul className="posts" data-list="">
       {items.map((post, i) => (
         <li className="post-li" data-cat={post.cat} key={i}>
           <Link className="post" href={`/updates/${post.slug}`}>

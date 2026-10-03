@@ -12,6 +12,7 @@ export default function WorkPage() {
     <main className="page" id="main-work">
       <Hero title={work.hero.title} text={work.hero.text} />
       <Section tone="white">
+        <h2 className="sr-only">{work.listTitle}</h2>
         <Filterable name="wtile" label={f.label} options={f.options} searchLabel={f.searchLabel} searchPlaceholder={f.searchPlaceholder}>
           <WorkTiles items={work.items} list />
         </Filterable>

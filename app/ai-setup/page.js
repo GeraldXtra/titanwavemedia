@@ -3,7 +3,7 @@ import Hero from "@/components/Hero";
 import SetupBuilder from "@/components/SetupBuilder";
 import { BlkHead, Cards, Cta, ExampleChat, Gap, Section, StepList, Strip, Subnav } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { fill, ph, RV } from "@/lib/text";
+import { fill, ph } from "@/lib/text";
 
 export const metadata = pageMeta({ ...aiSetup.meta, path: "/ai-setup" });
 
@@ -25,7 +25,7 @@ export default function AiSetupPage() {
       </Section>
 
       <Section tone="grey">
-        <div className={`sticky ${RV}`} id="setup-how">
+        <div className="sticky" id="setup-how">
           <div className="sticky__vis">
             <div className="box">
               <h2>{how.example.title}</h2>
@@ -47,7 +47,7 @@ export default function AiSetupPage() {
 
       <Section tone="white" id="setup-price">
         <BlkHead title={price.title} />
-        <div className={`prices ${RV}`}>
+        <div className="prices">
           {price.items.map((p, i) => {
             const value = fill(p.price);
             return (

@@ -20,7 +20,7 @@ You do not need any keys to run it. Without them, the assistant answers from its
 
 Every word on the site is in the `content` folder, one file per page:
 
-* `site.js`: the company details used everywhere (email, WhatsApp number, RC number, prices), the header, the menu, the footer and the closing "Tell us what you need" block
+* `site.js`: the company details used everywhere (email, WhatsApp number, RC number, prices), the main links in the header, the Menu panel on phones, the footer, the Cookie preferences dialog and the closing "Tell us what you need" block
 * `home.js`: the home page
 * `ai-setup.js`: AI Setup
 * `products.js`: the list of products
@@ -29,7 +29,7 @@ Every word on the site is in the `content` folder, one file per page:
 * `privacy.js`: Privacy
 * `work.js`: the list of projects
 * `project.js`: each project's own page
-* `about.js`: About
+* `about.js`: About, including the founder: the story, the three parts that open and close, the working hours behind the line that says if he is online, and the photo once there is one
 * `contact.js`: Contact
 * `updates.js`: the list of updates
 * `post.js`: each update's own page
@@ -47,7 +47,19 @@ A few things to know when you edit them:
 * The legal pages still have placeholders such as [DATE] and [NUMBER]. Fill them in before launch, and it is worth having a lawyer read them.
 * The assistant learns what it knows from these same files, so when you change the words, it knows the new ones too.
 
-The look of the site is in `app/globals.css`, with the colours at the top. The font is set in `app/layout.js`. The sharing image and the icons are drawn from the files in `assets/brand` and `assets/fonts`.
+## How it looks
+
+The look of the site is in `app/globals.css`. The colours sit at the top, named for what they do:
+
+* `--action` is the red of the one main button in an area, and `--action-hover` is its colour under the pointer. Keep red for main buttons only, never more than two on screen at once.
+* `--danger` is for error messages and things that failed.
+* `--tint` is the warm light grey that marks something new, like a fresh row in a table.
+
+Every pair of text and background reaches 4.6:1 contrast or more, and 3.1:1 for large text, borders and focus rings. Keep it that way when you change a colour.
+
+The font is Open Sans, set in `app/layout.js`. Open Sans has no naira sign (₦), so that one sign comes from Noto Sans, the open family that grew out of Open Sans. Its small files are in `assets/fonts` and only load on pages that show the sign. The sharing image uses the Open Sans files in the same folder and the logo in `assets/brand`.
+
+Nothing moves because a visitor scrolls. The only motion is the wave, the demos people play with, short colour changes under the pointer, the Menu panel sliding in on phones, and the back to top button. When a visitor asks their device for less motion, the wave is drawn once and stays still.
 
 ## Add the keys
 
@@ -105,6 +117,7 @@ To send emails from your own domain, open Domains in Resend, add the domain, and
 * Each visitor can send the assistant up to 30 messages an hour, and the forms up to 20 times an hour. This keeps spam and the AI bill down.
 * If the AI cannot answer, for example because the key stopped working, the assistant answers from its own list instead and offers WhatsApp.
 * If a message cannot be saved or emailed, it is written in full to the log, so it is not lost. On Vercel, open the project and then Logs.
+* Cookie preferences in the footer has one switch, Remember my choices. When a visitor turns it on, the setup builder and the dataset builder keep their picks in that browser for the next visit. Nothing is sent anywhere, and turning it off deletes them.
 
 ## What Phase 2 adds
 

@@ -9,7 +9,7 @@ const aiSetup = {
   hero: {
     title: "AI set up for your business.",
     text: "Tell us the work that eats your team's time. We build AI to handle it, connect it to your tools and keep it running.",
-    buttons: [{ label: "Start a project", href: "/contact?need=ai-setup", style: "dark" }],
+    buttons: [{ label: "Start a project", href: "/contact?need=ai-setup", style: "solid" }],
   },
 
   // The "On this page" bar. Each id is the section it jumps to.
@@ -21,7 +21,7 @@ const aiSetup = {
   ],
 
   what: {
-    title: "What we set up",
+    title: "Four kinds of AI we can set up for you",
     cards: [
       { icon: "chat", title: "Chat assistants", text: "Answers your customers on your website and WhatsApp." },
       { icon: "auto", title: "Automation", text: "Handles repeat work like orders, reports and reminders." },
@@ -87,7 +87,7 @@ const aiSetup = {
       ],
       note: "Example conversation. The names and details are made up.",
     },
-    title: "How it works",
+    title: "From your problem to a working system in four steps",
     steps: [
       { title: "Tell us the problem", text: "We start with the work that takes your team the most time." },
       { title: "See a working demo", text: "You try it on real examples from your business." },
@@ -97,7 +97,7 @@ const aiSetup = {
   },
 
   price: {
-    title: "Pricing",
+    title: "What it costs: one setup fee, then monthly care",
     items: [
       { title: "Setup", price: "{setupPrice}", text: "Paid once." },
       { title: "Care", price: "{carePrice}", text: "Per month for hosting, updates and fixes." },

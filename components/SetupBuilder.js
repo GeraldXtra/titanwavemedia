@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Rich from "./Rich";
-import { format, RV1 } from "@/lib/text";
+import { format } from "@/lib/text";
+import { loadChoice, saveChoice } from "@/lib/choices";
 
 // "Build your setup": the summary and the quote link follow the form.
 export default function SetupBuilder({ copy }) {
@@ -11,6 +12,24 @@ export default function SetupBuilder({ copy }) {
   const [where, setWhere] = useState(() => (copy.where.options.find((o) => o.checked) || copy.where.options[0]).value);
   const [size, setSize] = useState(() => (copy.size.options.find((o) => o.checked) || copy.size.options[0]).value);
   const s = copy.summary;
+
+  // With "Remember my choices" on (Cookie preferences), the last setup picked here comes back.
+  const started = useRef(false);
+  useEffect(() => {
+    const saved = loadChoice("setup");
+    if (!saved) return;
+    const known = (list, v) => list.some((o) => o.value === v);
+    if (Array.isArray(saved.what)) setWhat(new Set(saved.what.filter((v) => known(copy.what.options, v))));
+    if (known(copy.where.options, saved.where)) setWhere(saved.where);
+    if (known(copy.size.options, saved.size)) setSize(saved.size);
+  }, []);
+  useEffect(() => {
+    if (!started.current) {
+      started.current = true;
+      return;
+    }
+    saveChoice("setup", { what: [...what], where, size });
+  }, [what, where, size]);
 
   // Ticked items in the order of the form.
   const ticked = copy.what.options.filter((o) => what.has(o.value)).map((o) => o.value);
@@ -31,7 +50,7 @@ export default function SetupBuilder({ copy }) {
 
   return (
     <div className="cfg" id="cfg">
-      <form className={`box cfg__form ${RV1}`} id="cfg-form" noValidate onSubmit={(e) => e.preventDefault()}>
+      <form className="box cfg__form" id="cfg-form" noValidate onSubmit={(e) => e.preventDefault()}>
         <fieldset>
           <legend>{copy.what.legend}</legend>
           {copy.what.options.map((o) => (
@@ -60,7 +79,7 @@ export default function SetupBuilder({ copy }) {
           ))}
         </fieldset>
       </form>
-      <div className={`box cfg__sum ${RV1}`}>
+      <div className="box cfg__sum">
         <h3>{s.title}</h3>
         <ul id="cfg-list">
           {(ticked.length ? ticked : [s.nothing]).map((item) => (

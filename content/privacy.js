@@ -12,7 +12,7 @@ const privacy = {
   },
 
   promises: {
-    title: "Our promises",
+    title: "What we promise to do with your data",
     items: [
       { icon: "erase", text: "We remove names, phone numbers and account details before any AI model sees your data." },
       { icon: "pin", text: "We tell you where your data is stored and who can see it." },
@@ -29,7 +29,7 @@ const privacy = {
   ],
 
   demo: {
-    title: "See it work",
+    title: "Take personal details out of a message",
     text: "Tick what should come out of a message before any AI model reads it, and watch it happen.",
     legend: "Remove",
     kinds: [

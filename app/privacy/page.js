@@ -6,7 +6,6 @@ import Icon from "@/components/Icon";
 import PrivacyDemo from "@/components/PrivacyDemo";
 import { BlkHead, Section, Subnav } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { RV, RV1 } from "@/lib/text";
 
 export const metadata = pageMeta({ ...privacy.meta, path: "/privacy" });
 
@@ -18,7 +17,7 @@ export default function PrivacyPage() {
 
       <Section tone="white" id="priv-promises">
         <BlkHead title={promises.title} />
-        <div className={`promises ${RV}`} style={{ "--n": 2 }}>
+        <div className="promises" style={{ "--n": 2 }}>
           {promises.items.map((p, i) => (
             <div className="promise" key={i}>
               <Icon name={p.icon} />
@@ -35,13 +34,13 @@ export default function PrivacyPage() {
       </Section>
 
       <Section tone="white" id="priv-tools">
-        <div className={`notify ${RV1}`}>
+        <div className="notify">
           <div>
             <h3>{tools.title}</h3>
             <p>{tools.text}</p>
           </div>
           <div className="btns">
-            <Btn href={tools.button.href} label={tools.button.label} style="dark" />
+            <Btn href={tools.button.href} label={tools.button.label} style="line" />
           </div>
         </div>
         <p style={{ marginTop: 22 }}>

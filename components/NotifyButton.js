@@ -10,7 +10,7 @@ export default function NotifyButton({ label }) {
     setTimeout(() => field.focus(), 400);
   }
   return (
-    <button className="btn btn--dark btn--sm" type="button" data-notify="" onClick={onClick}>
+    <button className="btn btn--line btn--sm" type="button" data-notify="" onClick={onClick}>
       {label}
     </button>
   );

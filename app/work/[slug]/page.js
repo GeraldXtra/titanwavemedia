@@ -5,7 +5,7 @@ import Hero from "@/components/Hero";
 import CopyLinkButton from "@/components/CopyLinkButton";
 import { Cta, Section, Strip } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { ph, RV, RV1 } from "@/lib/text";
+import { ph } from "@/lib/text";
 
 // One page per entry in content/project.js. Other addresses get the "Page not found" page.
 export const dynamicParams = false;
@@ -31,7 +31,7 @@ export default async function ProjectPage({ params }) {
       <Hero title={p.name} text={p.line} crumbs={[{ label: l.crumb, href: "/work" }, { label: p.name }]} />
 
       <Section tone="white">
-        <div className={`meta-bar ${RV}`}>
+        <div className="meta-bar">
           {p.facts.map((fact, i) => (
             <div key={i}>
               <span>{fact.label}</span>
@@ -39,13 +39,13 @@ export default async function ProjectPage({ params }) {
             </div>
           ))}
         </div>
-        <div className={`shot ${RV1}`}>
+        <div className="shot">
           <div className="ph-box">{p.screenshot}</div>
         </div>
       </Section>
 
       <Section tone="white">
-        <div className={`stack ${RV}`}>
+        <div className="stack">
           {p.stories.map((s, i) => (
             <div className="story" key={i}>
               <h2>{s.title}</h2>
@@ -61,7 +61,7 @@ export default async function ProjectPage({ params }) {
               <b className={ph(p.next.name)}>{p.next.name}</b>
             </div>
           </Link>
-          <Strip icon="code" text={l.share} reveal={false}>
+          <Strip icon="code" text={l.share}>
             <CopyLinkButton label={l.copy} done={l.copied} prompt={l.copyPrompt} />
           </Strip>
         </div>

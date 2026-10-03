@@ -5,7 +5,7 @@ import Btn from "@/components/Btn";
 import CopyLinkButton from "@/components/CopyLinkButton";
 import { BlkHead, Cards, Cta, Faq, Gap, Notify, Section, StepList, Strip } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { ph, RV1 } from "@/lib/text";
+import { ph } from "@/lib/text";
 
 // One page per entry in content/product.js. Other addresses get the "Page not found" page.
 export const dynamicParams = false;
@@ -30,9 +30,9 @@ export default async function ProductPage({ params }) {
     <main className="page" id="main-products-product">
       <Hero title={p.name} text={p.line} crumbs={[{ label: l.crumb, href: "/products" }, { label: p.name }]}>
         <div className="buy">
-          <span className="tag tag--red">{p.tag}</span>
+          <span className="tag">{p.tag}</span>
           <strong className={ph(p.price)}>{p.price}</strong>
-          <a className="btn btn--dark" href="#pt-notify" data-jump="">
+          <a className="btn btn--line" href="#pt-notify" data-jump="">
             <span>{l.notify}</span>
           </a>
           <Btn href={l.ask.href} label={l.ask.label} style="line" />
@@ -40,7 +40,7 @@ export default async function ProductPage({ params }) {
       </Hero>
 
       <Section tone="white">
-        <div className={`shot ${RV1}`} style={{ marginTop: 0 }}>
+        <div className="shot" style={{ marginTop: 0 }}>
           <div className="ph-box">{p.screenshot}</div>
         </div>
       </Section>

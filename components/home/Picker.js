@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Icon from "../Icon";
-import { RV1 } from "@/lib/text";
 
 const allMessages = (sector) => sector.chat.flatMap((pair) => pair.map((text, i) => ({ text, out: i > 0 })));
 
@@ -40,7 +39,7 @@ export default function Picker({ copy }) {
         ))}
       </div>
       <div className="pick__panel" role="tabpanel">
-        <div className={`box ${RV1}`}>
+        <div className="box">
           <h3 id="pick-title">{sector.title}</h3>
           <p id="pick-text">{sector.text}</p>
           <ul className="pick__list" id="pick-list">
@@ -49,12 +48,12 @@ export default function Picker({ copy }) {
             ))}
           </ul>
           <div className="btns" style={{ marginTop: 20 }}>
-            <Link className="btn btn--dark" id="pick-cta" href={`/contact?need=ai-setup&sector=${sector.key}`}>
+            <Link className="btn btn--line" id="pick-cta" href={`/contact?need=ai-setup&sector=${sector.key}`}>
               {sector.cta}
             </Link>
           </div>
         </div>
-        <div className={`box ${RV1}`}>
+        <div className="box">
           <p className="note" style={{ marginBottom: 12 }}>
             {copy.note}
           </p>

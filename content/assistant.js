@@ -10,7 +10,7 @@ const assistant = {
   inputLabel: "Your message",
   placeholder: "Type your question",
   send: "Send",
-  note: "A simple assistant that answers from this site. On the live site it will be connected to a real model, with the same privacy rules.",
+  note: "Answers come from what is on this site. For anything else, a person replies on WhatsApp.",
   greeting: "Hello. I am the Titan Wave Media assistant. Ask me about what we do, prices, privacy, synthetic data, or how to reach us.",
   you: "You",
   bot: "Assistant",

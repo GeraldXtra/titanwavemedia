@@ -17,7 +17,7 @@ const home = {
   },
 
   whatWeDo: {
-    title: "What we do",
+    title: "Try what we can do for your business",
     text: "Four things, each one you can try right here.",
 
     // The restaurant chat demo.
@@ -131,7 +131,7 @@ const home = {
   },
 
   who: {
-    title: "Who we build for",
+    title: "See what AI can do for your kind of business",
     text: "Pick the kind of business you run. The plan and the example change to match.",
     tabsLabel: "Kind of business",
     note: "Example conversation. The details are made up.",
@@ -210,7 +210,7 @@ const home = {
   },
 
   how: {
-    title: "How we work with you",
+    title: "From your problem to a working system in four steps",
     link: { label: "See the full process", href: "/ai-setup" },
     more: "What happens",
     close: "Close",
@@ -240,7 +240,7 @@ const home = {
 
   // The product cards in this block come from content/products.js.
   tools: {
-    title: "Our AI tools",
+    title: "AI tools you can buy and use on your own",
     link: { label: "See all products", href: "/products" },
     notify: {
       title: "Get told when our first product launches",
@@ -252,7 +252,7 @@ const home = {
     title: "Realistic data. No real people.",
     text: "We make computer generated data you can use to train AI and test software safely.",
     buttons: [
-      { label: "Talk to us about data", href: "/contact?need=data", style: "dark" },
+      { label: "Talk to us about data", href: "/contact?need=data", style: "line" },
       { label: "How synthetic data works", href: "/synthetic-data", style: "line" },
     ],
   },
@@ -285,16 +285,16 @@ const home = {
 
   // The tiles and posts in these blocks come from content/work.js and content/updates.js.
   work: {
-    title: "Recent work",
+    title: "See what we have built for clients",
     link: { label: "See all work", href: "/work" },
   },
   updates: {
-    title: "Updates",
+    title: "Read what we are building and launching",
     link: { label: "All updates", href: "/updates" },
   },
 
   faq: {
-    title: "Questions",
+    title: "Answers to the questions people ask first",
     items: [
       {
         q: "Do I need to understand AI to work with you?",

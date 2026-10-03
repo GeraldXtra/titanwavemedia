@@ -7,7 +7,7 @@ import Rich from "@/components/Rich";
 import CopyLinkButton from "@/components/CopyLinkButton";
 import { Cta, PostList, Section, Strip } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { format, ph, RV1 } from "@/lib/text";
+import { format, ph } from "@/lib/text";
 
 // One page per entry in content/post.js. Other addresses get the "Page not found" page.
 export const dynamicParams = false;
@@ -45,7 +45,7 @@ export default async function PostPage({ params }) {
       </Hero>
 
       <Section tone="white">
-        <article className={`article box ${RV1}`}>
+        <article className="article box">
           <p className={ph(p.opening)} style={{ marginTop: 0, fontSize: "1.25rem", color: "var(--ink)" }}>
             {p.opening}
           </p>

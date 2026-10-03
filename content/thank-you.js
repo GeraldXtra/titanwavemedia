@@ -8,10 +8,10 @@ const thankYou = {
   },
 
   hero: {
-    title: "Thank you.",
+    title: "Thank you. Your message reached us.",
     text: "We got your message and will reply by email soon. If it is urgent, message us on WhatsApp.",
     buttons: [
-      { label: "Chat on WhatsApp", href: site.whatsappUrl, style: "dark", icon: "wa" },
+      { label: "Chat on WhatsApp", href: site.whatsappUrl, style: "line", icon: "wa" },
       { label: "Back to the home page", href: "/", style: "line" },
     ],
   },
@@ -21,7 +21,7 @@ const thankYou = {
   },
 
   bought: {
-    title: "Bought a product?",
+    title: "How to get a product you bought",
     text: "Your receipt and how to get started are in your email.",
   },
 };

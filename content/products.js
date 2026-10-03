@@ -12,6 +12,9 @@ const products = {
     text: "Small products, each one made to fix one real problem.",
   },
 
+  // A heading for screen readers over the list below (it is not shown on the page).
+  listTitle: "All products",
+
   filters: {
     label: "Filter products",
     // "value" must match the "cat" of the products below.

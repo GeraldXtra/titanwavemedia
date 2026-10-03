@@ -1,11 +1,12 @@
 import about from "@/content/about";
 import Hero from "@/components/Hero";
+import Founder from "@/components/Founder";
 import Rich from "@/components/Rich";
 import { DaysSince } from "@/components/Live";
 import { BlkHead, Cards, Cta, Section, Subnav } from "@/components/Blocks";
 import { daysSince } from "@/lib/lagos";
 import { pageMeta } from "@/lib/seo";
-import { ph, RV, RV1 } from "@/lib/text";
+import { ph } from "@/lib/text";
 
 export const metadata = pageMeta({ ...about.meta, path: "/about" });
 
@@ -17,14 +18,7 @@ export default function AboutPage() {
       <Subnav links={about.subnav} />
 
       <Section tone="white" id="about-founder">
-        <div className={`founder ${RV1}`}>
-          <div className="ph-box">{founder.photo}</div>
-          <div>
-            <h3>{founder.name}</h3>
-            <p className="role">{founder.role}</p>
-            <p className={ph(founder.story, "story")}>{founder.story}</p>
-          </div>
-        </div>
+        <Founder copy={founder} />
       </Section>
 
       <Section tone="grey" id="about-what">
@@ -34,7 +28,7 @@ export default function AboutPage() {
 
       <Section tone="white" id="about-details">
         <BlkHead title={details.title} text={details.text} />
-        <dl className={`details ${RV}`}>
+        <dl className="details">
           {details.items.map((d, i) => (
             <div key={i}>
               <dt>{d.label}</dt>

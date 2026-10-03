@@ -19,12 +19,6 @@ const site = {
   whatsapp,
   whatsappUrl,
 
-  // Put the full profile address in href once the accounts exist.
-  social: [
-    { label: "[LinkedIn]", href: "" },
-    { label: "[X]", href: "" },
-  ],
-
   prices: {
     setup: "[SETUP PRICE]",
     care: "[MONTHLY PRICE]",
@@ -32,30 +26,30 @@ const site = {
 
   header: {
     homeLabel: "Titan Wave Media, home",
+    navLabel: "Main",
     cta: { label: "Start a project", href: "/contact?need=ai-setup" },
+    search: "Search",
     menu: "Menu",
     close: "Close",
   },
 
   skipLink: "Skip to content",
 
+  // The main links: in the header on wide screens, and in the Menu panel on narrow ones.
+  // "section" marks the link of the page you are on.
+  nav: [
+    { label: "AI Setup", href: "/ai-setup", section: "ai-setup" },
+    { label: "Products", href: "/products", section: "products" },
+    { label: "Synthetic Data", href: "/synthetic-data", section: "synthetic-data" },
+    { label: "Privacy", href: "/privacy", section: "privacy" },
+    { label: "Work", href: "/work", section: "work" },
+    { label: "About", href: "/about", section: "about" },
+  ],
+
   menu: {
     label: "Menu",
     searchLabel: "Search this site",
     searchPlaceholder: "Search this site, for example privacy or prices",
-    // "section" marks the link as the current page for screen readers.
-    links: [
-      { label: "AI Setup", href: "/ai-setup", section: "ai-setup" },
-      { label: "Products", href: "/products", section: "products" },
-      { label: "Synthetic Data", href: "/synthetic-data", section: "synthetic-data" },
-      { label: "Privacy", href: "/privacy", section: "privacy" },
-      { label: "Work", href: "/work", section: "work" },
-      { label: "About", href: "/about", section: "about" },
-      { label: "Updates", href: "/updates" },
-      { label: "Contact", href: "/contact" },
-    ],
-    base: "Titan Wave Media LTD, Lagos, Nigeria",
-    whatsapp: "Chat on WhatsApp",
   },
 
   // The site search in the menu and on the "Page not found" page looks through this list.
@@ -77,11 +71,12 @@ const site = {
     ],
   },
 
+  // The footer: four columns of links, then a bottom row. In the Help column, "whatsapp" and
+  // "email" stand for the WhatsApp number and the company email above.
   footer: {
-    text: "An AI company in Lagos, Nigeria. AI we set up for you, tools you can use today, and data that keeps your customers private.",
     columns: [
       {
-        title: "What we do",
+        title: "Services",
         links: [
           { label: "AI Setup", href: "/ai-setup" },
           { label: "Products", href: "/products" },
@@ -92,28 +87,42 @@ const site = {
       {
         title: "Company",
         links: [
-          { label: "Work", href: "/work" },
           { label: "About", href: "/about" },
+          { label: "Work", href: "/work" },
           { label: "Updates", href: "/updates" },
-          { label: "Contact", href: "/contact" },
+        ],
+      },
+      {
+        title: "Help",
+        links: [{ label: "Contact", href: "/contact" }, { label: "WhatsApp", whatsapp: true }, { email: true }],
+      },
+      {
+        title: "Legal",
+        links: [
+          { label: "Terms", href: "/terms" },
+          { label: "Privacy Policy", href: "/privacy-policy" },
+          { label: "Refund Policy", href: "/refunds" },
         ],
       },
     ],
-    talk: {
-      title: "Talk to us",
-      whatsapp: "Chat on WhatsApp",
-      time: "Lagos time {clock} WAT",
-      socialJoin: " and ",
-    },
-    wordmark: "Titan Wave Media",
-    legalLabel: "Legal",
-    legal: [
+    // {year} is this year.
+    base: "© {year} Titan Wave Media LTD. RC {rc}. Lagos, Nigeria.",
+    baseLabel: "Policies",
+    baseLinks: [
+      { label: "Privacy", href: "/privacy-policy" },
       { label: "Terms", href: "/terms" },
-      { label: "Privacy Policy", href: "/privacy-policy" },
-      { label: "Refunds", href: "/refunds" },
     ],
-    rcLine: "RC {rc}",
-    copyright: "Titan Wave Media LTD",
+  },
+
+  // The dialog behind "Cookie preferences" in the footer.
+  cookies: {
+    open: "Cookie preferences",
+    title: "Cookie preferences",
+    text: "This site only uses the cookies it needs to work. There are no advertising or tracking cookies.",
+    remember: "Remember my choices",
+    rememberHelp: "Keeps what you pick in the setup builder and the dataset builder in this browser for your next visit. Turn it off to delete them.",
+    save: "Save",
+    close: "Close",
   },
 
   // The closing block on most pages. A page can set its own instead.
@@ -121,7 +130,7 @@ const site = {
     title: "Tell us what you need.",
     note: "We reply by email or WhatsApp. It is {clock} in Lagos right now.",
     buttons: [
-      { label: "Chat on WhatsApp", href: whatsappUrl, style: "solid", icon: "wa" },
+      { label: "Chat on WhatsApp", href: whatsappUrl, style: "line", icon: "wa" },
       { label: "Send an email", href: "/contact", style: "line", icon: "mail" },
     ],
   },

@@ -7,7 +7,7 @@ import LagosClock from "./LagosClock";
 import Rich from "./Rich";
 import Email from "./Email";
 import { checkContact, LIMITS } from "@/lib/validate";
-import { emailHref, fill, format, isPh, ph, RV } from "@/lib/text";
+import { emailHref, fill, format, isPh, ph } from "@/lib/text";
 
 const ORDER = ["name", "email", "need", "message"];
 
@@ -133,9 +133,9 @@ export default function ContactBlock({ copy, site, sectors }) {
   const email = site.email;
 
   return (
-    <div className={`contact ${RV}`}>
+    <div className="contact">
       <div className="box contact__side">
-        <a className="btn btn--dark" id="wa-link" href={waHref} target="_blank" rel="noopener">
+        <a className="btn btn--line" id="wa-link" href={waHref} target="_blank" rel="noopener">
           <Icon name="wa" className={null} />
           <span>{copy.side.whatsapp}</span>
         </a>
@@ -261,7 +261,7 @@ export default function ContactBlock({ copy, site, sectors }) {
             {errors.message}
           </p>
         </div>
-        <button className="btn btn--dark" type="submit" aria-disabled={sending || undefined}>
+        <button className="btn btn--solid" type="submit" aria-disabled={sending || undefined}>
           {f.submit}
         </button>
         {failed && (
