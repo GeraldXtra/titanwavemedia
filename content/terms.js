@@ -4,7 +4,7 @@
 
 const terms = {
   meta: { title: "Terms of Service, Titan Wave Media", description: "The terms for using the Titan Wave Media website, products and services." },
-  hero: { title: "Terms of Service", updated: "Last updated [DATE]" },
+  hero: { title: "Terms of Service", updated: "Last updated 4 October 2026" },
   tocLabel: "On this page",
   sections: [
     {
@@ -17,6 +17,12 @@ const terms = {
       title: "Using our website",
       body: [
         "Use the website lawfully. Do not try to break into it, overload it, copy it in bulk with automated tools, or use it to send spam or harmful code.",
+      ],
+    },
+    {
+      title: "Your account",
+      body: [
+        "Keep your sign in to yourself. Do not share your sign in links or codes with anyone. To give someone access, invite them from Settings in your console, so they sign in with their own email. We can close an account that breaks these terms.",
       ],
     },
     {
@@ -34,7 +40,7 @@ const terms = {
     {
       title: "Payments",
       body: [
-        "Prices are shown on the product page or in your quote. Payments go through our payment partner, and we never see your full card details. Prices include any taxes we are required to charge unless we say otherwise.",
+        "Prices are in naira, and are shown on the product page or in your quote. Payments go through Paystack, and we never see your full card details. Automatic monthly payments happen only when you switch them on, and you can switch them off at any time. Prices include any taxes we must charge, unless we say otherwise.",
       ],
     },
     {

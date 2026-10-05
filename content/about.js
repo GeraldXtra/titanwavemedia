@@ -3,12 +3,12 @@
 const about = {
   meta: {
     title: "About, Titan Wave Media",
-    description: "We are an AI company in Lagos, Nigeria. We build AI systems, tools and data for businesses here and around the world.",
+    description: "We're an AI company in Lagos, Nigeria. We build AI systems, tools and data for businesses here and around the world.",
   },
 
   hero: {
     title: "Who builds your AI, and how we work.",
-    text: "We are an AI company in Lagos, Nigeria. We build AI systems, tools and data for businesses here and around the world.",
+    text: "We're an AI company in Lagos, Nigeria. We build AI systems, tools and data for businesses here and around the world.",
   },
 
   // The "On this page" bar. Each id is the section it jumps to.
@@ -36,8 +36,8 @@ const about = {
     ],
     // The live line under the parts follows the working hours in content/site.js. {time} is the
     // time in Lagos, and it updates every minute.
-    open: "It is {time} in Lagos. I'm online, and I usually reply the same day.",
-    closed: "It is {time} in Lagos. I'm away right now, and I'll reply from {next}.",
+    open: "It's {time} in Lagos. I'm online, and I usually reply the same day.",
+    closed: "It's {time} in Lagos. I'm away right now, and I'll reply from {next}.",
     // {next} in the line above is one of these three.
     nextToday: "{time} today",
     nextTomorrow: "{time} tomorrow",
@@ -71,7 +71,7 @@ const about = {
   },
 
   timeline: {
-    title: "What we have done so far, and what comes next",
+    title: "What we've done so far, and what comes next",
     // "since" counts the days from that date to today; {days} shows the count.
     items: [
       {

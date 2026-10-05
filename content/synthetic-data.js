@@ -23,7 +23,7 @@ const syntheticData = {
 
   // The "On this page" bar. Each id is the section it jumps to.
   subnav: [
-    { id: "data-who", label: "Who it is for" },
+    { id: "data-who", label: "Who it's for" },
     { id: "data-build", label: "Build a sample" },
     { id: "data-how", label: "How it works" },
   ],
@@ -50,7 +50,7 @@ const syntheticData = {
     ],
     make: "Make dataset",
     copy: "Copy as CSV",
-    caption: "Sample only. Every row is made up.",
+    caption: "Every row is made up on purpose. No real person is in it.",
     noFields: "Tick at least one field.",
     made: "{rows} rows, {fields}. All made up.",
     // {fields} in the line above is one of these two.
@@ -64,9 +64,9 @@ const syntheticData = {
   how: {
     title: "How you get your dataset in three steps",
     steps: [
-      { title: "Tell us the data you need", text: "The fields, the size and what it will be used for." },
+      { title: "Tell us the data you need", text: "The fields, the size, and what you'll use it for." },
       { title: "Check a sample", text: "You review a small set before we make the rest." },
-      { title: "Get the full dataset", text: "Delivered in the format your team works with." },
+      { title: "Get the full dataset", text: "We send it in the format your team already uses." },
     ],
   },
 

@@ -232,17 +232,3 @@ export function Subnav({ links }) {
     </nav>
   );
 }
-
-// A chat shown as an example, customer on the left and assistant on the right.
-export function ExampleChat({ chat, customer, assistant }) {
-  return (
-    <ul className="msgs">
-      {chat.map((m, i) => (
-        <li key={i} className={m.from === "customer" ? "msg msg--in" : "msg msg--out"}>
-          {m.text}
-          <small>{m.from === "customer" ? customer : assistant}</small>
-        </li>
-      ))}
-    </ul>
-  );
-}

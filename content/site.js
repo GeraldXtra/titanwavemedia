@@ -15,7 +15,7 @@ const phone = /^234\d{10}$/.test(whatsapp) ? `+234 ${whatsapp.slice(3, 6)} ${wha
 const site = {
   name: "Titan Wave Media",
   legalName: "Titan Wave Media LTD",
-  rc: "[YOUR RC NUMBER]",
+  rc: "9457578",
   email: "titanwavemedia@proton.me",
   location: "Lagos, Nigeria",
   whatsapp,
@@ -36,6 +36,8 @@ const site = {
     homeLabel: "Titan Wave Media, home",
     navLabel: "Main",
     cta: { label: "Start a project", href: "/contact?need=ai-setup" },
+    // Before Start a project in the header, and above it in the Menu panel.
+    signin: { label: "Sign in", href: "/signin" },
     search: "Search",
     menu: "Menu",
     close: "Close",
@@ -134,7 +136,7 @@ const site = {
   cookies: {
     open: "Cookie preferences",
     title: "Cookie preferences",
-    text: "This site only uses the cookies it needs to work. There are no advertising or tracking cookies.",
+    text: "This site only uses the cookies it needs to work, like the one that keeps you signed in to your console. There are no advertising or tracking cookies.",
     remember: "Remember my choices",
     rememberHelp: "Keeps what you pick in the setup builder and the dataset builder in this browser for your next visit. Turn it off to delete them.",
     save: "Save",
@@ -144,7 +146,7 @@ const site = {
   // The closing block on most pages. A page can set its own instead.
   cta: {
     title: "Tell us what you need.",
-    note: "We reply by email or WhatsApp. It is {clock} in Lagos right now.",
+    note: "We reply by email or WhatsApp. It's {clock} in Lagos right now.",
     buttons: [
       { label: "Chat on WhatsApp", href: whatsappUrl, style: "line", icon: "wa" },
       { label: "Send an email", href: "/contact", style: "line", icon: "mail" },
@@ -176,8 +178,8 @@ const site = {
     button: "Notify me",
     empty: "Enter your email address.",
     invalid: "Enter an email address like name@company.com.",
-    thanks: "Thanks. We will email you when it is ready.",
-    failed: "That did not go through. Please try again in a moment.",
+    thanks: "Thanks. We'll email you when it's ready.",
+    failed: "That didn't go through. Please try again in a moment.",
   },
 };
 

@@ -9,7 +9,7 @@ const product = {
     notify: "Notify me",
     ask: { label: "Ask a question", href: "/contact?need=tool" },
     features: "What it does",
-    who: "Who it is for",
+    who: "Who it's for",
     get: "How you get it",
     questions: "Questions",
     privacy: {
@@ -20,7 +20,7 @@ const product = {
     copy: "Copy link",
     copied: "Link copied",
     copyPrompt: "Copy this link",
-    thanks: "Thanks. We will email you when it is ready.",
+    thanks: "Thanks. We'll email you when it's ready.",
   },
 
   pages: {
@@ -42,7 +42,7 @@ const product = {
       ],
       who: "[Who it helps, in one or two lines]",
       steps: [
-        { title: "Pay online", text: "Through our payment partner. We never see your full card details." },
+        { title: "Pay online", text: "You pay through Paystack, our payment partner. We never see your full card details." },
         { title: "Check your email", text: "Your receipt and how to get started arrive straight away." },
         { title: "Start using it", text: "[How to get started, in one line]" },
       ],

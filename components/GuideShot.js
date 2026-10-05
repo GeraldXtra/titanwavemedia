@@ -9,15 +9,19 @@ export default function GuideShot({ shot, id, eager = false }) {
     <div className="gshot">
       <figure className="gshot__fig">
         <div className="gshot__img">
-          <img
-            src={shot.src}
-            width={w}
-            height={h}
-            alt={shot.alt}
-            loading={eager ? "eager" : "lazy"}
-            decoding="async"
-            fetchPriority={eager ? "high" : undefined}
-          />
+          {/* Phones get a copy half as wide, from public/guide/phone/. */}
+          <picture>
+            <source media="(max-width: 700px)" srcSet={shot.src.replace("/guide/", "/guide/phone/")} width={w / 2} height={h / 2} />
+            <img
+              src={shot.src}
+              width={w}
+              height={h}
+              alt={shot.alt}
+              loading={eager ? "eager" : "lazy"}
+              decoding="async"
+              fetchPriority={eager ? "high" : undefined}
+            />
+          </picture>
           <svg className="gshot__arrows" viewBox={`0 0 ${w} ${h}`} aria-hidden="true" focusable="false">
             <defs>
               <marker id={`${id}-head`} viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">

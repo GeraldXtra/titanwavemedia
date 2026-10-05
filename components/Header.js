@@ -133,6 +133,9 @@ export default function Header() {
               <Icon name="search" className={null} />
               <span className="sr-only">{site.header.search}</span>
             </button>
+            <Link className="hd__signin" href={site.header.signin.href}>
+              {site.header.signin.label}
+            </Link>
             <Link className="btn btn--solid btn--sm hd__cta" href={site.header.cta.href}>
               {site.header.cta.label}
             </Link>
@@ -185,6 +188,9 @@ export default function Header() {
             </li>
           ))}
         </ul>
+        <Link className="btn mnav__signin" href={site.header.signin.href}>
+          {site.header.signin.label}
+        </Link>
         <Link className="btn btn--solid mnav__cta" href={site.header.cta.href}>
           {site.header.cta.label}
         </Link>

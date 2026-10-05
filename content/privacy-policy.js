@@ -4,7 +4,7 @@
 
 const privacyPolicy = {
   meta: { title: "Privacy Policy, Titan Wave Media", description: "How Titan Wave Media collects, uses and protects personal data." },
-  hero: { title: "Privacy Policy", updated: "Last updated [DATE]" },
+  hero: { title: "Privacy Policy", updated: "Last updated 4 October 2026" },
   tocLabel: "On this page",
   sections: [
     {
@@ -21,7 +21,7 @@ const privacyPolicy = {
             "What you send us through forms, WhatsApp or email: your name, email address, what you need and your message.",
             "Your email address if you ask to hear about a product or our updates.",
             "Order details when you buy a product: your name, email address and payment confirmation. Our payment partner handles your card or bank details.",
-            "Basic information about how the website is used, such as pages visited. [Name of analytics tool, or delete this line if you use none].",
+            "Your account details if you use the client console: your name, your business name and email address, and the time, browser and device of your last 20 sign ins. If you save a card, we keep only its type, last 4 digits, expiry date, bank and a code from Paystack, never the card number.",
             "Data that clients give us for a project, which we handle under the client's instructions and our agreement with them.",
           ],
         },
@@ -67,6 +67,20 @@ const privacyPolicy = {
       ],
     },
     {
+      title: "Who helps us run the service",
+      body: [
+        {
+          list: [
+            "Vercel hosts the website and the console.",
+            "Supabase keeps our database and signs you in.",
+            "Resend sends our emails.",
+            "Anthropic provides the AI model that writes the site assistant's answers.",
+            "Paystack takes payments. Your card details go to Paystack, never to us.",
+          ],
+        },
+      ],
+    },
+    {
       title: "Data outside Nigeria",
       body: [
         "Some of our providers store data outside Nigeria. When that happens, we use providers and agreements that keep your data protected to the standard the law requires.",
@@ -75,7 +89,7 @@ const privacyPolicy = {
     {
       title: "How long we keep it",
       body: [
-        "We keep personal data only as long as we need it for the reason we collected it. Messages are kept for [PERIOD]. Records we must keep for tax and accounting are kept for as long as the law requires.",
+        "We keep personal data only as long as we need it for the reason we collected it. Contact messages are kept for 12 months, and assistant conversations for 6 months, then deleted. Invoices and receipts are kept for [NUMBER] years, as tax law requires.",
       ],
     },
     {
@@ -90,7 +104,7 @@ const privacyPolicy = {
             "Complain to the Nigeria Data Protection Commission if you think we have handled your data wrongly.",
           ],
         },
-        "To use any of these rights, email {email}.",
+        "To use any of these rights, email {email}. We finish every request for a copy of your data, a correction or a deletion within 30 days.",
       ],
     },
     {
@@ -102,7 +116,7 @@ const privacyPolicy = {
     {
       title: "Cookies",
       body: [
-        "We do not use advertising cookies. [List any cookies or analytics you add here].",
+        "We use one cookie. It keeps you signed in, and the console needs it to work. We do not use advertising or tracking cookies.",
       ],
     },
     {

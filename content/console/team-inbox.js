@@ -1,0 +1,76 @@
+// Team view, Inbox: everything people send us, in one place.
+
+const teamInbox = {
+  meta: { title: "Inbox, Titan Wave Media Console" },
+  title: "Inbox",
+  lede: "Everything people send us: the contact form, quote requests, project chats, help requests, refund requests and feedback.",
+  filter: "Show",
+  filters: { all: "All", new: "New", replied: "Replied" },
+  empty: "Nothing here.",
+  emptyAll: "Nothing yet. Messages from the website and the console land here.",
+  pick: "Pick a message",
+  pickText: "Choose a message on the left to read it and reply.",
+
+  // What each kind of conversation is called.
+  kinds: {
+    contact: "Contact form",
+    quote: "Quote request",
+    project: "Project chat, {subject}",
+    help: "Help request, {subject}",
+    refund: "Refund request, {subject}",
+    feedback: "Console feedback, {subject}",
+  },
+  status: { new: "New", replied: "Replied", waiting: "Waiting on them", solved: "Solved" },
+
+  // The details shown above some messages.
+  details: {
+    need: "Needs",
+    channel: "Answers on",
+    rows: "Size",
+    product: "Product",
+    email: "Email",
+    business: "Business",
+    receipt: "Receipt",
+    amount: "Amount",
+    reason: "Reason",
+    page: "Sent from",
+    where: "Works on",
+  },
+  needs: { "ai-setup": "AI setup", tool: "An AI tool", data: "Synthetic data", privacy: "Keeping customer data private", other: "Something else" },
+
+  reply: {
+    label: "Reply",
+    placeholder: "Write a reply",
+    send: "Reply",
+    empty: "No messages.",
+    you: "You",
+    failed: "Your reply didn't send. Please try again.",
+    // Ready replies that fill the box.
+    quick: ["Thanks. We'll get back to you properly today.", "Can we do a short call tomorrow?", "Your quote is ready in your console."],
+    sentProject: "Sent. They see it in their project chat, and get an email.",
+    sentEmail: "Sent. They get your reply by email.",
+  },
+
+  open: "Open the project",
+  solve: "Mark as solved",
+  solved: "Marked as solved.",
+
+  refund: {
+    title: "Refund request",
+    approve: "Approve and refund {amount}",
+    decline: "Decline",
+    approveTitle: "Refund {amount}?",
+    approveText: "Paystack sends {amount} back to the way {business} paid. It can't be undone.",
+    approveButton: "Refund {amount}",
+    declineTitle: "Decline this refund?",
+    declineText: "Write to them in the reply box to say why. The receipt goes back to Paid.",
+    declineButton: "Decline the refund",
+    cancel: "Cancel",
+    approved: "Refund sent to Paystack. The receipt shows Refunded once Paystack finishes it.",
+    declined: "Refund declined.",
+    states: { requested: "Waiting for you", processing: "With Paystack", refunded: "Refunded", declined: "Declined", failed: "Paystack couldn't refund it" },
+    failed: "Paystack didn't take the refund: {message}",
+  },
+};
+
+export default teamInbox;

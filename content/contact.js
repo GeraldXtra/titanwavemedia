@@ -13,7 +13,7 @@ const contact = {
 
   side: {
     whatsapp: "Chat on WhatsApp",
-    note: "The message opens with what you picked on the form.",
+    note: "Your WhatsApp message starts with what you picked on the form.",
     email: "Email",
     location: "Location",
     locationValue: "{location}",
@@ -34,26 +34,28 @@ const contact = {
       { value: "ai-setup", label: "AI setup" },
       { value: "tool", label: "An AI tool" },
       { value: "data", label: "Synthetic data" },
+      { value: "privacy", label: "Keeping customer data private" },
       { value: "other", label: "Something else" },
     ],
-    // Extra questions that show for what is picked above. The first option starts ticked.
+    // Extra questions that show for what is picked above. Nothing starts ticked.
+    // "sentence" and "phrase" are how a choice reads in the WhatsApp message.
     extra: {
       "ai-setup": {
         name: "channel",
         legend: "Where should the assistant answer?",
         options: [
-          { value: "WhatsApp", label: "WhatsApp" },
-          { value: "Our website", label: "Our website" },
-          { value: "Both", label: "Both" },
+          { value: "WhatsApp", label: "WhatsApp", sentence: "I'm interested in an AI assistant for my business on WhatsApp." },
+          { value: "Our website", label: "Our website", sentence: "I'm interested in an AI assistant for my website." },
+          { value: "Both", label: "Both", sentence: "I'm interested in an AI assistant for my website and WhatsApp." },
         ],
       },
       data: {
         name: "rows",
         legend: "Roughly how many rows?",
         options: [
-          { value: "Up to 1,000 rows", label: "Up to 1,000" },
-          { value: "Up to 100,000 rows", label: "Up to 100,000" },
-          { value: "More than 100,000 rows", label: "More than 100,000" },
+          { value: "Up to 1,000 rows", label: "Up to 1,000", phrase: "about 1,000 rows" },
+          { value: "Up to 100,000 rows", label: "Up to 100,000", phrase: "about 100,000 rows" },
+          { value: "More than 100,000 rows", label: "More than 100,000", phrase: "more than 100,000 rows" },
         ],
       },
       tool: {
@@ -75,7 +77,7 @@ const contact = {
       need: "Choose what you need.",
       message: "Tell us a little more, at least 10 characters.",
     },
-    failed: "Your message did not send. Please try again, or message us on WhatsApp.",
+    failed: "Your message didn't send. Please try again, or message us on WhatsApp.",
   },
 
   // What each choice is called in the WhatsApp message and on the thank you page.
@@ -83,20 +85,38 @@ const contact = {
     "ai-setup": "AI setup",
     tool: "an AI tool",
     data: "synthetic data",
+    privacy: "keeping customer data private",
     other: "something else",
     none: "help",
   },
 
-  // The WhatsApp message carries what was picked on the form.
+  // The WhatsApp message. It uses only what the person picked or typed, as one natural message:
+  // the greeting, then "I'm {name}." if they typed a name, then one sentence for what they
+  // picked, then their own message exactly as they wrote it. With nothing picked or typed it is
+  // only the greeting, so they write their own words.
   whatsapp: {
-    start: "Hi Titan Wave Media. I need {need}.",
-    channel: "It should answer on {channel}.",
-    rows: "{rows}.",
-    product: "Product: {product}.",
+    greeting: "Hi Titan Wave Media, ",
+    name: "I'm {name}.",
+    // One sentence for what they picked. With an extra choice (above) its own sentence is used.
+    need: {
+      "ai-setup": "I'm interested in an AI assistant for my business.",
+      data: "I need a dataset.",
+      dataRows: "I need a dataset of {rows}.",
+      tool: "I'm interested in one of your AI tools.",
+      toolProduct: "I'm interested in {product}.",
+      privacy: "I need help keeping my customers' details private when we use AI.",
+      other: "",
+    },
   },
 
-  // Filled into the message when someone arrives from "Start a project for my shop" and the like.
-  sectorMessage: "I run a business in this area: {sector}. ",
+  // Put in the message box when someone arrives from "Start a project for my shop" and the like
+  // on the home page, after picking their kind of business there.
+  sectorMessages: {
+    shops: "I run a shop or restaurant.",
+    banks: "I work for a bank or fintech.",
+    clinics: "I run a clinic or hospital.",
+    logistics: "I run a logistics or delivery business.",
+  },
 
   // The list on the thank you page.
   summary: {

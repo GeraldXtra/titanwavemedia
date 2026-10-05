@@ -19,7 +19,7 @@ Next.js and React, hosted on Vercel. Supabase for the database, Resend for email
 
 ## Status
 
-The public website is built. Next come client accounts, the client console and Pay with Titan Wave.
+The public website is built. Client accounts, the client console and Pay with Titan Wave are built too, and payments run in Paystack test mode until live keys are added.
 
 ## Contact
 

@@ -3,21 +3,22 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Icon from "../Icon";
-import { bestMatch } from "@/lib/localBrain";
+import AssistantMessage from "../AssistantMessage";
+import { askAssistant } from "@/lib/askAssistant";
 import { redactParts } from "@/lib/redact";
 import { demoRow } from "@/lib/fakeData";
 import { ph } from "@/lib/text";
 
 const KINDS = ["NAME", "PHONE", "ACCOUNT", "EMAIL"];
 
-// "What we do": four things a visitor can try, three of them live demos.
+// "What we do": four things a visitor can try: our own site assistant, the tool that takes
+// personal details out of a message, and the maker of made up data.
 export default function Bento({ copy }) {
   const c = copy.chat;
   const p = copy.privacy;
   const d = copy.data;
   const bentoRef = useRef(null);
   const timers = useRef(new Set());
-  const nextId = useRef(1);
 
   function later(fn, ms) {
     const t = setTimeout(() => {
@@ -31,52 +32,43 @@ export default function Bento({ copy }) {
     return () => all.forEach(clearTimeout);
   }, []);
 
-  // The restaurant chat: chips, a typing box and a short script.
-  const greeting = [{ id: 0, from: "assistant", text: c.greeting }];
+  // A real conversation with our site assistant, with a few starter questions.
+  const greeting = [{ role: "assistant", text: c.greeting }];
   const [chat, setChat] = useState(greeting);
-  const [used, setUsed] = useState([]);
+  const [pending, setPending] = useState(0);
   const [typed, setTyped] = useState("");
-
-  function add(message) {
-    const id = nextId.current++;
-    setChat((list) => [...list, { ...message, id }]);
-    return id;
-  }
-  function remove(id) {
-    setChat((list) => list.filter((m) => m.id !== id));
-  }
-  // Start again begins a new round, so an answer still typing from the old round is dropped.
+  const chatRef = useRef(greeting);
+  const logRef = useRef(null);
   const round = useRef(0);
-  function exchange(question, answer, wait) {
+
+  function commit(list) {
+    chatRef.current = list;
+    setChat(list);
+  }
+  async function ask(raw) {
+    const text = String(raw || "").trim();
+    if (!text || pending) return;
     const asked = round.current;
-    add({ from: "customer", text: question });
-    const dots = add({ typing: true });
-    later(() => {
-      remove(dots);
-      if (asked === round.current) add({ from: "assistant", text: answer });
-    }, wait);
+    const history = [...chatRef.current, { role: "user", text }];
+    commit(history);
+    setTyped("");
+    setPending(1);
+    const reply = await askAssistant(history.slice(1));
+    setPending(0);
+    if (asked === round.current) commit([...chatRef.current, reply]);
   }
-  function askChip(i) {
-    if (used.includes(i)) return;
-    setUsed((u) => [...u, i]);
-    exchange(c.chips[i].question, c.chips[i].answer, 900);
-  }
+  // Start again begins a new round, so an answer still on its way is dropped.
   function resetChat() {
     round.current += 1;
-    setChat(greeting);
-    setUsed([]);
+    setPending(0);
+    commit(greeting);
   }
-  function onType(e) {
-    e.preventDefault();
-    const t = typed.trim();
-    if (!t) return;
-    setTyped("");
-    const best = bestMatch(t, c.script);
-    exchange(t, best ? best.answer : c.notSure, 800);
-  }
+  useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [chat, pending]);
 
   // Take the personal details out of the message.
-  const [message, setMessage] = useState(p.sample);
+  const [message, setMessage] = useState("");
   const [cleaned, setCleaned] = useState(null);
   const [count, setCount] = useState("");
 
@@ -106,54 +98,6 @@ export default function Bento({ copy }) {
     later(() => setTable((t) => ({ ...t, fresh: false })), 700);
   }
 
-  // The bento plays through its examples until the visitor touches it.
-  const actions = useRef(null);
-  actions.current = { askChip, runPrivacy, makeRows, resetChat };
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const panel = bentoRef.current;
-    let stopped = false;
-    let step = 0;
-    let timer = null;
-    let visible = true;
-    function auto() {
-      if (stopped || !visible || document.hidden) return;
-      step = (step + 1) % 6;
-      const a = actions.current;
-      if (step === 1) a.askChip(0);
-      if (step === 2) a.askChip(1);
-      if (step === 3) a.runPrivacy();
-      if (step === 4) a.makeRows();
-      if (step === 5) a.resetChat();
-      timer = setTimeout(auto, step === 0 ? 1200 : 4200);
-    }
-    timer = setTimeout(auto, 1600);
-    function stop() {
-      stopped = true;
-      clearTimeout(timer);
-    }
-    panel.addEventListener("pointerdown", stop);
-    panel.addEventListener("keydown", stop);
-    let io = null;
-    if ("IntersectionObserver" in window) {
-      io = new IntersectionObserver((entries) => {
-        visible = entries[entries.length - 1].isIntersecting;
-        if (visible && !stopped && !timer) timer = setTimeout(auto, 1500);
-        if (!visible) {
-          clearTimeout(timer);
-          timer = null;
-        }
-      });
-      io.observe(panel);
-    }
-    return () => {
-      clearTimeout(timer);
-      panel.removeEventListener("pointerdown", stop);
-      panel.removeEventListener("keydown", stop);
-      if (io) io.disconnect();
-    };
-  }, []);
-
   const pr = copy.products;
   const lagos = copy.lagos;
 
@@ -164,27 +108,23 @@ export default function Bento({ copy }) {
         <h3>{c.title}</h3>
         <p>{c.text}</p>
         <div className="mini">
-          <ul className="msgs" id="demo-chat">
-            {chat.map((m) =>
-              m.typing ? (
-                <li key={m.id} className="msg msg--out msg--typing" aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                </li>
-              ) : (
-                <li key={m.id} className={m.from === "customer" ? "msg msg--in" : "msg msg--out"}>
-                  {m.text}
-                  <small>{m.from === "customer" ? c.customer : c.assistant}</small>
-                </li>
-              )
+          <ul className="msgs" id="demo-chat" aria-live="polite" ref={logRef}>
+            {chat.map((m, i) => (
+              <AssistantMessage key={i} m={m} />
+            ))}
+            {pending > 0 && (
+              <li className="msg msg--out msg--typing" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </li>
             )}
           </ul>
           <ul className="chips" id="demo-chips">
-            {c.chips.map((chip, i) => (
-              <li key={i}>
-                <button type="button" data-q={chip.question} data-a={chip.answer} disabled={used.includes(i)} onClick={() => askChip(i)}>
-                  {chip.label}
+            {c.chips.map((q) => (
+              <li key={q}>
+                <button type="button" disabled={pending > 0} onClick={() => ask(q)}>
+                  {q}
                 </button>
               </li>
             ))}
@@ -194,20 +134,28 @@ export default function Bento({ copy }) {
               </button>
             </li>
           </ul>
-          <form className="chatline" id="demo-form" noValidate onSubmit={onType}>
+          <form
+            className="chatline"
+            id="demo-form"
+            noValidate
+            onSubmit={(e) => {
+              e.preventDefault();
+              ask(typed);
+            }}
+          >
             <label className="sr-only" htmlFor="demo-input">
               {c.inputLabel}
             </label>
             <input
               id="demo-input"
               type="text"
-              maxLength={200}
+              maxLength={500}
               placeholder={c.placeholder}
               autoComplete="off"
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
             />
-            <button className="btn btn--line btn--sm" type="submit">
+            <button className="btn btn--line btn--sm" type="submit" disabled={pending > 0}>
               {c.send}
             </button>
           </form>
@@ -228,7 +176,7 @@ export default function Bento({ copy }) {
           <label className="sr-only" htmlFor="demo-text">
             {p.label}
           </label>
-          <textarea className="ta" id="demo-text" maxLength={800} value={message} onChange={(e) => setMessage(e.target.value)} />
+          <textarea className="ta" id="demo-text" maxLength={800} placeholder={p.placeholder} value={message} onChange={(e) => setMessage(e.target.value)} />
           <div className="demo__row">
             <button className="btn btn--line btn--sm" type="button" id="demo-run" onClick={() => runPrivacy()}>
               {p.button}

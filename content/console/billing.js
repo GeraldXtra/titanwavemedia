@@ -1,0 +1,124 @@
+// Billing: what you owe, what you paid, your receipts and how you pay.
+
+const billing = {
+  meta: { title: "Billing, Titan Wave Media Console" },
+  title: "Billing",
+  lede: "Pay by card, bank transfer or USSD, and keep every receipt here.",
+  tabs: { overview: "Overview", invoices: "Invoices", payments: "Payments and receipts", methods: "How you pay" },
+  actions: "Actions",
+
+  payInvoice: "Pay the first half",
+  seeInvoice: "See the invoice",
+
+  overview: {
+    toPay: "To pay now",
+    toPayNone: "Nothing to pay. You're all set.",
+    toPayOne: "1 invoice, due {date}",
+    toPayMany: "{count} invoices, the first due {date}",
+    pay: "Pay now",
+    next: "Next Care payment",
+    nextNone: "No monthly Care yet",
+    nextAuto: "On {date}, paid automatically with {card}",
+    nextInvoice: "On {date}. We send you an invoice a week before.",
+    paid: "Paid this year",
+    paidCount: "{count} payments, each with a receipt",
+    paidOne: "1 payment, with a receipt",
+    paidNone: "No payments yet",
+    plans: "Your Care plans",
+    plansHelp: "Care keeps your project running after it goes live: hosting, updates and fixes.",
+    plansProject: "Project",
+    plansMonthly: "Per month",
+    plansSince: "Since",
+    plansNone: "No Care plans yet. Care starts when a project goes live.",
+  },
+
+  invoices: {
+    filter: "Show invoices",
+    all: "All",
+    due: "To pay",
+    paid: "Paid",
+    number: "Invoice",
+    for: "For",
+    dueOn: "Due",
+    amount: "Amount",
+    status: "Status",
+    view: "View",
+    pay: "Pay",
+    empty: "No invoices here.",
+    emptyAll: "No invoices yet. When we send you one, it shows here and in your email.",
+    summary: "{count} to pay, {total} in total",
+    summaryNone: "Nothing to pay right now",
+  },
+
+  payments: {
+    filter: "Show payments",
+    all: "All",
+    success: "Successful",
+    failed: "Didn't go through",
+    date: "Date",
+    for: "For",
+    with: "Paid with",
+    amount: "Amount",
+    status: "Status",
+    receipt: "Receipt",
+    tryAgain: "Try again",
+    note: "Every successful payment has a receipt.",
+    empty: "No payments here.",
+    emptyAll: "No payments yet.",
+  },
+
+  methods: {
+    cards: "Saved cards",
+    cardsNote: "We never keep your card number. Paystack keeps it safe and gives us a code to charge it with, only when you say so.",
+    cardsEmpty: "No saved cards. To save one, pay an invoice by card and choose Save this card.",
+    expires: "Expires {date}",
+    default: "Default",
+    makeDefault: "Make default",
+    remove: "Remove",
+    removed: "{card} removed.",
+    defaultSet: "{card} is now your default card.",
+    ownerOnly: "Only an owner of {business} can see and change how the business pays.",
+    auto: "Automatic payments",
+    autoLabel: "Pay Care automatically",
+    autoOn: "We charge {amount} to {card} on {date} for Care on {project}, and on the same day each month after.",
+    autoOnNoCare: "On. When a Care invoice is due, we charge your default card, {card}, on its due date.",
+    autoOff: "Off. We send you each Care invoice by email, and you pay it here.",
+    autoNeedsCard: "Save a card first. Pay an invoice by card and choose Save this card.",
+    autoTurnedOn: "Automatic payments are on.",
+    autoTurnedOff: "Automatic payments are off. We'll email you each Care invoice.",
+    other: "Other ways to pay",
+    transfer: "Bank transfer",
+    transferText: "Paystack gives you an account number for each payment, so we know it's you.",
+    ussd: "USSD",
+    ussdText: "Dial a code from the phone linked to your bank account. No internet needed.",
+  },
+
+  // How a payment was made, as people read it.
+  method: {
+    card: "{brand} ending {last4}",
+    cardNoNumber: "Card",
+    bank_transfer: "Bank transfer",
+    ussd: "USSD",
+    bank: "Bank account",
+    other: "Paystack",
+  },
+
+  // What invoices we make ourselves are called, and their line. {setup} is the whole setup price.
+  titles: {
+    setupFirst: "{project}: setup, first half",
+    setupSecond: "{project}: setup, second half",
+    care: "{project}: Care for {month}",
+  },
+  lines: {
+    setupFirst: "Setup of {project}, first half of {setup}",
+    setupSecond: "Setup of {project}, second half of {setup}",
+    care: "Care for {project}, {from} to {to}",
+  },
+
+  // The status of an invoice, as clients see it.
+  invoiceStatus: { due: "To pay", paid: "Paid", refunded: "Refunded", void: "Cancelled" },
+  receiptStatus: { paid: "Paid", refund_requested: "Refund asked for", refunded: "Refunded" },
+  paymentStatus: { success: "Successful", failed: "Didn't go through", abandoned: "Not finished", pending: "Waiting", review: "Being checked" },
+};
+
+export default billing;

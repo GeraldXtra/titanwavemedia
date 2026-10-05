@@ -4,13 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Rich from "./Rich";
 import { format } from "@/lib/text";
+import { builderMessage } from "@/lib/whatsapp";
 import { loadChoice, saveChoice } from "@/lib/choices";
 
-// "Build your setup": the summary and the quote link follow the form.
+// "Build your setup": the summary and the quote link follow the form. Nothing starts ticked,
+// so the quote request carries only what the person picked.
 export default function SetupBuilder({ copy }) {
-  const [what, setWhat] = useState(() => new Set(copy.what.options.filter((o) => o.checked).map((o) => o.value)));
-  const [where, setWhere] = useState(() => (copy.where.options.find((o) => o.checked) || copy.where.options[0]).value);
-  const [size, setSize] = useState(() => (copy.size.options.find((o) => o.checked) || copy.size.options[0]).value);
+  const [what, setWhat] = useState(() => new Set());
+  const [where, setWhere] = useState("");
+  const [size, setSize] = useState("");
   const s = copy.summary;
 
   // With "Remember my choices" on (Cookie preferences), the last setup picked here comes back.
@@ -33,11 +35,7 @@ export default function SetupBuilder({ copy }) {
 
   // Ticked items in the order of the form.
   const ticked = copy.what.options.filter((o) => what.has(o.value)).map((o) => o.value);
-  const message = format(s.message, {
-    what: ticked.length ? ticked.join(", ") : s.messageNothing,
-    where,
-    size,
-  });
+  const message = builderMessage(copy, { what: ticked, where, size });
 
   function toggle(value, on) {
     setWhat((prev) => {
@@ -85,8 +83,8 @@ export default function SetupBuilder({ copy }) {
           {(ticked.length ? ticked : [s.nothing]).map((item) => (
             <li key={item}>{item}</li>
           ))}
-          <li>{format(s.answers, { where })}</li>
-          <li>{format(s.team, { size })}</li>
+          {where && <li>{format(s.answers, { where })}</li>}
+          {size && <li>{format(s.team, { size })}</li>}
         </ul>
         <dl className="cfg__price">
           <div>
@@ -103,7 +101,7 @@ export default function SetupBuilder({ copy }) {
           </div>
         </dl>
         <div className="btns">
-          <Link className="btn btn--solid" id="cfg-cta" href={"/contact?need=ai-setup&msg=" + encodeURIComponent(message)}>
+          <Link className="btn btn--solid" id="cfg-cta" href={"/contact?need=ai-setup&from=builder&msg=" + encodeURIComponent(message)}>
             {s.button}
           </Link>
         </div>

@@ -1,0 +1,37 @@
+// One invoice, as the client sees it (and as it prints or saves as a PDF).
+
+const invoice = {
+  title: "Invoice {number}",
+  crumb: "Invoices",
+  crumbTeam: "Invoices",
+  doc: {
+    kind: "Invoice",
+    billedTo: "Billed to",
+    issued: "Issued",
+    due: "Due",
+    dueNow: "When you get it",
+    status: "Status",
+    paidOn: "Paid on {date}",
+    lines: { what: "What it's for", qty: "Qty", price: "Price", amount: "Amount" },
+    subtotal: "Subtotal",
+    total: "Total",
+    stampPaid: "PAID",
+    stampDue: "DUE",
+    stampRefunded: "REFUNDED",
+    howTitle: "How to pay.",
+    how: "Open this invoice in your Titan Wave console and press Pay. You can pay by card, bank transfer or USSD, through Paystack.",
+    questions: "Questions about this invoice? Message us on WhatsApp at {phone}.",
+    note: "Note:",
+  },
+  // The company block at the top of invoices and receipts.
+  company: ["Titan Wave Media LTD", "Lagos, Nigeria", "RC {rc}", "{email}", "WhatsApp {phone}"],
+  pay: "Pay {amount}",
+  receipt: "See the receipt",
+  print: "Print or save as PDF",
+  remind: "Send a reminder",
+  reminded: "Reminder sent to {count} people by email.",
+  remindedOne: "Reminder sent to 1 person by email.",
+  remindNobody: "Nobody at this business wants invoice emails. They can see it in their console.",
+};
+
+export default invoice;

@@ -1,0 +1,103 @@
+// One project: the 5 step tracker, what happens next, the quote, updates, files, payments and
+// the chat with us.
+
+const project = {
+  crumb: "Projects",
+  stepsLabel: "Project steps",
+  stepDone: "{step}, done",
+  stepNow: "{step}, now",
+
+  next: {
+    title: "What happens next",
+    // When our team has not written its own note, the words for the step.
+    byStep: {
+      1: "We read your request and reply here within working hours with a few questions. Then we book a first call with you.",
+      2: "We're planning your project. Your quote will show here, with the price to build it and the monthly price to keep it running.",
+      3: "We're building it now. We post updates here as we go.",
+      4: "It's ready for you to test. Try it with your team on your own questions and tell us what to change.",
+      5: "It's live. Care keeps it running: we host it, update it and fix anything that breaks.",
+    },
+    quoteWaiting: "Your quote is ready. Accept it to get the invoice for the first half and start the build.",
+    firstHalfDue: "Thank you for accepting. Pay the first half and we'll start building the same week.",
+  },
+
+  quote: {
+    title: "Your quote",
+    setup: "To build it",
+    halves: "Paid in two halves: {first} now, {second} when it goes live",
+    care: "Care, to keep it running",
+    perMonth: "{amount} a month, from the month after it goes live",
+    noCare: "No monthly Care",
+    sent: "Sent on {date}",
+    accept: "Accept the quote",
+    changes: "Ask for changes",
+    changesText: "Could we change the quote? ",
+    accepted: "You accepted this quote on {date}.",
+    changesAsked: "You asked for changes on {date}. We'll send a new quote.",
+    ownerOnly: "Only the owner of {business} can accept a quote.",
+    acceptedToast: "Quote accepted. Your first invoice is ready.",
+    confirmTitle: "Accept the quote?",
+    confirmText: "You get an invoice for the first half, {first}, due in 7 days. The second half comes when your project goes live.",
+    confirmButton: "Accept the quote",
+    cancel: "Not yet",
+  },
+
+  updates: {
+    title: "Updates",
+    empty: "Nothing yet.",
+    // The words for each kind of update. {Words in curly brackets} come from the update.
+    kinds: {
+      request: "You sent the request.",
+      step: "Moved to step {n}, {step}.",
+      quote: "We sent your quote: {amount} to build it.",
+      quote_accepted: "You accepted the quote.",
+      quote_changes: "You asked for changes to the quote.",
+      file: "{who} sent a file: {name}",
+      invoice: "Invoice {number} for {amount}.",
+      payment: "{amount} paid for {number}. Thank you.",
+      care: "Care started.",
+      note: "{body}",
+    },
+    you: "You",
+    us: "We",
+  },
+
+  files: {
+    title: "Files",
+    send: "Send us a file",
+    sending: "Sending {name}",
+    rules: "PDF, images, Word, Excel, CSV, text or zip. Up to 20 MB each.",
+    empty: "No files yet.",
+    open: "Download",
+    fromYou: "Sent by you, {date}, {size}",
+    fromUs: "From Titan Wave Media, {date}, {size}",
+    tooBig: "{name} is bigger than 20 MB. Send a smaller file, or split it.",
+    wrongType: "{name} isn't a file type we take. Send a PDF, image, Word, Excel, CSV, text or zip file.",
+    sent: "Sent. We can see {name} now.",
+    failed: "{name} didn't send. Please try again.",
+  },
+
+  payments: {
+    title: "Payments for this project",
+    invoice: "Invoice",
+    amount: "Amount",
+    status: "Status",
+    empty: "No invoices yet.",
+    pay: "Pay",
+    receipt: "Receipt",
+  },
+
+  chat: {
+    title: "Chat with Titan Wave Media",
+    online: "We're online now and usually reply within an hour.",
+    away: "We're away now. We reply from {next}.",
+    label: "Message",
+    placeholder: "Write to us",
+    send: "Send",
+    empty: "Write to us here. Questions, changes, anything about this project.",
+    you: "You",
+    failed: "Your message didn't send. Please try again.",
+  },
+};
+
+export default project;

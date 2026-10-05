@@ -18,48 +18,19 @@ const home = {
 
   whatWeDo: {
     title: "Try what we can do for your business",
-    text: "Four things, each one you can try right here.",
+    text: "Four things we do. You can try three of them right here.",
 
-    // The restaurant chat demo.
+    // A real chat with our own site assistant, with a few starter questions.
     chat: {
       title: "AI set up for your business",
       text: "Chat assistants that answer your customers, automation that takes repeat work off your team, and AI inside the apps you already use.",
-      greeting: "Hi, I am the assistant for Ade's Kitchen. Ask me about an order, our opening hours or a refund.",
-      chips: [
-        {
-          label: "Has my order shipped?",
-          question: "Has my order 4821 shipped?",
-          answer: "Yes. Order 4821 left the Ikeja store this afternoon and should reach you tomorrow before 6 pm.",
-        },
-        {
-          label: "Opening hours",
-          question: "What time do you open on Sunday?",
-          answer: "We open at 12 noon on Sundays and close at 9 pm.",
-        },
-        {
-          label: "Ask for a refund",
-          question: "Can I get a refund for a wrong order?",
-          answer: "Yes. I have told Bisi on our team, and she will message you within the hour to sort it out.",
-        },
-      ],
+      greeting: "Hi, I'm the Titan Wave Media assistant. Ask me what we set up, what it costs, or how we keep your data private.",
+      chips: ["What do you set up?", "How much does it cost?", "How do you keep data private?", "How long does a setup take?"],
       reset: "Start again",
       inputLabel: "Type a message",
-      placeholder: "Type a message, for example: is my order ready?",
+      placeholder: "Ask about our work, prices or privacy",
       send: "Send",
-      note: "A demo assistant for a made up restaurant. It answers from a short script.",
-      customer: "Customer",
-      assistant: "Assistant",
-      // Typed messages are matched against these words.
-      script: [
-        { words: ["order", "shipped", "ready", "where", "4821", "status", "delivery"], answer: "Order 4821 left the Ikeja store this afternoon and should reach you tomorrow before 6 pm." },
-        { words: ["open", "hours", "time", "close", "sunday", "today"], answer: "We open at 12 noon and close at 9 pm, every day including Sunday." },
-        { words: ["refund", "wrong", "complain", "cold", "missing", "bad"], answer: "Sorry about that. I have told Bisi on our team, and she will message you within the hour to sort it out." },
-        { words: ["menu", "jollof", "rice", "food", "eat", "have", "price", "cost", "how much"], answer: "Tonight we have jollof rice, fried rice, pepper soup and suya. I can send the full menu with prices if you like." },
-        { words: ["book", "table", "reserve", "reservation", "seat"], answer: "Yes. How many people, and what time? I will check the tables." },
-        { words: ["hello", "hi", "hey", "good"], answer: "Hello. Ask me about an order, our opening hours, the menu or a booking." },
-        { words: ["thanks", "thank"], answer: "You are welcome. Enjoy your meal." },
-      ],
-      notSure: "I am not sure about that one, so I have passed it to a person on our team. They will message you shortly.",
+      note: "This is our real site assistant. It answers from what's on this site, and passes you to a person on WhatsApp when it isn't sure.",
       foot: { label: "See AI setup", href: "/ai-setup" },
     },
 
@@ -68,11 +39,11 @@ const home = {
       title: "Your data stays private",
       text: "Paste any message. We take the personal details out before an AI model reads it.",
       label: "Message to clean",
-      sample: "Hello, this is Chiamaka Eze. My transfer to account 0123456789 failed twice today. Please call me on 0803 555 0142 or email chiamaka@example.com.",
+      placeholder: "Paste a message that has names or phone numbers in it",
       button: "Remove personal details",
-      start: "Edit the message, then press the button.",
-      empty: "Nothing to clean.",
-      none: "No personal details found.",
+      start: "Paste a message, then press the button.",
+      empty: "There's nothing to clean yet. Paste a message first.",
+      none: "We didn't find any personal details in this message.",
       removed: "Removed",
       // One and more than one of each kind, for the count under the button.
       kinds: {
@@ -95,18 +66,18 @@ const home = {
         { value: "orders", label: "Orders" },
       ],
       button: "Make five rows",
-      caption: "Sample only. Every row is made up.",
+      caption: "Every row is made up on purpose. No real person is in it.",
       heads: {
         bank: ["Name", "State", "Account type", "Amount (₦)", "Date"],
         customers: ["Name", "City", "Joined", "Orders", "Status"],
         orders: ["Order", "Item", "Customer", "Amount (₦)", "Status"],
       },
       rows: [
-        ["Adaeze Okafor", "Lagos", "Savings", "184,500", "3 Mar 2026"],
-        ["Tunde Bakare", "Oyo", "Current", "1,250,000", "17 Apr 2026"],
-        ["Halima Bello", "Kano", "Domiciliary", "620,750", "9 Jun 2026"],
-        ["Chidi Nwosu", "Enugu", "Savings", "42,300", "21 Jul 2026"],
-        ["Funmi Adeyemi", "Abuja (FCT)", "Fixed deposit", "2,000,000", "5 Aug 2026"],
+        ["Ngozi Okeke", "Lagos", "Savings", "184,500", "3 Mar 2026"],
+        ["Kunle Adebayo", "Oyo", "Current", "1,250,000", "17 Apr 2026"],
+        ["Zainab Musa", "Kano", "Domiciliary", "620,750", "9 Jun 2026"],
+        ["Emeka Obi", "Enugu", "Savings", "42,300", "21 Jul 2026"],
+        ["Ifeoma Nnaji", "Abuja (FCT)", "Fixed deposit", "2,000,000", "5 Aug 2026"],
       ],
       foot: { label: "How synthetic data works", href: "/synthetic-data" },
     },
@@ -124,7 +95,7 @@ const home = {
 
     lagos: {
       title: "Based in Lagos. Working anywhere.",
-      text: "A private company registered with the Corporate Affairs Commission, Nigeria. Tell us what you need and we reply the same day we read it.",
+      text: "A private company registered with the Corporate Affairs Commission, Nigeria. Tell us what you need, and we'll reply the same working day.",
       foot: "Start a project",
       href: "/contact?need=ai-setup",
     },
@@ -132,11 +103,9 @@ const home = {
 
   who: {
     title: "See what AI can do for your kind of business",
-    text: "Pick the kind of business you run. The plan and the example change to match.",
+    text: "Pick the kind of business you run, and see what we'd set up for it.",
     tabsLabel: "Kind of business",
-    note: "Example conversation. The details are made up.",
-    customer: "Customer",
-    assistant: "Assistant",
+    listTitle: "What we'd set up",
     sectors: [
       {
         key: "shops",
@@ -148,10 +117,6 @@ const home = {
           "A chat assistant that takes orders and answers questions on WhatsApp",
           "Order updates and delivery reminders sent without anyone typing them",
           "A simple view of sales and stock",
-        ],
-        chat: [
-          ["Do you have jollof rice tonight?", "Yes, it is on the menu tonight. Delivery to Yaba takes about 40 minutes. Shall I place an order?"],
-          ["Yes please, two plates.", "Done. Two plates of jollof rice, paying on delivery. The rider will message you when he leaves."],
         ],
         cta: "Start a project for my shop",
       },
@@ -166,10 +131,6 @@ const home = {
           "Records cleaned of names, phone numbers and account numbers before any AI reads them",
           "An assistant that answers account questions without ever seeing account numbers",
         ],
-        chat: [
-          ["Why was my transfer declined this morning?", "I can see a transfer was declined at 9:40 this morning. I have passed it to our support team, and they will call you within the hour."],
-          ["Thank you.", "You are welcome. Your reference is 2210, in case you need it."],
-        ],
         cta: "Start a project for my bank",
       },
       {
@@ -183,10 +144,6 @@ const home = {
           "Patient records cleaned before AI summarises them for a doctor",
           "Reports with the names taken out",
         ],
-        chat: [
-          ["Can I book a follow up for next week?", "Yes. Dr Okoro has space on Tuesday at 10 am and Thursday at 2 pm. Which one works for you?"],
-          ["Thursday at 2.", "Booked. You will get a reminder the day before."],
-        ],
         cta: "Start a project for my clinic",
       },
       {
@@ -199,10 +156,6 @@ const home = {
           "Delivery updates sent to customers automatically",
           "Driver reports written from a voice note",
           "A view of deliveries on time and late, as they happen",
-        ],
-        chat: [
-          ["Where is my package?", "Your package left the Ikeja hub at 9:15 and is with the rider now. It should reach you before 1 pm."],
-          ["Can he call me when he is close?", "Yes. I have added that to the delivery note."],
         ],
         cta: "Start a project for my fleet",
       },
@@ -223,7 +176,7 @@ const home = {
       {
         title: "See a working demo",
         text: "You try it on real examples from your business.",
-        detail: "We build a small version first, with your own examples in it. You try it, you tell us what is wrong, and only then do we agree the full build in writing.",
+        detail: "We build a small version first, with your own examples in it. You try it, you tell us what's wrong, and only then do we agree the full build in writing.",
       },
       {
         title: "We build and connect it",
@@ -244,7 +197,7 @@ const home = {
     link: { label: "See all products", href: "/products" },
     notify: {
       title: "Get told when our first product launches",
-      thanks: "Thanks. We will email you when it is ready.",
+      thanks: "Thanks. We'll email you when it's ready.",
     },
   },
 
@@ -264,7 +217,7 @@ const home = {
       {
         icon: "erase",
         text: "We remove personal details before any AI sees your data.",
-        more: "Names, phone numbers, account numbers and emails come out first. The model sees the question, not the person. Try it in the box at the top of this page.",
+        more: "Names, phone numbers, account numbers and emails come out first. The model sees the question, not the person. Try it in the box near the top of this page.",
       },
       {
         icon: "pin",
@@ -285,11 +238,11 @@ const home = {
 
   // The tiles and posts in these blocks come from content/work.js and content/updates.js.
   work: {
-    title: "See what we have built",
+    title: "See what we've built",
     link: { label: "See all work", href: "/work" },
   },
   updates: {
-    title: "Read what we are building and launching",
+    title: "Read what we're building and launching",
     link: { label: "All updates", href: "/updates" },
   },
 

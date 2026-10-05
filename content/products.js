@@ -42,8 +42,8 @@ const products = {
 
   notify: {
     title: "Our first product is on the way.",
-    text: "Leave your email and we will tell you when it is ready.",
-    thanks: "Thanks. We will email you when it is ready.",
+    text: "Leave your email and we'll tell you when it's ready.",
+    thanks: "Thanks. We'll email you when it's ready.",
   },
 
   strip: {

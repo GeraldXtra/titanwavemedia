@@ -30,7 +30,7 @@ const privacy = {
 
   demo: {
     title: "Take personal details out of a message",
-    text: "Tick what should come out of a message before any AI model reads it, and watch it happen.",
+    text: "Paste a message and tick what should come out before an AI model reads it. Nothing you paste leaves this page.",
     legend: "Remove",
     kinds: [
       { value: "NAME", label: "Names" },
@@ -38,28 +38,17 @@ const privacy = {
       { value: "ACCOUNT", label: "Account numbers" },
       { value: "EMAIL", label: "Emails" },
     ],
-    removed: "Personal details removed.",
-    original: "Original shown.",
-    label: "Customer message",
-    example: "Example, every detail is made up",
-    // The parts marked with a kind are the personal details that can be taken out.
-    message: [
-      "Hello, this is ",
-      { kind: "NAME", text: "Chiamaka Eze" },
-      ". My transfer to account ",
-      { kind: "ACCOUNT", text: "0123456789" },
-      " failed twice today. Please call me on ",
-      { kind: "PHONE", text: "0803 555 0142" },
-      " or email ",
-      { kind: "EMAIL", text: "chiamaka@example.com" },
-      ".",
-    ],
+    label: "Message to clean",
+    placeholder: "Paste a message that has names or phone numbers in it",
+    cleanLabel: "The clean copy",
+    empty: "Paste a message first. The clean copy shows here, with the details you tick taken out.",
+    none: "We didn't find any personal details in this message.",
   },
 
   tools: {
-    title: "Privacy tools for your organization",
+    title: "Privacy tools for your organisation",
     text: "We clean personal details out of your records so your team can use AI safely.",
-    button: { label: "Talk to us", href: "/contact?need=other" },
+    button: { label: "Talk to us", href: "/contact?need=privacy" },
     policyLink: { label: "Read our full Privacy Policy", href: "/privacy-policy" },
   },
 };

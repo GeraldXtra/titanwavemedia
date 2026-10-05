@@ -74,7 +74,7 @@ const support = {
 
   data: {
     title: "Your data",
-    text: "You can ask for a copy of your data, ask us to correct it, or ask us to delete it. Email us from the address you used with us. We confirm we have your request the same working day, and finish it within [NUMBER] days.",
+    text: "You can ask for a copy of your data, ask us to correct it, or ask us to delete it. Email us from the address you used with us. We confirm we have your request the same working day, and finish it within 30 days. We keep contact messages for 12 months and assistant conversations for 6 months, then delete them. Invoices and receipts are kept for [NUMBER] years, as tax law requires.",
     link: { label: "Read the Privacy Policy", href: "/privacy-policy" },
   },
 

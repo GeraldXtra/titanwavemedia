@@ -3,7 +3,7 @@
 const notFound = {
   meta: {
     title: "Page not found, Titan Wave Media",
-    description: "This page does not exist.",
+    description: "This page doesn't exist.",
   },
 
   hero: {

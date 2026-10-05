@@ -4,12 +4,12 @@
 const updates = {
   meta: {
     title: "Updates, Titan Wave Media",
-    description: "Product launches, what we are building, and what we learn along the way.",
+    description: "Product launches, what we're building, and what we learn along the way.",
   },
 
   hero: {
-    title: "Read what we are building and launching.",
-    text: "Product launches, what we are building, and what we learn along the way.",
+    title: "Read what we're building and launching.",
+    text: "Product launches, what we're building, and what we learn along the way.",
   },
 
   // A heading for screen readers over the list below (it is not shown on the page).
@@ -34,8 +34,8 @@ const updates = {
 
   notify: {
     title: "Get our updates by email.",
-    text: "We only send an email when there is something new.",
-    thanks: "Thanks. You will hear from us when there is news.",
+    text: "We only email you when there's something new.",
+    thanks: "Thanks. You'll hear from us when there's news.",
   },
 };
 

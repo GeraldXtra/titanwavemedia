@@ -4,12 +4,12 @@
 const work = {
   meta: {
     title: "Our work, Titan Wave Media",
-    description: "Sites, apps and AI systems we have built, for clients and as our own projects.",
+    description: "Sites, apps and AI systems we've built, for clients and as our own projects.",
   },
 
   hero: {
-    title: "See what we have built.",
-    text: "Sites, apps and AI systems we have built, for clients and as our own projects.",
+    title: "See what we've built.",
+    text: "Sites, apps and AI systems we've built, for clients and as our own projects.",
   },
 
   // A heading for screen readers over the list below (it is not shown on the page).

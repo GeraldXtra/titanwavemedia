@@ -1,82 +1,14 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import BrandMark from "./BrandMark";
 import Icon from "./Icon";
+import AssistantMessage from "./AssistantMessage";
 import assistant from "@/content/assistant";
-import site from "@/content/site";
-import { localAnswer } from "@/lib/localBrain";
+import { askAssistant } from "@/lib/askAssistant";
 
 const STORE = "twm-chat";
-const STORE_ID = "twm-chat-id";
-const MAX_SENT = 12;
-const MAX_CHARS = 599;
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-function newId() {
-  if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
-}
-
-// Placeholders like [SETUP PRICE] show in grey; line breaks are kept.
-function ChatText({ text }) {
-  return String(text)
-    .split("\n")
-    .map((line, i) => (
-      <Fragment key={i}>
-        {i > 0 && <br />}
-        {line.split(/(\[[A-Z ]+\])/).map((part, j) =>
-          /^\[[A-Z ]+\]$/.test(part) ? (
-            <span className="ph" key={j}>
-              {part}
-            </span>
-          ) : (
-            part
-          )
-        )}
-      </Fragment>
-    ));
-}
-
-function Message({ m }) {
-  if (m.role === "user") {
-    return (
-      <li className="msg msg--in">
-        {m.text}
-        <small>{assistant.you}</small>
-      </li>
-    );
-  }
-  return (
-    <li className="msg msg--out">
-      <ChatText text={m.text} />
-      {m.link && (
-        <>
-          <br />
-          <Link className="link" href={m.link.href}>
-            {m.link.label}
-          </Link>
-        </>
-      )}
-      {m.whatsapp && (
-        <>
-          <br />
-          <a
-            className="link"
-            href={`${site.whatsappUrl}?text=${encodeURIComponent(assistant.whatsappStart + (m.question || ""))}`}
-            target="_blank"
-            rel="noopener"
-          >
-            {assistant.whatsappLink}
-          </a>
-        </>
-      )}
-      <small>{assistant.bot}</small>
-    </li>
-  );
-}
 
 // The site assistant at the bottom right. Full screen on phones.
 export default function ChatWidget() {
@@ -88,7 +20,6 @@ export default function ChatWidget() {
   const openRef = useRef(null);
   const inputRef = useRef(null);
   const logRef = useRef(null);
-  const idRef = useRef(null);
   const messagesRef = useRef(messages);
 
   // The conversation is remembered while the browser tab stays open.
@@ -107,14 +38,7 @@ export default function ChatWidget() {
         messagesRef.current = saved;
         setMessages(saved);
       }
-      idRef.current = sessionStorage.getItem(STORE_ID);
-      if (!idRef.current) {
-        idRef.current = newId();
-        sessionStorage.setItem(STORE_ID, idRef.current);
-      }
-    } catch {
-      idRef.current = idRef.current || newId();
-    }
+    } catch {}
   }, []);
 
   useEffect(() => {
@@ -160,28 +84,7 @@ export default function ChatWidget() {
     commit(history);
     setInput("");
     setPending((n) => n + 1);
-    const started = Date.now();
-    const minWait = 600 + Math.min(900, text.length * 15);
-    let reply;
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: idRef.current,
-          messages: history.slice(-MAX_SENT).map((m) => ({ role: m.role, content: String(m.text).slice(0, MAX_CHARS) })),
-        }),
-      });
-      const data = await res.json();
-      if (!data || typeof data.reply !== "string" || !data.reply) throw new Error("no reply");
-      reply = { role: "assistant", text: data.reply, link: data.link || null, whatsapp: !!data.whatsapp, question: text };
-    } catch {
-      // Offline or the server could not answer: the local brain replies instead.
-      const local = localAnswer(text);
-      reply = { role: "assistant", text: local.text, link: local.link, whatsapp: local.whatsapp, question: text };
-    }
-    const wait = minWait - (Date.now() - started);
-    if (wait > 0) await sleep(wait);
+    const reply = await askAssistant(history);
     commit([...messagesRef.current, reply]);
     setPending((n) => n - 1);
   }
@@ -214,7 +117,7 @@ export default function ChatWidget() {
         </div>
         <ul className="chat__log" id="chat-log" aria-live="polite" ref={logRef}>
           {messages.map((m, i) => (
-            <Message key={i} m={m} />
+            <AssistantMessage key={i} m={m} />
           ))}
           {Array.from({ length: pending }, (_, i) => (
             <li key={`typing-${i}`} className="msg msg--out msg--typing">

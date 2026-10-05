@@ -8,11 +8,12 @@ import LagosClock from "./LagosClock";
 import Rich from "./Rich";
 import Email from "./Email";
 import { checkContact, LIMITS } from "@/lib/validate";
-import { emailHref, fill, format, isPh, ph } from "@/lib/text";
+import { emailHref, fill, isPh, ph } from "@/lib/text";
+import { contactMessage, waLink } from "@/lib/whatsapp";
 
 const ORDER = ["name", "email", "need", "message"];
 
-// Reads ?need=, ?msg= and ?sector= from the address. Kept apart so the rest of the form is
+// Reads ?need=, ?msg=, ?from= and ?sector= from the address. Kept apart so the rest of the form is
 // part of the page's first paint.
 function Prefill({ onQuery }) {
   const params = useSearchParams();
@@ -22,19 +23,15 @@ function Prefill({ onQuery }) {
   return null;
 }
 
-export default function ContactBlock({ copy, site, sectors }) {
+const EMPTY = { name: "", email: "", need: "", channel: "", rows: "", product: "", message: "" };
+
+export default function ContactBlock({ copy, site }) {
   const f = copy.form;
   const router = useRouter();
-  const firstOf = (key) => f.extra[key].options[0].value;
-  const [values, setValues] = useState({
-    name: "",
-    email: "",
-    need: "",
-    channel: firstOf("ai-setup"),
-    rows: firstOf("data"),
-    product: firstOf("tool"),
-    message: "",
-  });
+  // Nothing starts picked: the extra choices count only once the person picks one.
+  const [values, setValues] = useState(EMPTY);
+  // True while the message box holds the setup builder's words.
+  const [fromBuilder, setFromBuilder] = useState(false);
   const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -43,28 +40,25 @@ export default function ContactBlock({ copy, site, sectors }) {
 
   const needWord = (v) => copy.needWords[v] || copy.needWords.none;
   const set = (key, value) => {
+    if (key === "need") setFromBuilder(false);
     setValues((v) => ({ ...v, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: "" }));
   };
 
-  // The WhatsApp message carries what is picked on the form.
+  // The WhatsApp message: only what is picked or typed on the form, as one natural message.
   const v = values;
-  const parts = [format(copy.whatsapp.start, { need: needWord(v.need) })];
-  if (v.need === "ai-setup" && v.channel) parts.push(format(copy.whatsapp.channel, { channel: v.channel }));
-  if (v.need === "data" && v.rows) parts.push(format(copy.whatsapp.rows, { rows: v.rows }));
-  if (v.need === "tool" && v.product) parts.push(format(copy.whatsapp.product, { product: v.product }));
-  if (v.message.trim()) parts.push(v.message.trim());
-  const waHref = site.whatsappUrl + "?text=" + encodeURIComponent(parts.join(" "));
+  const waHref = waLink(site.whatsappUrl, contactMessage(copy, v, { fromBuilder }));
 
   function onQuery(params) {
     const need = params.get("need");
     const msg = params.get("msg");
     const sector = params.get("sector");
+    setFromBuilder(Boolean(msg) && params.get("from") === "builder");
     setValues((current) => {
       const next = { ...current };
       if (need && f.needs.some((o) => o.value === need)) next.need = need;
       if (msg) next.message = msg;
-      else if (sector && sectors[sector]) next.message = format(copy.sectorMessage, { sector: sectors[sector] });
+      else if (sector && copy.sectorMessages[sector]) next.message = copy.sectorMessages[sector];
       return next;
     });
   }
@@ -80,6 +74,7 @@ export default function ContactBlock({ copy, site, sectors }) {
     if (v.email.trim()) sum.push([s.email, v.email.trim()]);
     try {
       sessionStorage.setItem("twm-last", JSON.stringify(sum));
+      sessionStorage.setItem("twm-last-email", v.email.trim());
     } catch {}
   }
 
@@ -118,7 +113,8 @@ export default function ContactBlock({ copy, site, sectors }) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error("not sent");
-      setValues({ name: "", email: "", need: "", channel: firstOf("ai-setup"), rows: firstOf("data"), product: firstOf("tool"), message: "" });
+      setValues(EMPTY);
+      setFromBuilder(false);
       router.push("/thank-you");
     } catch {
       setFailed(true);

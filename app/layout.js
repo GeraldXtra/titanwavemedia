@@ -1,12 +1,6 @@
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import SvgSprite from "@/components/SvgSprite";
-import SkipLink from "@/components/SkipLink";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ScrollUi from "@/components/ScrollUi";
-import ChatWidget from "@/components/ChatWidget";
-import SiteEffects from "@/components/SiteEffects";
 import site from "@/content/site";
 import home from "@/content/home";
 import { siteUrl } from "@/lib/seo";
@@ -50,13 +44,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <SvgSprite />
-        <SkipLink label={site.skipLink} />
-        <Header />
-        <div id="content">{children}</div>
-        <Footer />
-        <ScrollUi />
-        <ChatWidget />
-        <SiteEffects />
+        {/* The public pages add the site header and footer in app/(site)/layout.js; sign in
+            and the console have their own. */}
+        {children}
       </body>
     </html>
   );
