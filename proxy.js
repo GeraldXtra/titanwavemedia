@@ -6,10 +6,18 @@ import { frameAncestors } from "@/lib/assist/sites";
 // Runs before the console, the sign in pages and the Wave Assist chat page (see the matcher
 // below; the rest of the public website is untouched).
 export async function proxy(request) {
-  if (request.nextUrl.pathname === "/assist/chat") return assistChat(request);
+  const chat = request.nextUrl.pathname === "/assist/chat";
+  try {
+    return chat ? await assistChat(request) : await renewSession(request);
+  } catch (error) {
+    console.error("[proxy] Failed, so the page carries on without it:", error);
+    return chat ? chatResponse("") : NextResponse.next({ request });
+  }
+}
 
-  // The console and sign in: renews the sign in cookie when it is close to running out, so
-  // pages, which cannot set cookies themselves, always see a fresh one.
+// The console and sign in: renews the sign in cookie when it is close to running out, so
+// pages, which cannot set cookies themselves, always see a fresh one.
+async function renewSession(request) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return NextResponse.next({ request });
@@ -76,6 +84,10 @@ async function assistChat(request) {
   } catch (error) {
     console.error("[assist] Could not read the chat's websites, so it shows on our own site only:", error.message);
   }
+  return chatResponse(sources);
+}
+
+function chatResponse(sources) {
   const csp = [
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
