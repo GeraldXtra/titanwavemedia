@@ -27,20 +27,21 @@ const guide = {
     {
       id: "home",
       name: "Home",
-      purpose: "The front door: what we do, things you can try right on the page, and the way to start a project.",
+      purpose: "The front door: what we do, things you can try right on the page, our products and our work, and the way to start a project.",
       links: [{ page: "Home", href: "/" }],
       shots: [
         {
           src: "/guide/home-top.webp",
           width: 1440,
           height: 900,
-          alt: "The top of the home page: the header with the main links, Search, Sign in and Start a project, the black hero with the headline We build AI for businesses, and the start of the things you can try.",
+          alt: "The top of the home page: the header with the main links, Search, Sign in and Start a project, the black hero with the headline We build AI for businesses and the buttons Start a project and See our products, and the start of the things you can try.",
           markers: [
             { n: 1, x: 33.5, y: 13.1, to: { x: 33.5, y: 7.1 }, text: "The main links. Every page is one click away." },
             { n: 2, x: 82.1, y: 12.9, to: { x: 85.1, y: 5.9 }, text: "Sign in to your console to follow your projects and pay invoices." },
             { n: 3, x: 92.6, y: 12.9, to: { x: 92.6, y: 5.9 }, text: "Start a project. This opens the contact form." },
             { n: 4, x: 77.9, y: 88.9, to: { x: 84.9, y: 94.9 }, text: "Ask the assistant anything. It answers from this site, and a person takes over on WhatsApp when it isn't sure." },
             { n: 5, x: 26.2, y: 70.5, to: { x: 26.2, y: 76.5 }, text: "Chat with our own site assistant, right on the page." },
+            { n: 6, x: 31.6, y: 41.6, to: { x: 26.6, y: 41.6 }, text: "See our products: what you can use today, and what's on the way." },
           ],
         },
         {
@@ -103,19 +104,19 @@ const guide = {
     {
       id: "products",
       name: "Products",
-      purpose: "The AI tools we're making, which you can use on your own once they launch.",
+      purpose: "Our AI products: what you can use today, what you can ask us for now, and what's on the way.",
       links: [{ page: "Products", href: "/products" }],
       shots: [
         {
           src: "/guide/products-top.webp",
           width: 1440,
           height: 900,
-          alt: "The top of the Products page: buttons to filter the tools, a search box, and product cards marked Coming soon, each with Details and Notify me buttons.",
+          alt: "The top of the Products page: buttons to filter the products, a search box, and product cards, each with its label, what it does, its price and its buttons.",
           markers: [
-            { n: 1, x: 34, y: 50.6, to: { x: 29, y: 54.6 }, text: "Filter the tools by what they help with." },
-            { n: 2, x: 74.2, y: 50.6, to: { x: 79.2, y: 54.6 }, text: "Search the tools by name." },
-            { n: 3, x: 28.3, y: 70.2, to: { x: 28.3, y: 64.2 }, text: "Coming soon means the tool isn't out yet." },
-            { n: 4, x: 23.1, y: 83.5, to: { x: 18.1, y: 83.5 }, text: "Details opens the page for that tool, and Notify me tells you when it launches." },
+            { n: 1, x: 53.7, y: 50.6, to: { x: 48.7, y: 54.6 }, text: "Filter the products by what they help with." },
+            { n: 2, x: 74.2, y: 50.6, to: { x: 79.2, y: 54.6 }, text: "Search the products by name." },
+            { n: 3, x: 15.9, y: 62.7, to: { x: 20.9, y: 62.7 }, text: "The label says where a product stands: Live, Available now or Coming soon." },
+            { n: 4, x: 46.8, y: 91.5, to: { x: 41.8, y: 91.5 }, text: "Details opens a product's page. The button beside it opens the product, starts a talk with us, or tells you when it launches." },
           ],
         },
       ],
@@ -123,20 +124,20 @@ const guide = {
     {
       id: "product",
       name: "A product page",
-      purpose: "Everything about one tool: what it does, how to get it, and a form to hear when it launches.",
-      links: [{ page: "a product page", href: "/products/example" }],
+      purpose: "Everything about one product: what it does, where it stands, its price and how to get it.",
+      links: [{ page: "a product page", href: "/products/wave-assist" }],
       shots: [
         {
           src: "/guide/product-top.webp",
           width: 1440,
           height: 900,
-          alt: "The top of a product page: the way back to Products, the product name, its Coming soon label, its price, and the Notify me and Ask a question buttons.",
+          alt: "The top of the Wave Assist page: the way back to Products, the product name and what it does, its Available now label, its price line, the Talk to us button, and the start of what it does.",
           markers: [
-            { n: 1, x: 21, y: 18, to: { x: 16, y: 18 }, text: "Go back to all products from here." },
-            { n: 2, x: 14.4, y: 44.9, to: { x: 14.4, y: 38.9 }, text: "The price, once it's set." },
-            { n: 3, x: 22.9, y: 45.6, to: { x: 22.9, y: 39.6 }, text: "Notify me takes you to a form to hear when it launches." },
-            { n: 4, x: 44.9, y: 36.9, to: { x: 39.9, y: 36.9 }, text: "Ask us a question about this tool." },
-            { n: 5, x: 50, y: 54.8, to: { x: 50, y: 58.8 }, text: "A picture of the tool goes here." },
+            { n: 1, x: 4.9, y: 10.9, to: { x: 4.9, y: 16.9 }, text: "Go back to all products from here." },
+            { n: 2, x: 6.7, y: 47.3, to: { x: 6.7, y: 41.3 }, text: "Where the product stands: Live, Available now or Coming soon." },
+            { n: 3, x: 19.4, y: 47.9, to: { x: 19.4, y: 41.9 }, text: "Its price. For this one, we agree the price with you." },
+            { n: 4, x: 41.4, y: 39.9, to: { x: 36.4, y: 39.9 }, text: "Talk to us opens the contact form with this product already picked." },
+            { n: 5, x: 11.9, y: 75.2, to: { x: 11.9, y: 68.2 }, text: "What it does, in a few short lines. Questions and answers follow further down." },
           ],
         },
       ],
@@ -205,19 +206,19 @@ const guide = {
     {
       id: "work",
       name: "Work",
-      purpose: "Sites, apps and AI systems we've built, which you can filter and search.",
+      purpose: "Projects we've built, each with the problem it fixes and the tools we used. Filter them by kind, or search.",
       links: [{ page: "Work", href: "/work" }],
       shots: [
         {
           src: "/guide/work-top.webp",
           width: 1440,
           height: 900,
-          alt: "The top of the Work page: buttons to filter projects, a search box, and project tiles with a picture and a name.",
+          alt: "The top of the Work page: buttons to filter projects by kind, a search box, and a project tile with a picture of the project, its name and its label.",
           markers: [
-            { n: 1, x: 29.6, y: 48, to: { x: 24.6, y: 52 }, text: "Filter the projects by kind." },
+            { n: 1, x: 20, y: 48, to: { x: 15, y: 52 }, text: "Filter the projects by kind." },
             { n: 2, x: 74.2, y: 48, to: { x: 79.2, y: 52 }, text: "Search the projects." },
-            { n: 3, x: 40.7, y: 65.3, to: { x: 33.7, y: 68.3 }, text: "Point at a project to see what we built and the result." },
-            { n: 4, x: 19.5, y: 89.7, to: { x: 13.5, y: 89.7 }, text: "Open a project to read the whole story." },
+            { n: 3, x: 40.7, y: 68.6, to: { x: 33.7, y: 71.6 }, text: "Point at a project to see the problem it fixes and what we built. Open it to read the whole story." },
+            { n: 4, x: 38.2, y: 95.5, to: { x: 32.2, y: 95.5 }, text: "The label says what kind of project it is, like our own product or client work." },
           ],
         },
       ],
@@ -225,18 +226,19 @@ const guide = {
     {
       id: "project",
       name: "A project page",
-      purpose: "One project in detail: the problem, what we built, how we handled the data and what changed.",
-      links: [{ page: "a project page", href: "/work/example" }],
+      purpose: "One project in detail: the problem, what we built, who it was for, our role and the tools we used.",
+      links: [{ page: "a project page", href: "/work/ledgerwatch" }],
       shots: [
         {
           src: "/guide/project-top.webp",
           width: 1440,
           height: 900,
-          alt: "The top of a project page: the way back to Work, the project name, a bar with the client, the industry, the year and what we built, and a picture of the project.",
+          alt: "The top of the LedgerWatch project page: the way back to Work, the project name, buttons to open the app and read its code, a bar with the kind of project, who it was for, our role and where it stands, and the first picture of the app.",
           markers: [
-            { n: 1, x: 18.9, y: 18, to: { x: 13.9, y: 18 }, text: "Go back to all projects from here." },
-            { n: 2, x: 38.1, y: 47.4, to: { x: 38.1, y: 52.4 }, text: "Who it was for, the kind of business, the year and what we built." },
-            { n: 3, x: 40, y: 72, to: { x: 50, y: 80 }, text: "A picture of the project goes here." },
+            { n: 1, x: 4, y: 10.9, to: { x: 4, y: 16.9 }, text: "Go back to all projects from here." },
+            { n: 2, x: 9.5, y: 49.8, to: { x: 9.5, y: 42.8 }, text: "Open the project, or read its code on GitHub. Both open in a new tab." },
+            { n: 3, x: 50, y: 57, to: { x: 50, y: 62 }, text: "What kind of project it is, who it was for, our role and where it stands." },
+            { n: 4, x: 81.6, y: 82.6, to: { x: 73.6, y: 82.6 }, text: "Pictures of the project. The story follows: the problem, what we built, who it's for and the tools we used." },
           ],
         },
       ],

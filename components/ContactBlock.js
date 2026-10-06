@@ -13,8 +13,8 @@ import { contactMessage, waLink } from "@/lib/whatsapp";
 
 const ORDER = ["name", "email", "need", "message"];
 
-// Reads ?need=, ?msg=, ?from= and ?sector= from the address. Kept apart so the rest of the form is
-// part of the page's first paint.
+// Reads ?need=, ?product=, ?msg=, ?from= and ?sector= from the address. Kept apart so the rest of
+// the form is part of the page's first paint.
 function Prefill({ onQuery }) {
   const params = useSearchParams();
   useEffect(() => {
@@ -53,10 +53,16 @@ export default function ContactBlock({ copy, site }) {
     const need = params.get("need");
     const msg = params.get("msg");
     const sector = params.get("sector");
+    const product = params.get("product");
     setFromBuilder(Boolean(msg) && params.get("from") === "builder");
     setValues((current) => {
       const next = { ...current };
       if (need && f.needs.some((o) => o.value === need)) next.need = need;
+      // ?product=<slug>, from a product page's Talk to us or Ask a question: picks that product.
+      if (product && (!need || need === "tool") && f.extra.tool.options.some((o) => o.value === product)) {
+        next.need = "tool";
+        next.product = product;
+      }
       if (msg) next.message = msg;
       else if (sector && copy.sectorMessages[sector]) next.message = copy.sectorMessages[sector];
       return next;
@@ -69,7 +75,8 @@ export default function ContactBlock({ copy, site }) {
     const sum = [[s.need, needWord(v.need)]];
     if (v.need === "ai-setup" && v.channel) sum.push([s.channel, v.channel]);
     if (v.need === "data" && v.rows) sum.push([s.rows, v.rows]);
-    if (v.need === "tool" && v.product) sum.push([s.product, v.product]);
+    const product = f.extra.tool.options.find((o) => o.value === v.product);
+    if (v.need === "tool" && product) sum.push([s.product, product.label]);
     if (v.name.trim()) sum.push([s.name, v.name.trim()]);
     if (v.email.trim()) sum.push([s.email, v.email.trim()]);
     try {
@@ -237,7 +244,7 @@ export default function ContactBlock({ copy, site }) {
         </div>
         <div id="c-extra">
           {Object.entries(f.extra).map(([need, group]) => (
-            <fieldset key={need} data-for={need} hidden={v.need !== need}>
+            <fieldset key={need} data-for={need} hidden={v.need !== need} className={group.options.length > 4 ? "checks--grid" : undefined}>
               <legend>{group.legend}</legend>
               {group.options.map((o) => (
                 <label className="check" key={o.value}>

@@ -9,12 +9,15 @@ export const runtime = "nodejs";
 const NEEDS = contact.form.needs.map((o) => o.value).filter(Boolean);
 
 // The extra answer for the chosen need ("Where should the assistant answer?" and the like),
-// kept only if it is one of the offered options.
+// kept only if it is one of the offered options. A product is sent as its slug and kept by its
+// name ("Not sure yet" by its words), so the inbox reads the way the form did.
 function extra(need, data) {
   const group = contact.form.extra[need];
   if (!group) return null;
   const value = str(data[group.name]);
-  return group.options.some((o) => o.value === value) ? value : null;
+  const option = group.options.find((o) => o.value === value);
+  if (!option) return null;
+  return need === "tool" ? option.label : option.value;
 }
 
 export async function POST(request) {

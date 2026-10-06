@@ -7,7 +7,7 @@ import products from "@/content/console/products";
 export const metadata = { title: copy.meta.title };
 
 // How many people asked to hear about each product: the console's Notify me plus the website's
-// notify list from that product's page.
+// notify list from that product's page. Every product on the way is listed, from the shared list.
 export default async function TeamInterestPage() {
   await teamContext();
   const admin = getAdmin();
@@ -19,8 +19,10 @@ export default async function TeamInterestPage() {
     .map((p) => {
       const inConsole = (consoleRows || []).filter((r) => r.product === p.slug).length;
       const onSite = (siteRows || []).filter((r) => r.source === `product:${p.slug}`).length;
-      return { name: p.name, inConsole, onSite, total: inConsole + onSite };
+      return { name: p.name, soon: p.status === "soon", inConsole, onSite, total: inConsole + onSite };
     })
+    // Products that are already out stay on the list only while people who asked earlier count.
+    .filter((r) => r.soon || r.total > 0)
     .sort((a, b) => b.total - a.total);
   const general = (siteRows || []).filter((r) => !String(r.source || "").startsWith("product:")).length;
   const total = rows.reduce((a, r) => a + r.total, 0);

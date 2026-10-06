@@ -1,6 +1,7 @@
 import copy from "@/content/console/settings";
 import { ownerEmail } from "@/lib/accounts";
 import { guard } from "@/lib/api";
+import { forgetAssistant } from "@/lib/assist/store";
 import { json, readJson, str } from "@/lib/http";
 import { getAdmin } from "@/lib/supabase";
 import { likeExact } from "@/lib/text";
@@ -40,12 +41,15 @@ export async function DELETE(request) {
     await admin.from("notify_list").delete().ilike("email", likeExact(m.email));
   }
 
-  // The business and everything in it. Money rows stay, without the business.
+  // The business and everything in it, its Wave Assist too. Money rows stay, without the business.
+  const { data: assistant } = await admin.from("assistants").select("public_id").eq("business_id", biz.id).maybeSingle();
   const { error } = await admin.from("businesses").delete().eq("id", biz.id);
   if (error) {
     console.error("[account] business:", error.message);
     return json({ ok: false, message: copy.failed }, 502);
   }
+  // Its chat stops at once on this server, instead of when the cached setup runs out.
+  if (assistant) forgetAssistant(assistant.public_id);
 
   // The people's own accounts. Someone on our team keeps their account.
   for (const m of members || []) {

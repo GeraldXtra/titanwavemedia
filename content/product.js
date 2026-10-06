@@ -1,16 +1,22 @@
-// The product page template. Each entry in `pages` is a page at /products/<key>.
-// To add a product, copy the "example" entry, give it a new key and change the words.
-// Set `published` to true once a page has real words, so search engines are told about it.
+// The words on every product page. There is one page for each product in content/product-list.js,
+// at /products/<slug>, made from its name, status, price, text and list, so a product is never
+// copied in here by hand. {name} is the product's name and {slug} its address.
 
 const product = {
-  // Shared by every product page.
+  meta: {
+    title: "{name}, Titan Wave Media",
+  },
+
   labels: {
     crumb: "Products",
+    // Live products: opens the product's own website in a new tab.
+    open: "Open {name}",
+    // Products that are available now: the contact form, with the product picked.
+    talk: { label: "Talk to us", href: "/contact?need=tool&product={slug}" },
+    // Products that are coming soon: the email form at the bottom of the page.
     notify: "Notify me",
-    ask: { label: "Ask a question", href: "/contact?need=tool" },
+    ask: { label: "Ask a question", href: "/contact?need=tool&product={slug}" },
     features: "What it does",
-    who: "Who it's for",
-    get: "How you get it",
     questions: "Questions",
     privacy: {
       text: "Built under our privacy rules.",
@@ -20,49 +26,47 @@ const product = {
     copy: "Copy link",
     copied: "Link copied",
     copyPrompt: "Copy this link",
+    notifyTitle: "Get told when {name} opens.",
     thanks: "Thanks. We'll email you when it's ready.",
   },
 
-  pages: {
-    example: {
-      published: false,
-      meta: {
-        title: "[Product name], Titan Wave Media",
-        description: "[One line on what it does and who it is for]",
+  // Questions that are true for every product with that status. A product can add its own
+  // questions with "faq" in content/product-list.js; they show first.
+  faq: {
+    live: [
+      {
+        q: "How do I start?",
+        a: "Press the button at the top of this page. It opens on its own website, in a new tab.",
       },
-      name: "[Product name]",
-      line: "[One line on what it does and who it is for]",
-      tag: "Coming soon",
-      price: "[Price]",
-      screenshot: "[Product screenshot]",
-      features: [
-        { icon: "tool", title: "[Feature]", text: "[What it does for you]" },
-        { icon: "tool", title: "[Feature]", text: "[What it does for you]" },
-        { icon: "tool", title: "[Feature]", text: "[What it does for you]" },
-      ],
-      who: "[Who it helps, in one or two lines]",
-      steps: [
-        { title: "Pay online", text: "You pay through Paystack, our payment partner. We never see your full card details." },
-        { title: "Check your email", text: "Your receipt and how to get started arrive straight away." },
-        { title: "Start using it", text: "[How to get started, in one line]" },
-      ],
-      faq: [
-        {
-          q: "How do I get it after I pay?",
-          a: "[How buyers get access, for example an email with a download link or a sign in]",
-        },
-        {
-          q: "Can I get a refund?",
-          a: ["Yes. Our ", { link: "Refund Policy", href: "/refunds" }, " explains how it works and how long it takes."],
-        },
-        {
-          q: "Do you keep my data?",
-          a: ["Only what the product needs to work. Our ", { link: "Privacy Policy", href: "/privacy-policy" }, " has the details."],
-        },
-        { q: "Can I use it for my business?", a: "[What the licence allows]" },
-      ],
-      notifyTitle: "Get told when [Product name] launches.",
-    },
+      {
+        q: "Who do I ask if I need help?",
+        a: ["Ask us. Our ", { link: "Support", href: "/support" }, " page shows every way to reach us."],
+      },
+    ],
+    available: [
+      {
+        q: "How much does it cost?",
+        a: "We agree the price with you before anything starts. Press Talk to us and tell us a little about your business.",
+      },
+      {
+        q: "How do I ask for it?",
+        a: "Press Talk to us at the top of this page, or message us on WhatsApp. We reply the same working day.",
+      },
+    ],
+    soon: [
+      {
+        q: "When will it be ready?",
+        a: "We don't have a date yet. Leave your email below and we'll tell you the day it opens.",
+      },
+      {
+        q: "How much will it cost?",
+        a: "We'll share the price when it launches.",
+      },
+      {
+        q: "Can I tell you what I need from it?",
+        a: "Yes. Press Ask a question at the top of this page. The products people ask for most get built first.",
+      },
+    ],
   },
 };
 

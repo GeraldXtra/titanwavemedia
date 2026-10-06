@@ -25,6 +25,10 @@ const ICONS = {
   product_interest: "bell",
   message: "mail",
   quote_request: "mail",
+  assist_on: "chat",
+  assist_off: "chat",
+  assist_setup: "chat",
+  assist_answer: "chat",
 };
 
 export default async function ConsoleHome() {

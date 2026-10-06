@@ -33,10 +33,12 @@ const shell = {
         { label: "Settings", href: "/console/settings", icon: "gear" },
       ],
     },
-    // The products come from content/console/products.js, each marked with `soon`.
+    // The products come from content/console/products.js. One that works in the console opens
+    // its page here; a live product with its own website says Live; the rest say Soon.
     { title: "Products", products: true },
   ],
   soon: "Soon",
+  live: "Live",
 
   // The side menu in Team view. `count: "inbox"` shows how many messages wait for a reply.
   // `owner: true` shows only to the owner.
@@ -48,6 +50,7 @@ const shell = {
         { label: "Payments", href: "/console/team/payments", icon: "bank" },
         { label: "Invoices", href: "/console/team/invoices", icon: "read" },
         { label: "Clients", href: "/console/team/clients", icon: "users" },
+        { label: "Assistants", href: "/console/team/assistants", icon: "chat" },
         { label: "Product interest", href: "/console/team/interest", icon: "chart" },
         { label: "Emails", href: "/console/team/emails", icon: "mail" },
         { label: "Team", href: "/console/team/members", icon: "users", owner: true },
@@ -67,6 +70,12 @@ const shell = {
       { label: "Projects", href: "/console/projects", icon: "folder" },
       { label: "Start a new project", href: "/console/projects/new", icon: "plus" },
       { label: "Products", href: "/console/products", icon: "data" },
+      { label: "Wave Assist", href: "/console/assist", icon: "chat" },
+      { label: "Wave Assist setup", href: "/console/assist", icon: "chat" },
+      { label: "Test your assistant", href: "/console/assist?tab=test", icon: "chat" },
+      { label: "Install Wave Assist on your website", href: "/console/assist?tab=install", icon: "code" },
+      { label: "Wave Assist conversations", href: "/console/assist?tab=conversations", icon: "chat" },
+      { label: "Questions it couldn't answer", href: "/console/assist?tab=questions", icon: "chat" },
       { label: "Billing", href: "/console/billing", icon: "card" },
       { label: "Invoices", href: "/console/billing?tab=invoices", icon: "read" },
       { label: "Payments and receipts", href: "/console/billing?tab=payments", icon: "card" },
@@ -90,6 +99,8 @@ const shell = {
       { label: "New invoice", href: "/console/team/invoices", icon: "plus" },
       { label: "Clients", href: "/console/team/clients", icon: "users" },
       { label: "Invite a client", href: "/console/team/clients", icon: "plus" },
+      { label: "Assistants", href: "/console/team/assistants", icon: "chat" },
+      { label: "Wave Assist for every business", href: "/console/team/assistants", icon: "chat" },
       { label: "Product interest", href: "/console/team/interest", icon: "chart" },
       { label: "Emails", href: "/console/team/emails", icon: "mail" },
       { label: "Team", href: "/console/team/members", icon: "users" },

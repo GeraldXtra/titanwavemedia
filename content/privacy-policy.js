@@ -1,10 +1,11 @@
 // The Privacy Policy page.
 // Each section is a heading and its paragraphs. A { list: [...] } is a bulleted list, and
-// { link: "Words", href: "/page" } inside a paragraph is a link.
+// { link: "Words", href: "/page" } inside a paragraph is a link. A section with an "id" keeps that
+// id as its link on the page; the others are numbered (see components/LegalPage.js).
 
 const privacyPolicy = {
   meta: { title: "Privacy Policy, Titan Wave Media", description: "How Titan Wave Media collects, uses and protects personal data." },
-  hero: { title: "Privacy Policy", updated: "Last updated 4 October 2026" },
+  hero: { title: "Privacy Policy", updated: "Last updated 6 October 2026" },
   tocLabel: "On this page",
   sections: [
     {
@@ -61,6 +62,23 @@ const privacyPolicy = {
       ],
     },
     {
+      // Its own id, so the Wave Assist chat can link straight to it: /privacy-policy#wave-assist
+      id: "wave-assist",
+      title: "When a business uses Wave Assist",
+      body: [
+        "Wave Assist is a chat assistant that a business adds to its own website. When you chat with it, we handle your messages for that business.",
+        {
+          list: [
+            "The business decides what its assistant knows. The answers come from what the business has taught it.",
+            "We keep the conversations for that business for 6 months to run the service, then delete them. The business can read them in its console, and can delete them sooner.",
+            "Your messages go to our AI provider to write the answers.",
+            "Before your words are kept or sent to our AI provider, we take out email addresses and long numbers, like card, account and phone numbers.",
+            "If you choose to leave your name and a phone number or email, we share them with that business so it can get back to you.",
+          ],
+        },
+      ],
+    },
+    {
       title: "Who we share it with",
       body: [
         "We share data only with providers that help us run the business, such as hosting, email and payments, and only under agreements that protect it. We never sell personal data. We share data with authorities only when the law requires it.",
@@ -74,7 +92,7 @@ const privacyPolicy = {
             "Vercel hosts the website and the console.",
             "Supabase keeps our database and signs you in.",
             "Resend sends our emails.",
-            "Anthropic provides the AI model that writes the site assistant's answers.",
+            "Anthropic provides the AI model that writes the answers of our site assistant and of Wave Assist.",
             "Paystack takes payments. Your card details go to Paystack, never to us.",
           ],
         },
@@ -89,7 +107,7 @@ const privacyPolicy = {
     {
       title: "How long we keep it",
       body: [
-        "We keep personal data only as long as we need it for the reason we collected it. Contact messages are kept for 12 months, and assistant conversations for 6 months, then deleted. Invoices and receipts are kept for [NUMBER] years, as tax law requires.",
+        "We keep personal data only as long as we need it for the reason we collected it. Contact messages are kept for 12 months, and conversations with our site assistant and with Wave Assist for 6 months, then deleted. Invoices and receipts are kept for [NUMBER] years, as tax law requires.",
       ],
     },
     {

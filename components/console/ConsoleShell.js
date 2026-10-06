@@ -189,14 +189,19 @@ export default function ConsoleShell({ me, counts: firstCounts, legal, children 
               {group.title && <h2>{group.title}</h2>}
               <ul>
                 {(group.products
-                  ? products.items.map((p) => ({ label: p.name, href: `/console/products/${p.slug}`, icon: p.icon, soon: true }))
+                  ? products.items.map((p) => ({
+                      label: p.name,
+                      href: products.pages[p.slug] || `/console/products/${p.slug}`,
+                      icon: p.icon,
+                      chip: p.status === "live" ? shell.live : p.status === "soon" ? shell.soon : null,
+                    }))
                   : group.items.filter((i) => !i.owner || me.isOwner)
                 ).map((item) => (
                   <li key={item.href}>
                     <Link href={item.href} aria-current={current(item)}>
                       <Icon name={item.icon} />
                       {item.label}
-                      {item.soon && <span className="c-side__soon">{shell.soon}</span>}
+                      {item.chip && <span className="c-side__soon">{item.chip}</span>}
                       {item.count && counts[item.count] > 0 && <span className="c-side__count">{counts[item.count]}</span>}
                     </Link>
                   </li>

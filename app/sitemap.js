@@ -1,4 +1,4 @@
-import product from "@/content/product";
+import productList from "@/content/product-list";
 import project from "@/content/project";
 import post from "@/content/post";
 import { siteUrl } from "@/lib/seo";
@@ -20,7 +20,8 @@ const PAGES = [
   ["/refunds", 0.3],
 ];
 
-// Product, project and post pages join the sitemap once they are marked published in content/.
+// Every product in content/product-list.js has a page. Project and post pages join the sitemap once
+// they are marked published in content/.
 function published(prefix, pages) {
   return Object.entries(pages)
     .filter(([, page]) => page.published)
@@ -30,7 +31,7 @@ function published(prefix, pages) {
 export default function sitemap() {
   return [
     ...PAGES.map(([path, priority]) => ({ url: siteUrl + (path === "/" ? "" : path), priority })),
-    ...published("/products", product.pages),
+    ...productList.items.map((p) => ({ url: `${siteUrl}/products/${p.slug}`, priority: 0.6 })),
     ...published("/work", project.pages),
     ...published("/updates", post.pages),
   ];

@@ -207,6 +207,17 @@ a.card:hover{background:var(--grey)}
 .pcard .ico{width:32px;height:32px}
 .pcard p{color:var(--ink-2)}
 .pcard__price{margin-top:auto;padding-top:12px;border-top:1px solid var(--line-soft);font-weight:700}
+/* the Products page shows every product at once, in rows that wrap */
+.row[data-list]{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));overflow-x:visible;scroll-snap-type:none;padding-bottom:0}
+/* a product's status: Live is filled, Available now has the darker line, Coming soon the plain one */
+.tag[data-status="live"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.tag[data-status="available"]{border-color:var(--ink)}
+.hero .tag[data-status="live"]{background:#fff;border-color:#fff;color:var(--ink)}
+.hero .tag[data-status="available"]{border-color:#fff}
+/* what a product does, one line each */
+.feats{list-style:none;border-top:1px solid var(--line-soft)}
+.feats li{position:relative;max-width:60ch;padding:12px 0 12px 22px;border-bottom:1px solid var(--line-soft)}
+.feats li::before{content:"";position:absolute;left:0;top:19px;width:10px;height:10px;background:var(--ink)}
 .notify{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px 40px;align-items:center;padding:clamp(22px,3vw,36px);background:var(--white);border:1px solid var(--line-soft)}
 .notify p{color:var(--ink-2);margin-top:8px}
 .inline-form{display:flex;gap:10px}
@@ -307,10 +318,13 @@ a.card:hover{background:var(--grey)}
 .meta-bar div{padding:16px 18px;background:var(--white);border:1px solid var(--line-soft)}
 .meta-bar span{display:block;font-size:14px;font-weight:600;color:var(--ink-3)}
 .meta-bar b{display:block;margin-top:4px;font-weight:700}
-.shot{margin-top:var(--gap)}
-.shot .ph-box{aspect-ratio:16/8}
+/* a project picture: its width and height keep its shape before it loads */
+.shot{margin:var(--gap) 0 0}
+.shot img{width:100%;height:auto;object-fit:cover;border:1px solid var(--line-soft);background:var(--grey-2)}
+.stack .shot{margin:0}
 .story{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:12px 40px;padding:24px;background:var(--white);border:1px solid var(--line-soft)}
 .story p{color:var(--ink-2);max-width:60ch}
+.story__text{display:grid;gap:12px}
 .stack{display:grid;gap:var(--gap)}
 .buy{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;margin-top:26px}
 .buy strong{font-size:1.5rem;font-weight:700}
@@ -434,6 +448,9 @@ a.card:hover{background:var(--grey)}
 .check:hover{border-color:var(--line)}
 .check:has(input:checked){border-color:var(--line);background:var(--tint)}
 .check input{margin:3px 0 0;width:18px;height:18px;accent-color:var(--ink);flex:none}
+/* a long list of choices (the products on the Contact page) sits in two columns on wider screens */
+.form fieldset.checks--grid:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}
+@media (max-width:640px){.form fieldset.checks--grid:not([hidden]){grid-template-columns:minmax(0,1fr)}}
 .cfg__sum{position:sticky;top:88px}
 .cfg__sum ul{list-style:none;margin-top:14px;border-top:1px solid var(--line-soft)}
 .cfg__sum li{padding:10px 0;border-bottom:1px solid var(--line-soft);font-weight:600}
@@ -474,11 +491,13 @@ details.promise summary{display:flex;gap:16px;align-items:flex-start;padding:22p
 details.promise summary::-webkit-details-marker{display:none}
 details.promise .promise__more{padding:0 22px 20px 70px;color:var(--ink-2)}
 details.promise[open] summary p{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
-.wtile .ph-box{position:relative;overflow:hidden}
+/* the tile picture fills its box, cut from the top left, and the box keeps its shape before it loads */
+.wtile__img{position:relative;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--line-soft);background:var(--grey-2)}
+.wtile__img img{width:100%;height:100%;object-fit:cover;object-position:left top}
 .wtile__flip{position:absolute;inset:0;display:grid;align-content:center;gap:4px;padding:18px;background:var(--black);color:#fff;text-align:left;font-size:14px;opacity:0;transition:opacity .15s ease}
 .wtile__flip b{color:#fff;margin-top:6px}
 .wtile__flip .ph{color:rgb(255 255 255/.6)}
-.wtile:hover .wtile__flip,.wtile.is-flipped .wtile__flip{opacity:1}
+.wtile:hover .wtile__flip,.wtile:focus-visible .wtile__flip,.wtile.is-flipped .wtile__flip{opacity:1}
 .timeline{list-style:none;display:grid;gap:var(--gap)}
 .timeline li{display:grid;grid-template-columns:160px minmax(0,1fr);gap:16px 32px;padding:22px 24px;background:var(--white);border:1px solid var(--line-soft)}
 .timeline time{font-weight:700;color:var(--ink)}

@@ -3,12 +3,18 @@ import { notFound } from "next/navigation";
 import project from "@/content/project";
 import Hero from "@/components/Hero";
 import CopyLinkButton from "@/components/CopyLinkButton";
-import { Cta, Section, Strip } from "@/components/Blocks";
+import { Cta, OutLink, Section, Strip } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
 import { ph } from "@/lib/text";
 
 // One page per entry in content/project.js. Other addresses get the "Page not found" page.
 export const dynamicParams = false;
+
+// The published projects in order, for the "Next project" link.
+const published = Object.keys(project.pages).filter((slug) => project.pages[slug].published);
+
+// How wide a picture shows: the width of the page, up to 1360 pixels.
+const SIZES = "(max-width: 1440px) 94vw, 1360px";
 
 export function generateStaticParams() {
   return Object.keys(project.pages).map((slug) => ({ slug }));
@@ -21,27 +27,57 @@ export async function generateMetadata({ params }) {
   return pageMeta({ ...p.meta, path: `/work/${slug}`, index: p.published });
 }
 
+// A picture of the project, with the copy half as wide for phones. The first one on the page
+// loads straight away; the others load as they come near.
+function Shot({ shot, first }) {
+  return (
+    <figure className="shot">
+      <img
+        src={shot.src}
+        srcSet={`${shot.small} ${Math.round(shot.width / 2)}w, ${shot.src} ${shot.width}w`}
+        sizes={SIZES}
+        width={shot.width}
+        height={shot.height}
+        alt={shot.alt}
+        loading={first ? "eager" : "lazy"}
+        decoding="async"
+      />
+    </figure>
+  );
+}
+
 export default async function ProjectPage({ params }) {
   const { slug } = await params;
   const p = project.pages[slug];
   if (!p) notFound();
   const l = project.labels;
+  const facts = [{ label: l.kind, value: project.kinds[p.kind] }, ...p.facts];
+  const shots = p.shots || [];
+  // The next published project, when there is more than one.
+  const at = published.indexOf(slug);
+  const next = published.length > 1 && at >= 0 ? published[(at + 1) % published.length] : null;
   return (
     <main className="page" id="main-work-project">
-      <Hero title={p.name} text={p.line} crumbs={[{ label: l.crumb, href: "/work" }, { label: p.name }]} />
+      <Hero title={p.name} text={p.line} crumbs={[{ label: l.crumb, href: "/work" }, { label: p.name }]}>
+        {p.links && p.links.length > 0 && (
+          <div className="btns">
+            {p.links.map((link, i) => (
+              <OutLink key={i} href={link.href} label={link.label} className={i === 0 ? "btn btn--solid" : "btn btn--line"} />
+            ))}
+          </div>
+        )}
+      </Hero>
 
       <Section tone="white">
         <div className="meta-bar">
-          {p.facts.map((fact, i) => (
+          {facts.map((fact, i) => (
             <div key={i}>
               <span>{fact.label}</span>
               <b className={ph(fact.value)}>{fact.value}</b>
             </div>
           ))}
         </div>
-        <div className="shot">
-          <div className="ph-box">{p.screenshot}</div>
-        </div>
+        {shots[0] && <Shot shot={shots[0]} first />}
       </Section>
 
       <Section tone="white">
@@ -49,18 +85,26 @@ export default async function ProjectPage({ params }) {
           {p.stories.map((s, i) => (
             <div className="story" key={i}>
               <h2>{s.title}</h2>
-              <p className={ph(s.text)}>{s.text}</p>
+              <div className="story__text">
+                {[].concat(s.text).map((text, j) => (
+                  <p className={ph(text)} key={j}>
+                    {text}
+                  </p>
+                ))}
+              </div>
             </div>
           ))}
-          <div className="shot" style={{ margin: 0 }}>
-            <div className="ph-box">{p.secondScreenshot}</div>
-          </div>
-          <Link className="next" href={p.next.href}>
-            <div>
-              <span>{l.next}</span>
-              <b className={ph(p.next.name)}>{p.next.name}</b>
-            </div>
-          </Link>
+          {shots.slice(1).map((shot, i) => (
+            <Shot shot={shot} key={i} />
+          ))}
+          {next && (
+            <Link className="next" href={`/work/${next}`}>
+              <div>
+                <span>{l.next}</span>
+                <b>{project.pages[next].name}</b>
+              </div>
+            </Link>
+          )}
           <Strip icon="code" text={l.share}>
             <CopyLinkButton label={l.copy} done={l.copied} prompt={l.copyPrompt} />
           </Strip>

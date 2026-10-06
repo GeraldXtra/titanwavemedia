@@ -1,5 +1,6 @@
-// The Products page. The first three products also show on the home page.
-// Each product links to its own page; the words for those pages are in content/product.js.
+// The Products page. The products themselves come from content/product-list.js, and the first
+// three of them also show on the home page. Each product links to its own page; the words for
+// those pages are in content/product.js.
 
 const products = {
   meta: {
@@ -17,33 +18,35 @@ const products = {
 
   filters: {
     label: "Filter products",
-    // "value" must match the "cat" of the products below.
-    options: [
-      { value: "all", label: "All" },
-      { value: "support", label: "Customer support" },
-      { value: "sales", label: "Sales" },
-      { value: "finance", label: "Finance" },
-    ],
+    all: "All",
+    // The name of each "cat" in content/product-list.js, in the order the buttons show.
+    // A button shows only when at least one product has that cat.
+    cats: {
+      support: "Customer support",
+      sales: "Selling online",
+      finance: "Money and records",
+      data: "Data and privacy",
+    },
     searchLabel: "Search products",
     searchPlaceholder: "Search products",
     empty: "Nothing matches yet. Try another word.",
   },
 
-  items: [
-    { slug: "example", cat: "support", name: "[Product name]", text: "[What it does]", price: "[Price]", tag: "Coming soon" },
-    { slug: "example", cat: "sales", name: "[Product name]", text: "[What it does]", price: "[Price]", tag: "Coming soon" },
-    { slug: "example", cat: "finance", name: "[Product name]", text: "[What it does]", price: "[Price]", tag: "Coming soon" },
-  ],
-
+  // The buttons on each product card. {name} is the product's name and {slug} its address.
   card: {
     details: "Details",
+    // Live products: opens the product's own website in a new tab.
+    open: "Open {name}",
+    // Products that are available now: the contact form, with the product picked.
+    talk: { label: "Talk to us", href: "/contact?need=tool&product={slug}" },
+    // Products that are coming soon: brings the email form below into view.
     notify: "Notify me",
   },
 
   notify: {
-    title: "Our first product is on the way.",
-    text: "Leave your email and we'll tell you when it's ready.",
-    thanks: "Thanks. We'll email you when it's ready.",
+    title: "Get told when a new product opens.",
+    text: "Leave your email and we'll tell you when the next one is ready.",
+    thanks: "Thanks. We'll email you when the next one is ready.",
   },
 
   strip: {

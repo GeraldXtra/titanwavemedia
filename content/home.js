@@ -82,13 +82,12 @@ const home = {
       foot: { label: "How synthetic data works", href: "/synthetic-data" },
     },
 
+    // The rows in this tile come from content/product-list.js: every product you can use or ask
+    // for now, then one line for the ones on the way. {n} is how many are on the way.
     products: {
       title: "AI tools you can use today",
       text: "Small products, each one made to fix one real problem.",
-      rows: [
-        { name: "[Product name]", tag: "Coming soon" },
-        { name: "[Product name]", tag: "Coming soon" },
-      ],
+      more: "{n} more on the way",
       foot: "See our products",
       href: "/products",
     },
@@ -191,13 +190,13 @@ const home = {
     ],
   },
 
-  // The product cards in this block come from content/products.js.
+  // The product cards in this block are the first three in content/product-list.js.
   tools: {
-    title: "AI tools you can use on your own, coming soon",
+    title: "AI tools you can use today, and more on the way",
     link: { label: "See all products", href: "/products" },
     notify: {
-      title: "Get told when our first product launches",
-      thanks: "Thanks. We'll email you when it's ready.",
+      title: "Get told when our next product opens",
+      thanks: "Thanks. We'll email you when the next one is ready.",
     },
   },
 
@@ -236,7 +235,8 @@ const home = {
     },
   },
 
-  // The tiles and posts in these blocks come from content/work.js and content/updates.js.
+  // The tiles in the Work block are the first three published projects in content/project.js
+  // (the block hides when there are none). The posts come from content/updates.js.
   work: {
     title: "See what we've built",
     link: { label: "See all work", href: "/work" },

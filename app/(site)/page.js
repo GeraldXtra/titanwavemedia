@@ -1,5 +1,5 @@
 import home from "@/content/home";
-import products from "@/content/products";
+import productList from "@/content/product-list";
 import work from "@/content/work";
 import updates from "@/content/updates";
 import Hero from "@/components/Hero";
@@ -11,6 +11,7 @@ import Picker from "@/components/home/Picker";
 import StepsRow from "@/components/home/StepsRow";
 import { BlkHead, Cta, Faq, Gap, Notify, PostList, ProductRow, Section, Strip, WorkTiles } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
+import { format } from "@/lib/text";
 
 export const metadata = pageMeta({
   title: home.meta.title,
@@ -18,6 +19,16 @@ export const metadata = pageMeta({
   shareText: home.meta.shareText,
   path: "/",
 });
+
+// The products tile in "What we do": every product you can use or ask for now, then one line for
+// the ones on the way.
+function productRows() {
+  const ready = productList.items.filter((p) => p.status !== "soon");
+  const soon = productList.items.length - ready.length;
+  const rows = ready.map((p) => ({ name: p.name, tag: productList.status[p.status], status: p.status }));
+  if (soon) rows.push({ name: format(home.whatWeDo.products.more, { n: soon }), tag: productList.status.soon, status: "soon" });
+  return rows;
+}
 
 export default function HomePage() {
   const w = home.whatWeDo;
@@ -27,7 +38,7 @@ export default function HomePage() {
 
       <Section tone="grey">
         <BlkHead title={w.title} text={w.text} />
-        <Bento copy={w} />
+        <Bento copy={w} productRows={productRows()} />
       </Section>
 
       <Section tone="white" id="who">
@@ -42,7 +53,7 @@ export default function HomePage() {
 
       <Section tone="white">
         <BlkHead title={home.tools.title} link={home.tools.link} />
-        <ProductRow items={products.items.slice(0, 3)} />
+        <ProductRow items={productList.items.slice(0, 3)} />
         <Gap>
           <Notify title={home.tools.notify.title} thanks={home.tools.notify.thanks} inputId="home-email" source="home" />
         </Gap>
@@ -83,10 +94,13 @@ export default function HomePage() {
         </Gap>
       </Section>
 
-      <Section tone="white">
-        <BlkHead title={home.work.title} link={home.work.link} />
-        <WorkTiles items={work.items.slice(0, 3)} />
-      </Section>
+      {/* Up to three published projects from content/project.js. */}
+      {work.items.length > 0 && (
+        <Section tone="white">
+          <BlkHead title={home.work.title} link={home.work.link} />
+          <WorkTiles items={work.items.slice(0, 3)} />
+        </Section>
+      )}
 
       <Section tone="grey">
         <BlkHead title={home.updates.title} link={home.updates.link} />

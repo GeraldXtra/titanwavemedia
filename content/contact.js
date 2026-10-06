@@ -1,4 +1,5 @@
 // The Contact page and its form.
+import productList from "./product-list";
 
 const contact = {
   meta: {
@@ -58,12 +59,14 @@ const contact = {
           { value: "More than 100,000 rows", label: "More than 100,000", phrase: "more than 100,000 rows" },
         ],
       },
+      // Every product in content/product-list.js, then "Not sure yet". /contact?need=tool&product=<slug>
+      // picks one. The message keeps the product's name.
       tool: {
         name: "product",
         legend: "Which product?",
         options: [
-          { value: "[Product name]", label: "[Product name]" },
-          { value: "Not sure yet", label: "Not sure yet" },
+          ...productList.items.map((p) => ({ value: p.slug, label: p.name, phrase: p.name })),
+          { value: "not-sure", label: "Not sure yet" },
         ],
       },
     },

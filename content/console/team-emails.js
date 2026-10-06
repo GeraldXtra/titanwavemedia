@@ -26,6 +26,7 @@ const teamEmails = {
     team_invite: "the newest invite",
     twostep_removed: "the newest sign in with a backup code",
     reply: "the newest reply to a message",
+    assist_handover: "the newest Wave Assist handover",
   },
 };
 

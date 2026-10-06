@@ -1,3 +1,4 @@
+import { allRows } from "@/lib/assist/console";
 import { guard } from "@/lib/api";
 import { lagosToday } from "@/lib/format";
 import { likeExact } from "@/lib/text";
@@ -5,6 +6,38 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
+
+// Wave Assist: its setup (without our own ids), and every conversation with its messages and the
+// details customers left. Test chats are never kept, so they are not in it. Null for a business
+// that has never opened Wave Assist.
+async function waveAssist(admin, biz) {
+  if (!biz) return null;
+  const { data: setup } = await admin
+    .from("assistants")
+    .select("created_at, updated_at, public_id, is_on, name, sells, prices, hours, areas, whatsapp, phone, email, qa, extra, greeting, starters, color, text_color, corner, sites, monthly_limit, seen_at, seen_site")
+    .eq("business_id", biz)
+    .maybeSingle();
+  if (!setup) return null;
+  const [conversations, messages, handovers] = await Promise.all([
+    allRows(() => admin.from("assist_conversations").select("id, created_at, last_message_at, message_count, outcome, first_message, over_limit, ended_at, whatsapp_at").eq("business_id", biz).order("created_at"), 100000),
+    allRows(() => admin.from("assist_messages").select("conversation_id, created_at, role, body, answered, handover, source").eq("business_id", biz).order("id"), 1000000),
+    allRows(() => admin.from("assist_handovers").select("conversation_id, created_at, name, phone, email, question, handled_at").eq("business_id", biz).order("created_at"), 100000),
+  ]);
+  const byConversation = (list) => {
+    const map = new Map();
+    for (const { conversation_id: id, ...row } of list) {
+      if (!map.has(id)) map.set(id, []);
+      map.get(id).push(row);
+    }
+    return map;
+  };
+  const said = byConversation(messages);
+  const left = byConversation(handovers);
+  return {
+    setup,
+    conversations: conversations.map(({ id, ...c }) => ({ ...c, messages: said.get(id) || [], handovers: left.get(id) || [] })),
+  };
+}
 
 // Your data: everything we hold about you and your business, as one JSON file. Paystack's
 // authorization codes for saved cards are never in it.
@@ -41,6 +74,8 @@ export async function GET(request) {
     rows(admin.from("messages").select("created_at, name, email, need, channel, rows, product, message").ilike("email", likeExact(ctx.email))),
   ]);
 
+  const assist = await waveAssist(admin, biz);
+
   const threadIds = threads.map((t) => t.id);
   const invoiceIds = invoices.map((i) => i.id);
   const [messages, lines] = await Promise.all([
@@ -69,6 +104,7 @@ export async function GET(request) {
     sign_ins: signins,
     product_interest: interest,
     website_messages: websiteMessages,
+    wave_assist: assist,
   };
   return new Response(JSON.stringify(file, null, 2), {
     headers: {

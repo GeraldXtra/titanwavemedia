@@ -32,6 +32,10 @@ const events = {
     refund_declined: "Your refund request on {number} was declined",
     ticket_opened: "You asked for help: {subject}",
     product_interest: "You asked to hear about {name}",
+    assist_on: "Wave Assist was switched on",
+    assist_off: "Wave Assist was switched off",
+    assist_setup: "Wave Assist's setup was changed",
+    assist_answer: "Wave Assist learned a new answer: {question}",
     // A message sent through the website before the account was made.
     message: "You sent us a message from the website",
     quote_request: "You asked us for a quote from the website",
@@ -53,6 +57,7 @@ const events = {
     refund_received: "We got your refund request for {number}",
     refund_done: "Your refund of {amount} on {number} is done",
     refund_declined: "Your refund request on {number} was declined",
+    assist_handover: "{name} left their details in your website chat",
   },
   team: {
     new_contact: "New message from {who}",

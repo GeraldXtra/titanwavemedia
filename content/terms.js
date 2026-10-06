@@ -4,7 +4,7 @@
 
 const terms = {
   meta: { title: "Terms of Service, Titan Wave Media", description: "The terms for using the Titan Wave Media website, products and services." },
-  hero: { title: "Terms of Service", updated: "Last updated 4 October 2026" },
+  hero: { title: "Terms of Service", updated: "Last updated 6 October 2026" },
   tocLabel: "On this page",
   sections: [
     {
@@ -35,6 +35,7 @@ const terms = {
       title: "Our products",
       body: [
         "When you buy one of our products, you get a licence to use it as described on its product page. You may not resell it, share your access, or copy, change or reverse engineer it unless the product page says you can. We may update products to fix problems or add features.",
+        "If your business uses Wave Assist, you are responsible for what you teach your assistant, and for telling your customers that you use it.",
       ],
     },
     {

@@ -3,8 +3,13 @@ import Rich from "./Rich";
 import site from "@/content/site";
 
 // Terms, Privacy Policy and Refund Policy: a contents list that follows you, and the text.
+// A section can have its own "id" (like "wave-assist"), used for its heading and its contents link.
+// The others are numbered in order, skipping those, so adding a section with an id never moves
+// another section's link.
 export default function LegalPage({ id, content }) {
-  const anchor = (i) => `${id}-${i}`;
+  let n = 0;
+  const anchors = content.sections.map((s) => s.id || `${id}-${n++}`);
+  const anchor = (i) => anchors[i];
   return (
     <main className="page" id={`main-${id}`}>
       <Hero title={content.hero.title}>

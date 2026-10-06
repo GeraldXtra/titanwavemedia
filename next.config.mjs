@@ -25,7 +25,8 @@ const csp = [
   "img-src 'self' blob: data:",
   "font-src 'self'",
   `connect-src 'self' ${supabaseOrigin()} ${paystack.api}`,
-  `frame-src ${paystack.checkout}`,
+  // Our own pages in a frame: the console's Wave Assist test chat.
+  `frame-src 'self' ${paystack.checkout}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -47,7 +48,9 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        // Every page except the Wave Assist chat page, which businesses' websites show in a
+        // frame. proxy.js gives that page its own headers.
+        source: "/((?!assist/chat/?$).*)",
         headers: [
           { key: "Content-Security-Policy", value: csp },
           { key: "X-Content-Type-Options", value: "nosniff" },

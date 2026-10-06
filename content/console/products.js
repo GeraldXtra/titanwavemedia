@@ -1,12 +1,32 @@
-// The products in the console. None of them works in the console yet: each shows Coming soon
-// with Notify me, and every Notify me counts on the Team view's Product interest page, together
-// with the website's notify list (a website sign up from a product page with the same slug).
+import productList, { priceOf } from "@/content/product-list";
+
+// The products in the console. The list itself is content/product-list.js, which the website
+// reads too; this file has only the console's words. Wave Assist works here in the console,
+// LedgerWatch is live on its own website, and the products on the way show Coming soon with
+// Notify me. Every Notify me counts on the Team view's Product interest page, together with the
+// website's notify list (a website sign up from a product page with the same slug).
 
 const products = {
   meta: { title: "Products, Titan Wave Media Console" },
   title: "Products",
-  lede: "AI tools for your business. They're on the way. Tell us which ones you want, and we'll email you the day each one opens.",
-  soon: "Coming soon",
+  lede: "Tools for your business. Wave Assist works right here in your console, LedgerWatch is live on its own website, and the rest are on the way. Tell us which ones you want, and we'll email you the day each one opens.",
+
+  // The chip for each status, and the price line: "Live", "Available now", "Coming soon".
+  status: productList.status,
+
+  // The console page of a product that works in the console.
+  pages: { "wave-assist": "/console/assist" },
+
+  // A product that works today.
+  openProduct: "Open {name}",
+  newTab: "(opens in a new tab)",
+  whatLive: "What it does",
+  useTitle: "Use it",
+  useLive: "{name} works on its own website, so it opens there.",
+  useHere: "{name} works here in your console. Set it up, test it and put it on your website.",
+  seeMore: "See what it does",
+
+  // A product on the way.
   notify: "Notify me",
   notified: "We'll tell you",
   notifiedHelp: "We email you the day it opens.",
@@ -18,57 +38,8 @@ const products = {
   wantText: "Tell us, and we'll email you the day it opens. The products people ask for most get built first.",
   back: "Products",
 
-  items: [
-    {
-      slug: "wave-assist",
-      name: "Wave Assist",
-      icon: "chat",
-      text: "A chat assistant that answers your customers on your website, and later on WhatsApp, day and night.",
-      list: ["Answers questions about your business from what you teach it", "Hands a customer over to your team when it's not sure", "Shows you every conversation it has"],
-    },
-    {
-      slug: "wave-data",
-      name: "Wave Data",
-      icon: "data",
-      text: "Realistic data with no real people in it, for testing apps and training AI.",
-      list: ["Pick the kind of data and the fields you need", "Download it as a CSV or JSON file", "Every value is made up, so no real person is in it"],
-    },
-    {
-      slug: "wave-clean",
-      name: "Wave Clean",
-      icon: "shield",
-      text: "Takes names, phone numbers and account numbers out of your files, so they are safe to share or give to AI.",
-      list: ["Paste text or upload a file", "Choose what to take out", "Get back a clean copy"],
-    },
-    {
-      slug: "wave-write",
-      name: "Wave Write",
-      icon: "write",
-      text: "AI that writes product descriptions, Instagram captions and replies for people who sell online.",
-      list: ["Write a product description from a photo and a few words", "Turn one post into captions for Instagram, WhatsApp status and X", "Draft replies to customer messages in your own tone"],
-    },
-    {
-      slug: "wave-read",
-      name: "Wave Read",
-      icon: "read",
-      text: "Upload receipts, invoices or forms, and get a neat spreadsheet back.",
-      list: ["Read receipts and invoices from photos or PDFs", "Put the dates, amounts and names into columns", "Download it as a spreadsheet for your accountant"],
-    },
-    {
-      slug: "wave-voice",
-      name: "Wave Voice",
-      icon: "voice",
-      text: "Turns WhatsApp voice notes into text and drafts a reply.",
-      list: ["Turn voice notes into text", "Understands English and Nigerian Pidgin", "Drafts a reply you can send or change"],
-    },
-    {
-      slug: "wave-insights",
-      name: "Wave Insights",
-      icon: "chart",
-      text: "Connect your sales, and every week get simple charts and a short summary of what changed.",
-      list: ["A weekly summary of your sales in plain words", "Charts of what sold, when and where", "A heads up when something changes fast"],
-    },
-  ],
+  items: productList.items,
 };
 
+export { priceOf };
 export default products;

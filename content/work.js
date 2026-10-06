@@ -1,31 +1,31 @@
-// The Work page. The first three projects also show on the home page.
-// Each project links to its own page; the words for those pages are in content/project.js.
+// The Work page. The projects themselves, and the words for their own pages, are in
+// content/project.js; every published one gets a tile here, in the same order, and the first
+// three also show on the home page.
+
+import project from "./project";
 
 const work = {
   meta: {
     title: "Our work, Titan Wave Media",
-    description: "Sites, apps and AI systems we've built, for clients and as our own projects.",
+    description: "Projects we've built, with the problem each one fixes, who it's for and the tools we used.",
   },
 
   hero: {
     title: "See what we've built.",
-    text: "Sites, apps and AI systems we've built, for clients and as our own projects.",
+    text: "Projects we've built, with the problem each one fixes, who it's for and the tools we used.",
   },
 
   // A heading for screen readers over the list below (it is not shown on the page).
   listTitle: "All projects",
 
+  // The buttons are "All", then one for each kind of project in content/project.js that has at
+  // least one published project.
   filters: {
     label: "Filter projects",
-    // "value" must match the "cat" of the projects below.
-    options: [
-      { value: "all", label: "All" },
-      { value: "ai", label: "AI setup" },
-      { value: "product", label: "Products" },
-      { value: "data", label: "Data" },
-    ],
+    all: "All",
     searchLabel: "Search projects",
     searchPlaceholder: "Search projects",
+    empty: "Nothing matches yet. Try another word.",
   },
 
   // The words that show when a tile is turned over.
@@ -34,14 +34,18 @@ const work = {
     built: "What we built",
   },
 
-  items: [
-    { slug: "example", cat: "ai", tag: "AI setup", client: "[Client name]", screenshot: "[Project screenshot]", needed: "[What the client needed]", built: "[What we built]" },
-    { slug: "example", cat: "product", tag: "Product", client: "[Client name]", screenshot: "[Project screenshot]", needed: "[What the client needed]", built: "[What we built]" },
-    { slug: "example", cat: "data", tag: "Data", client: "[Client name]", screenshot: "[Project screenshot]", needed: "[What the client needed]", built: "[What we built]" },
-    { slug: "example", cat: "ai", tag: "AI setup", client: "[Client name]", screenshot: "[Project screenshot]", needed: "[What the client needed]", built: "[What we built]" },
-    { slug: "example", cat: "product", tag: "Product", client: "[Client name]", screenshot: "[Project screenshot]", needed: "[What the client needed]", built: "[What we built]" },
-    { slug: "example", cat: "data", tag: "Data", client: "[Client name]", screenshot: "[Project screenshot]", needed: "[What the client needed]", built: "[What we built]" },
-  ],
+  items: Object.entries(project.pages)
+    .filter(([, p]) => p.published)
+    .map(([slug, p]) => ({
+      slug,
+      kind: p.kind,
+      tag: project.kinds[p.kind],
+      name: p.name,
+      card: p.card,
+      needed: p.needed,
+      built: p.built,
+      cover: p.cover,
+    })),
 
   cta: {
     title: "Tell us what you want built.",

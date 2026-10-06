@@ -1,80 +1,95 @@
 import { notFound } from "next/navigation";
 import product from "@/content/product";
+import productList, { priceOf } from "@/content/product-list";
 import Hero from "@/components/Hero";
 import Btn from "@/components/Btn";
 import CopyLinkButton from "@/components/CopyLinkButton";
-import { BlkHead, Cards, Cta, Faq, Gap, Notify, Section, StepList, Strip } from "@/components/Blocks";
+import { BlkHead, Cta, Faq, Gap, Notify, OutLink, Section, StatusTag, Strip } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { ph } from "@/lib/text";
+import { format } from "@/lib/text";
 
-// One page per entry in content/product.js. Other addresses get the "Page not found" page.
+// One page for each product in content/product-list.js. Other addresses get the "Page not found" page.
 export const dynamicParams = false;
 
+const find = (slug) => productList.items.find((p) => p.slug === slug);
+
 export function generateStaticParams() {
-  return Object.keys(product.pages).map((slug) => ({ slug }));
+  return productList.items.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const p = product.pages[slug];
+  const p = find(slug);
   if (!p) return {};
-  return pageMeta({ ...p.meta, path: `/products/${slug}`, index: p.published });
+  return pageMeta({ title: format(product.meta.title, { name: p.name }), description: p.text, path: `/products/${slug}` });
 }
 
 export default async function ProductPage({ params }) {
   const { slug } = await params;
-  const p = product.pages[slug];
+  const p = find(slug);
   if (!p) notFound();
   const l = product.labels;
+  const values = { name: p.name, slug: p.slug };
+  // The product's own questions first, then the ones every product with its status shares.
+  const faq = [...(p.faq || []), ...(product.faq[p.status] || [])];
   return (
     <main className="page" id="main-products-product">
-      <Hero title={p.name} text={p.line} crumbs={[{ label: l.crumb, href: "/products" }, { label: p.name }]}>
+      <Hero title={p.name} text={p.text} crumbs={[{ label: l.crumb, href: "/products" }, { label: p.name }]}>
         <div className="buy">
-          <span className="tag">{p.tag}</span>
-          <strong className={ph(p.price)}>{p.price}</strong>
-          <a className="btn btn--line" href="#pt-notify" data-jump="">
-            <span>{l.notify}</span>
-          </a>
-          <Btn href={l.ask.href} label={l.ask.label} style="line" />
+          <StatusTag status={p.status} />
+          <strong>{priceOf(p)}</strong>
+          {p.status === "live" && p.url ? (
+            <OutLink href={p.url} label={format(l.open, values)} className="btn btn--solid" />
+          ) : p.status === "available" ? (
+            <Btn href={format(l.talk.href, values)} label={l.talk.label} style="solid" />
+          ) : (
+            <>
+              <a className="btn btn--line" href="#pt-notify" data-jump="">
+                <span>{l.notify}</span>
+              </a>
+              <Btn href={format(l.ask.href, values)} label={l.ask.label} style="line" />
+            </>
+          )}
         </div>
       </Hero>
 
       <Section tone="white">
-        <div className="shot" style={{ marginTop: 0 }}>
-          <div className="ph-box">{p.screenshot}</div>
-        </div>
-      </Section>
-
-      <Section tone="white">
-        <BlkHead title={l.features} />
-        <Cards n={3} cards={p.features} />
-      </Section>
-
-      <Section tone="white">
-        <div className="story">
-          <h2>{l.who}</h2>
-          <p className={ph(p.who)}>{p.who}</p>
-        </div>
-      </Section>
-
-      <Section tone="white">
-        <BlkHead title={l.get} />
-        <StepList steps={p.steps} />
-        <Gap>
-          <Strip icon="shield" text={l.privacy.text} link={l.privacy.link} />
-        </Gap>
+        {p.list.length > 0 && (
+          <div className="story">
+            <h2>{l.features}</h2>
+            <ul className="feats">
+              {p.list.map((line, i) => (
+                <li key={i}>{line}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {/* A live product runs on its own website; the others run with us. */}
+        {p.status === "available" && (
+          <Gap>
+            <Strip icon="shield" text={l.privacy.text} link={l.privacy.link} />
+          </Gap>
+        )}
         <Strip icon="code" text={l.share} style={{ marginTop: "var(--gap)" }}>
           <CopyLinkButton label={l.copy} done={l.copied} prompt={l.copyPrompt} />
         </Strip>
       </Section>
 
-      <Section tone="white">
-        <BlkHead title={l.questions} />
-        <Faq items={p.faq} />
-        <div id="pt-notify" style={{ marginTop: "var(--gap)", scrollMarginTop: 110 }}>
-          <Notify title={p.notifyTitle} thanks={l.thanks} inputId="pt-email" source={`product:${slug}`} />
-        </div>
-      </Section>
+      {(faq.length > 0 || p.status === "soon") && (
+        <Section tone="white">
+          {faq.length > 0 && (
+            <>
+              <BlkHead title={l.questions} />
+              <Faq items={faq} />
+            </>
+          )}
+          {p.status === "soon" && (
+            <div id="pt-notify" style={{ marginTop: "var(--gap)", scrollMarginTop: 110 }}>
+              <Notify title={format(l.notifyTitle, values)} thanks={l.thanks} inputId="pt-email" source={`product:${slug}`} />
+            </div>
+          )}
+        </Section>
+      )}
 
       <Cta />
     </main>

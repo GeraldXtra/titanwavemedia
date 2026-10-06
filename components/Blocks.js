@@ -7,6 +7,7 @@ import NotifyButton from "./NotifyButton";
 import WorkTile from "./WorkTile";
 import site from "@/content/site";
 import products from "@/content/products";
+import productList, { priceOf } from "@/content/product-list";
 import work from "@/content/work";
 import { format, isPh, ph } from "@/lib/text";
 
@@ -154,25 +155,55 @@ export function Notify({ title, text, thanks, inputId, source }) {
   );
 }
 
+// A link to another website. It opens in a new tab, and screen readers are told so.
+export function OutLink({ href, label, className }) {
+  return (
+    <a className={className} href={href} target="_blank" rel="noopener noreferrer">
+      <span>{label}</span>
+      <span className="sr-only">{`, ${site.newTab}`}</span>
+    </a>
+  );
+}
+
+// A product's status: Live, Available now or Coming soon.
+export function StatusTag({ status }) {
+  return (
+    <span className="tag" data-status={status}>
+      {productList.status[status]}
+    </span>
+  );
+}
+
+// One product from content/product-list.js. The second button depends on its status: open a
+// live product, talk to us about one that is available, or hear when one is ready.
 export function ProductCard({ item }) {
+  const c = products.card;
+  const values = { name: item.name, slug: item.slug };
   return (
     <div className="pcard" data-cat={item.cat}>
       <div className="pcard__top">
         <Icon name={item.icon || "tool"} />
-        <span className="tag">{item.tag}</span>
+        <StatusTag status={item.status} />
       </div>
-      <h3 className={ph(item.name)}>{item.name}</h3>
-      <p className={ph(item.text)}>{item.text}</p>
-      <p className={ph(item.price, "pcard__price")}>{item.price}</p>
+      <h3>{item.name}</h3>
+      <p>{item.text}</p>
+      <p className="pcard__price">{priceOf(item)}</p>
       <div className="btns" style={{ marginTop: 12 }}>
-        <Btn href={`/products/${item.slug}`} label={products.card.details} style="line" size="sm" plain />
-        <NotifyButton label={products.card.notify} />
+        <Btn href={`/products/${item.slug}`} label={c.details} style="line" size="sm" plain />
+        {item.status === "live" && item.url ? (
+          <OutLink href={item.url} label={format(c.open, values)} className="btn btn--line btn--sm" />
+        ) : item.status === "available" ? (
+          <Btn href={format(c.talk.href, values)} label={c.talk.label} style="line" size="sm" plain />
+        ) : (
+          <NotifyButton label={c.notify} />
+        )}
       </div>
     </div>
   );
 }
 
-// The sideways row of product cards.
+// The sideways row of product cards. With `list` (the Products page) every card shows, in rows
+// that wrap, and the filters above can hide them.
 export function ProductRow({ items, list }) {
   return (
     <div className="row" data-list={list ? "" : undefined}>

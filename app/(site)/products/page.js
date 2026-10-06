@@ -1,4 +1,5 @@
 import products from "@/content/products";
+import productList from "@/content/product-list";
 import Hero from "@/components/Hero";
 import Filterable from "@/components/Filterable";
 import { Gap, Notify, ProductRow, Section, Strip } from "@/components/Blocks";
@@ -8,6 +9,13 @@ export const metadata = pageMeta({ ...products.meta, path: "/products" });
 
 export default function ProductsPage() {
   const f = products.filters;
+  // A filter button for each kind of product that has at least one product in it.
+  const options = [
+    { value: "all", label: f.all },
+    ...Object.entries(f.cats)
+      .filter(([cat]) => productList.items.some((p) => p.cat === cat))
+      .map(([value, label]) => ({ value, label })),
+  ];
   return (
     <main className="page" id="main-products">
       <Hero title={products.hero.title} text={products.hero.text} />
@@ -16,12 +24,12 @@ export default function ProductsPage() {
         <Filterable
           name="pcard"
           label={f.label}
-          options={f.options}
+          options={options}
           searchLabel={f.searchLabel}
           searchPlaceholder={f.searchPlaceholder}
           empty={f.empty}
         >
-          <ProductRow items={products.items} list />
+          <ProductRow items={productList.items} list />
         </Filterable>
         <Gap>
           <Notify title={products.notify.title} text={products.notify.text} thanks={products.notify.thanks} inputId="prod-email" source="products" />

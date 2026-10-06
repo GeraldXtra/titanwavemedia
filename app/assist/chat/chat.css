@@ -1,0 +1,71 @@
+/* Wave Assist's chat, inside a business's website. Plain white and calm, the business's colour
+   on the customer's messages and the main buttons, with white or black text on it that reads at
+   4.6:1 or more. Grey text and borders keep 4.6:1 and 3.1:1 on white. Nothing moves when the
+   visitor prefers less motion. */
+.wa{--wa-color:#0b0b0b;--wa-text:#fff;--wa-edge:#0b0b0b;position:fixed;inset:0;display:flex;flex-direction:column;background:#fff;color:#0b0b0b;font-family:var(--sans);font-size:16px;line-height:1.5;color-scheme:light}
+.wa :focus-visible{outline:2px solid #0b0b0b;outline-offset:2px}
+.wa--still{align-items:center;justify-content:center;padding:24px;text-align:center}
+.wa-quiet{color:#4a4945}
+
+/* the top: the business's name, Start again and Close */
+.wa-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:10px 12px 10px 16px;border-bottom:1px solid #d5d3cc}
+.wa-name{margin:0;min-width:0;font-size:18px;line-height:1.3;font-weight:700;overflow-wrap:anywhere}
+.wa-top__btns{display:flex;align-items:center;gap:8px;margin-left:auto}
+.wa-close{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:0;border:1px solid #6c6a64;border-radius:8px;background:#fff;color:#0b0b0b;cursor:pointer}
+.wa-close:hover{background:#eeede8}
+.wa-close svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.wa-test{padding:8px 16px;font-size:14px;color:#4a4945;background:#f3f1ec;border-bottom:1px solid #d5d3cc}
+
+/* the conversation, the starter questions and the way to a person scroll together */
+.wa-main{flex:1;min-height:0;display:flex;flex-direction:column}
+.wa-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;padding:16px}
+.wa-log{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.wa-msg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:16px;line-height:1.5;overflow-wrap:anywhere}
+.wa-msg--them{align-self:flex-start;background:#f3f1ec;color:#0b0b0b;border-bottom-left-radius:4px}
+.wa-msg--you{align-self:flex-end;background:var(--wa-color);color:var(--wa-text);border:1px solid var(--wa-edge);border-bottom-right-radius:4px}
+.wa-msg a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.wa-typing{display:flex;align-items:center;gap:6px;min-height:44px}
+.wa-typing i{width:7px;height:7px;border-radius:50%;background:#4a4945;animation:wa-dot 1.2s ease-in-out infinite}
+.wa-typing i:nth-of-type(2){animation-delay:.2s}
+.wa-typing i:nth-of-type(3){animation-delay:.4s}
+@keyframes wa-dot{0%,100%{opacity:.3}50%{opacity:1}}
+
+.wa-starters{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.wa-starters button{min-height:44px;padding:8px 14px;border:1px solid #6c6a64;border-radius:22px;background:#fff;color:#0b0b0b;font-size:15px;font-weight:600;line-height:1.3;text-align:left;cursor:pointer}
+.wa-starters button:hover{background:#eeede8}
+
+/* buttons */
+.wa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 16px;border:1px solid #0b0b0b;border-radius:8px;background:#fff;color:#0b0b0b;font-size:15px;font-weight:700;line-height:1.25;text-align:center;text-decoration:none;cursor:pointer}
+.wa-btn:hover{background:#eeede8}
+.wa-btn--sm{min-height:40px;padding:6px 12px;font-size:14px}
+.wa-btn--main{background:var(--wa-color);border-color:var(--wa-edge);color:var(--wa-text)}
+.wa-btn--main:hover{background:var(--wa-color);box-shadow:inset 0 0 0 2px var(--wa-text)}
+.wa-btn[aria-disabled="true"]{cursor:progress}
+.wa-ico{width:18px;height:18px;flex:none}
+
+/* Talk to a person */
+.wa-hand{display:grid;gap:12px;padding:14px 16px;border:1px solid #6c6a64;border-radius:12px}
+.wa-hand h2,.wa-hand h3{margin:0;font-size:16px;line-height:1.4}
+.wa-hand__ways{display:flex;flex-wrap:wrap;gap:8px}
+.wa-details{display:grid;gap:12px}
+.wa-rule{font-size:14px;color:#4a4945}
+.wa-field{display:grid;gap:4px}
+.wa-field label{font-size:14px;font-weight:600}
+.wa-field input,.wa-form__row input{width:100%;min-width:0;min-height:44px;padding:8px 12px;border:1px solid #6c6a64;border-radius:8px;background:#fff;color:#0b0b0b;font-size:16px}
+.wa-field input[aria-invalid="true"]{border-color:#b51f18;border-width:2px}
+.wa-field input::placeholder,.wa-form__row input::placeholder{color:#6c6a64;opacity:1}
+.wa-err{font-size:14px;color:#b51f18}
+.wa-thanks{padding:2px 0}
+.wa-thanks:focus{outline:none}
+
+/* where the customer types, and the line about who handles the messages */
+.wa-form{display:grid;gap:8px;padding:12px 16px 8px;border-top:1px solid #d5d3cc}
+.wa-form__row{display:flex;gap:8px}
+.wa-form__row input{flex:1}
+.wa-foot{padding:0 16px 12px;font-size:13px;line-height:1.4;color:#4a4945}
+.wa-foot a{color:inherit;text-underline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  .wa-typing i{animation:none;opacity:.7}
+  .wa-body{scroll-behavior:auto}
+}

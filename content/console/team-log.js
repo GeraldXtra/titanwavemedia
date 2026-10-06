@@ -3,7 +3,7 @@
 const teamLog = {
   meta: { title: "Log, Titan Wave Media Console" },
   title: "Log",
-  lede: "What the team did: invoices sent, refunds, steps changed and members added. Newest first.",
+  lede: "What the team did: invoices sent, refunds, steps changed, members added and Wave Assist changes. Newest first.",
   when: "When",
   who: "Who",
   what: "What",
@@ -19,6 +19,13 @@ const teamLog = {
     client_invited: "Invited the client {target}",
     member_added: "Added {target} to the team",
     member_removed: "Removed {target} from the team",
+    assist_setup: "Changed the Wave Assist setup of {target}",
+    assist_on: "Switched on Wave Assist for {target}",
+    assist_off: "Switched off Wave Assist for {target}",
+    assist_limit: "Set the Wave Assist limit of {target} to {limit} conversations a month",
+    assist_handled: "Marked a Wave Assist handover for {target} as handled",
+    assist_deleted: "Deleted a Wave Assist conversation of {target}",
+    assist_answer: "Added an answer to the Wave Assist of {target}: {question}",
   },
 };
 

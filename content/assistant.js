@@ -40,6 +40,18 @@ const assistant = {
       answer: "AI setup means we build AI to handle the work that eats your team's time, connect it to your tools and keep it running: chat assistants, automation, dashboards and AI inside the software you already use. You see a working demo before we start the full build.",
       link: { label: "Build your setup", href: "/ai-setup" },
     },
+    // The two products people can use or ask for now. They sit before prices, so "How much is
+    // Wave Assist?" gets the Wave Assist answer.
+    {
+      words: ["wave assist", "waveassist", "on my website", "for my website", "my website", "my site", "website chat", "chat widget", "chatbot"],
+      answer: "Wave Assist is a chat assistant for your own website. It answers your customers in English, day and night, from what you teach it, and when it isn't sure it hands them to you on WhatsApp or takes their details. It goes on your website with one line of code. It's available now, and we agree the price with you. Press Talk to us on its page to ask.",
+      link: { label: "Wave Assist", href: "/products/wave-assist" },
+    },
+    {
+      words: ["ledgerwatch", "ledger watch", "ledger", "who owes", "owes me", "owe me", "debtor", "debtors", "crypto", "coin", "market watch"],
+      answer: "LedgerWatch is live and free. It keeps track of who owes you and sends reminders over WhatsApp or email, with your bank details already in them. It also watches coin prices against conditions you set, and you decide what to do. It runs on its own website, useledgerwatch.co.",
+      link: { label: "LedgerWatch", href: "/products/ledgerwatch" },
+    },
     {
       words: ["price", "prices", "cost", "how much", "pay", "fee", "pricing", "quote", "expensive", "cheap"],
       answer: "Setup is paid once ({setupPrice}) and Care is paid monthly ({carePrice}) for hosting, updates and fixes. Every quote is written down before any work starts. You can build your setup on the AI Setup page and ask us for a quote from there.",
@@ -57,7 +69,7 @@ const assistant = {
     },
     {
       words: ["product", "products", "tools", "buy", "launch", "app", "subscription", "download"],
-      answer: "Our first products are on the way. Leave your email on the Products page and we'll tell you when the first one is ready.",
+      answer: "LedgerWatch is live and free to use, and Wave Assist, a chat assistant for your own website, is available now with a price we agree with you. More tools are coming soon. On each one's page you can leave your email to hear the day it opens.",
       link: { label: "See our products", href: "/products" },
     },
     {
@@ -83,7 +95,7 @@ const assistant = {
     },
     {
       words: ["work", "portfolio", "clients", "projects", "examples", "case study", "case studies"],
-      answer: "Our Work page shows sites, apps and AI systems we've built, for clients and as our own projects. You can filter it by AI setup, products and data.",
+      answer: "Our Work page shows projects we've built, each with the problem it fixes, what we built, who it's for and the tools we used. Open a project to read its own page.",
       link: { label: "See our work", href: "/work" },
     },
     {

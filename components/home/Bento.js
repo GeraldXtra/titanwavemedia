@@ -7,13 +7,14 @@ import AssistantMessage from "../AssistantMessage";
 import { askAssistant } from "@/lib/askAssistant";
 import { redactParts } from "@/lib/redact";
 import { demoRow } from "@/lib/fakeData";
-import { ph } from "@/lib/text";
 
 const KINDS = ["NAME", "PHONE", "ACCOUNT", "EMAIL"];
 
 // "What we do": four things a visitor can try: our own site assistant, the tool that takes
 // personal details out of a message, and the maker of made up data.
-export default function Bento({ copy }) {
+// `productRows` is the products tile's list ({ name, tag, status }), made by the home page from
+// content/product-list.js.
+export default function Bento({ copy, productRows = [] }) {
   const c = copy.chat;
   const p = copy.privacy;
   const d = copy.data;
@@ -256,11 +257,13 @@ export default function Bento({ copy }) {
         <div className="mini">
           <table className="dt">
             <tbody>
-              {pr.rows.map((row, i) => (
+              {productRows.map((row, i) => (
                 <tr key={i}>
-                  <td className={ph(row.name)}>{row.name}</td>
+                  <td>{row.name}</td>
                   <td className="num">
-                    <span className="tag">{row.tag}</span>
+                    <span className="tag" data-status={row.status}>
+                      {row.tag}
+                    </span>
                   </td>
                 </tr>
               ))}

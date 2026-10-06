@@ -26,9 +26,10 @@ const thankYou = {
     link: "Create a free account",
   },
 
+  // For people who asked about one of our products.
   bought: {
-    title: "How to get a product you bought",
-    text: "Your receipt and how to get started are in your email.",
+    title: "Asked about a product?",
+    text: "We'll reply with how to get it and what it costs. When you pay us, you get a receipt.",
   },
 };
 

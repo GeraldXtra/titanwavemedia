@@ -12,7 +12,8 @@ export async function POST(request) {
   if (res) return res;
   const body = await readJson(request, 1024);
   const data = (body.data && typeof body.data === "object" && body.data) || {};
-  const product = products.items.find((p) => p.slug === data.product);
+  // Only products on the way have a list; a product that works today has nothing to wait for.
+  const product = products.items.find((p) => p.slug === data.product && p.status === "soon");
   if (!product) return json({ ok: false, error: "not_found" }, 404);
   const admin = getAdmin();
   if (data.on === true) {

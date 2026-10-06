@@ -27,6 +27,7 @@ const ICONS = {
   quote_accepted: "folder",
   quote_changes: "folder",
   step_changed: "folder",
+  assist_handover: "users",
 };
 
 function when(iso) {

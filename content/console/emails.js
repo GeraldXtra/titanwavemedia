@@ -192,6 +192,25 @@ const emails = {
       noAccount: "You can reply to this email.",
       reason: "You got this email because you wrote to Titan Wave Media.",
     },
+
+    assist_handover: {
+      name: "Wave Assist handover",
+      when: "When a customer leaves their details in the chat on a business's website",
+      subject: "{name} would like {business} to get back to them",
+      preview: "They left their details in the chat on your website.",
+      blocks: [
+        { h: "A customer would like a person" },
+        { p: "**{name}** left their details in the chat on your website, so someone from **{business}** can get back to them." },
+        { box: [["Name", "{name}"], ["Phone number", "{phone}"], ["Email", "{email}"]] },
+        { p: "What they asked:" },
+        { quote: "{question}" },
+        { button: "Open the conversation" },
+        { p: "Once you've got back to them, mark it as handled in your console." },
+      ],
+      // In place of a phone number, an email or a question the customer didn't give.
+      notGiven: "Not given",
+      reason: "You got this email because your business uses Wave Assist from Titan Wave Media.",
+    },
   },
 };
 

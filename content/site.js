@@ -6,6 +6,12 @@
 // - Words in {curly brackets} are filled in from this file: {email}, {rc}, {setupPrice},
 //   {carePrice}, {location}. {clock} shows the time in Lagos.
 
+import productList from "./product-list";
+import project from "./project";
+
+// The published projects, for the site search.
+const published = Object.entries(project.pages).filter(([, p]) => p.published);
+
 // Digits only, with the country code. The NEXT_PUBLIC_WHATSAPP_NUMBER setting overrides it.
 const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "2347064094004";
 const whatsappUrl = `https://wa.me/${whatsapp}`;
@@ -68,10 +74,19 @@ const site = {
     pages: [
       { title: "Home", href: "/", words: "AI we set up for you, tools you can use today, and data that keeps your customers private" },
       { title: "AI Setup", href: "/ai-setup", words: "chat assistants automation dashboards AI inside your software build your setup pricing quote" },
-      { title: "Products", href: "/products", words: "AI tools you can use today coming soon notify" },
+      { title: "Products", href: "/products", words: "AI tools you can use today live available now coming soon notify me price" },
+      // One for each product page, from content/product-list.js.
+      ...productList.items.map((p) => ({
+        title: p.name,
+        href: `/products/${p.slug}`,
+        words: `product ${productList.status[p.status]} ${p.text}`,
+      })),
       { title: "Synthetic Data", href: "/synthetic-data", words: "realistic data no real people dataset builder sample csv" },
       { title: "Privacy", href: "/privacy", words: "your data stays private remove personal details NDPA" },
-      { title: "Work", href: "/work", words: "sites apps and AI systems built for clients projects" },
+      // The Work page names the labels its published projects have.
+      { title: "Work", href: "/work", words: `projects we have built portfolio case study the problem what we built who it is for tools ${[...new Set(published.map(([, p]) => project.kinds[p.kind]))].join(" ")}` },
+      // One for each published project page, from content/project.js.
+      ...published.map(([slug, p]) => ({ title: `${p.name} project`, href: `/work/${slug}`, words: `project work ${project.kinds[p.kind]} ${p.card}` })),
       { title: "About", href: "/about", words: "AI company in Lagos founder company details registered timeline" },
       { title: "Contact", href: "/contact", words: "tell us what you need whatsapp email form" },
       { title: "Updates", href: "/updates", words: "news product launches" },
@@ -154,6 +169,9 @@ const site = {
   },
 
   backToTop: "Back to the top",
+
+  // Read out by screen readers after a link that opens another website in a new tab.
+  newTab: "opens in a new tab",
 
   // What search engines are told about the company (the Organization block on every page).
   organization: {
