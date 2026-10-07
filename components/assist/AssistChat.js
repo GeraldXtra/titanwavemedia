@@ -2,42 +2,38 @@
 
 import { useEffect, useRef, useState } from "react";
 import words from "@/content/assist";
+import { contrast } from "@/lib/assist/color";
 import { siteAllowsOrigin } from "@/lib/assist/sites";
 import AssistText from "./AssistText";
 import Handover from "./Handover";
 
-// The chat inside the frame on a business's website (app/assist.js/loader.js adds the frame).
-// It reads ?id=, ?test= and #o= (the address of the page it sits in), gets its settings from
-// /api/assist/config, and tells that page whether to show the button. It talks only to our own
-// API, sets no cookies, and keeps only the conversation id, in its own storage.
-// Opened on its own (not in a frame) it still works, without a Close button. A test chat
-// (?test=, in the console) shows even when the assistant is off and keeps nothing.
-
 const SRC = "twm-assist";
+const ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const STATE_WAIT = 1500;
 const fill = (text, values) => String(text).replace(/\{(\w+)\}/g, (m, k) => (k in values ? String(values[k]) : m));
+const validId = (v) => (typeof v === "string" && ID.test(v) ? v : null);
 
-// The conversation id, in this page's own storage, or in memory when storage is blocked.
 const memory = new Map();
 const kept = {
   get(k) {
     try {
-      return window.localStorage.getItem(k);
+      const v = window.localStorage.getItem(k);
+      return v === null ? memory.get(k) || null : v;
     } catch {
       return memory.get(k) || null;
     }
   },
   set(k, v) {
+    memory.set(k, v);
     try {
       window.localStorage.setItem(k, v);
-    } catch {
-      memory.set(k, v);
-    }
+    } catch {}
   },
   remove(k) {
+    memory.delete(k);
     try {
       window.localStorage.removeItem(k);
     } catch {}
-    memory.delete(k);
   },
 };
 
@@ -62,7 +58,7 @@ export default function AssistChat() {
   const [offer, setOffer] = useState(null);
   const [notice, setNotice] = useState("");
 
-  const ctx = useRef({ id: "", test: "", origin: "", target: null, token: null, conversation: null });
+  const ctx = useRef({ id: "", test: "", origin: "", target: null, token: null, conversation: null, onState: null, test1: false });
   const messagesRef = useRef([]);
   const rootRef = useRef(null);
   const bodyRef = useRef(null);
@@ -83,7 +79,30 @@ export default function AssistChat() {
     if (target && window.parent !== window) window.parent.postMessage({ source: SRC, kind, ...extra }, target);
   }
 
-  // A chat call with the current token. An old token is swapped for a fresh one once.
+  function remember(id) {
+    const c = ctx.current;
+    c.conversation = id || null;
+    if (c.test1) return;
+    if (c.conversation) kept.set(storeKey(), c.conversation);
+    else kept.remove(storeKey());
+    tell("save", { conversation: c.conversation });
+  }
+
+  function askParent() {
+    const c = ctx.current;
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        c.onState = null;
+        resolve(undefined);
+      }, STATE_WAIT);
+      c.onState = (value) => {
+        clearTimeout(timer);
+        c.onState = null;
+        resolve(value);
+      };
+    });
+  }
+
   async function call(path, body, retry = true) {
     const res = await post(path, { ...body, token: ctx.current.token });
     if (res.status === 401 && retry && res.data && res.data.error === "token") {
@@ -96,7 +115,6 @@ export default function AssistChat() {
     return res;
   }
 
-  // Loading: settings first, then any open conversation.
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     const hash = new URLSearchParams(window.location.hash.slice(1));
@@ -114,17 +132,20 @@ export default function AssistChat() {
       } catch {}
       const conf = res && res.data && res.data.ok ? res.data : null;
       if (!conf) return setPhase("closed");
-      // The page around the chat hears from it only at its own exact address, and only when
-      // that address is one of the business's websites (or our own, for a test).
+      c.test1 = Boolean(conf.test);
       if (conf.test) c.target = window.location.origin;
       else if (c.origin && siteAllowsOrigin(conf.sites, c.origin)) c.target = c.origin;
       c.token = conf.token;
       setCfg(conf);
       const name = conf.name && conf.name.trim();
       const buttonLabel = name ? fill(words.label, { business: name }) : words.labelNoName;
+      const showing = Boolean(conf.show && conf.token);
+      let waiting = null;
       if (framed) {
-        if (conf.show && conf.token) tell("ready", { show: true, label: buttonLabel, color: conf.color, textColor: conf.textColor, corner: conf.corner });
-        else tell("hide");
+        if (showing) {
+          waiting = !conf.test && c.target ? askParent() : null;
+          tell("ready", { show: true, label: buttonLabel, color: conf.color, textColor: conf.textColor, corner: conf.corner, darkEdge: contrast(conf.color, "#0B0B0B") < 3.1 });
+        } else tell("hide");
       }
       if (!conf.token || (framed && !conf.show)) return setPhase("closed");
       document.title = buttonLabel;
@@ -132,12 +153,14 @@ export default function AssistChat() {
       const first = { role: "assistant", text: (conf.greeting && conf.greeting.trim()) || fill(words.greeting, { business: name || words.noName }), first: true };
       commit([first]);
       setPhase("chat");
-      const saved = conf.test ? null : kept.get(storeKey());
+      if (conf.test) return;
+      const fromParent = waiting ? validId(await waiting) : null;
+      const saved = fromParent || validId(kept.get(storeKey()));
       if (!saved) return;
       try {
         const h = await call("/api/assist/history", { conversationId: saved });
         if (h.data && h.data.ok && h.data.open && h.data.messages.length) {
-          c.conversation = saved;
+          remember(saved);
           const restored = h.data.messages.map((m) => ({ role: m.role, text: m.text, handover: m.handover }));
           commit([first, ...restored]);
           const last = restored[restored.length - 1];
@@ -146,26 +169,25 @@ export default function AssistChat() {
             setOffer({ question: asked ? asked.text : "" });
           }
         } else if (h.data && h.data.ok) {
-          kept.remove(storeKey());
+          remember(null);
         }
       } catch {}
     })();
   }, []);
 
-  // Messages from the page around the chat: only "open", from its exact address and frame.
   useEffect(() => {
     function onMessage(e) {
-      const { target } = ctx.current;
-      if (!target || e.origin !== target || e.source !== window.parent) return;
+      const c = ctx.current;
+      if (!c.target || e.origin !== c.target || e.source !== window.parent) return;
       const m = e.data;
       if (!m || typeof m !== "object" || m.source !== SRC) return;
       if (m.kind === "open" && inputRef.current) inputRef.current.focus();
+      if (m.kind === "state" && c.onState) c.onState(typeof m.conversation === "string" ? m.conversation : null);
     }
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
   }, []);
 
-  // Escape closes the chat; Tab and Shift Tab stay inside it while it is open.
   useEffect(() => {
     if (!closable) return;
     function onKey(e) {
@@ -192,16 +214,19 @@ export default function AssistChat() {
     return () => document.removeEventListener("keydown", onKey);
   }, [closable]);
 
-  // The newest message stays in view.
   useEffect(() => {
     const el = bodyRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, pending, offer, notice]);
 
+  const lastAsked = () => {
+    const asked = [...messagesRef.current].reverse().find((m) => m.role === "customer");
+    return asked ? asked.text : "";
+  };
+
   async function send(raw) {
     const text = String(raw || "").trim().slice(0, 500);
     if (!text || pending) return;
-    // A starter button goes away once something is asked, so the box takes the focus.
     if (inputRef.current && document.activeElement !== inputRef.current) inputRef.current.focus();
     const before = messagesRef.current;
     commit([...before, { role: "customer", text }]);
@@ -219,7 +244,6 @@ export default function AssistChat() {
     } catch {}
     setPending(false);
     if (!res) {
-      // It never reached us: the message goes back in the box to send again.
       commit(before);
       setInput(text);
       setNotice(words.offline);
@@ -227,24 +251,39 @@ export default function AssistChat() {
     }
     const ok = res.data && res.data.ok && res.data.reply;
     const reply = ok ? res.data.reply : { text: fill(words.replies.failed, { business }), handover: true };
-    if (ok && res.data.conversationId && !cfg.test) {
-      c.conversation = res.data.conversationId;
-      kept.set(storeKey(), c.conversation);
+    if (ok && !cfg.test) {
+      const next = validId(res.data.conversationId);
+      if (next) remember(next);
+      else if (res.data.limited === "starts") remember(null);
     }
     commit([...messagesRef.current, { role: "assistant", text: reply.text, handover: reply.handover }]);
     if (reply.handover) setOffer({ question: text });
   }
 
-  function startAgain() {
+  async function startAgain() {
     const c = ctx.current;
-    if (c.conversation && !cfg.test) call("/api/assist/end", { conversationId: c.conversation }).catch(() => {});
-    c.conversation = null;
-    kept.remove(storeKey());
+    if (pending) return;
+    if (!cfg.test) {
+      let r = null;
+      try {
+        r = await call("/api/assist/end", { conversationId: c.conversation });
+      } catch {}
+      if (r && r.data && r.data.ok && r.data.kept) {
+        commit([...messagesRef.current, { role: "assistant", text: fill(words.handover.kept, { business }), handover: true }]);
+        setOffer({ question: lastAsked(), focus: true });
+        return;
+      }
+    }
+    remember(null);
     commit([greeting]);
     setOffer(null);
     setNotice("");
     setInput("");
     if (inputRef.current) inputRef.current.focus();
+  }
+
+  function openPerson() {
+    setOffer({ question: lastAsked(), focus: true });
   }
 
   function onWhatsapp() {
@@ -254,7 +293,7 @@ export default function AssistChat() {
 
   async function onDetails(values) {
     try {
-      const r = await call("/api/assist/handover", { conversationId: ctx.current.conversation, ...values });
+      const r = await call("/api/assist/handover", { conversationId: ctx.current.conversation, question: lastAsked(), ...values });
       return r.data || { ok: false };
     } catch {
       return { ok: false };
@@ -281,9 +320,11 @@ export default function AssistChat() {
   const settings = { sites: cfg.sites, whatsapp: cfg.whatsapp, phone: cfg.phone, email: cfg.email };
   const asked = messages.some((m) => m.role === "customer");
   const starters = !asked && Array.isArray(cfg.starters) ? cfg.starters.slice(0, 4) : [];
+  const edge = cfg.textColor === "#000000" ? "#0b0b0b" : cfg.color;
+  const darkEdge = contrast(cfg.color, "#151514") < 3.1 ? "#F2F0EB" : edge;
 
   return (
-    <div className="wa" ref={rootRef} style={{ "--wa-color": cfg.color, "--wa-text": cfg.textColor, "--wa-edge": cfg.textColor === "#000000" ? "#0b0b0b" : cfg.color }}>
+    <div className="wa" ref={rootRef} style={{ "--wa-color": cfg.color, "--wa-text": cfg.textColor, "--wa-edge": edge, "--wa-dark-edge": darkEdge }}>
       <header className="wa-top">
         <h1 className="wa-name">{business}</h1>
         <div className="wa-top__btns">
@@ -336,11 +377,14 @@ export default function AssistChat() {
 
           {offer && (
             <Handover
-              key={messages.length}
+              key={`${messages.length}:${offer.focus ? 1 : 0}`}
               business={business}
               whatsapp={cfg.whatsapp}
+              phone={cfg.phone}
+              email={cfg.email}
               question={offer.question}
-              canLeaveDetails={Boolean(cfg.test || ctx.current.conversation)}
+              canLeaveDetails
+              focusOnOpen={Boolean(offer.focus)}
               onWhatsapp={onWhatsapp}
               onDetails={onDetails}
             />
@@ -358,6 +402,13 @@ export default function AssistChat() {
           {notice && (
             <p className="wa-err" role="alert">
               {notice}
+            </p>
+          )}
+          {!offer && (
+            <p className="wa-person">
+              <button className="wa-link" type="button" onClick={openPerson}>
+                {words.handover.open}
+              </button>
             </p>
           )}
           <div className="wa-form__row">

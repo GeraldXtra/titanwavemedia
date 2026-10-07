@@ -6,8 +6,6 @@ import { format } from "@/lib/text";
 
 export const runtime = "nodejs";
 
-// Team only: a business's monthly limit of conversations, { business, limit }, from 0 to
-// 1,000,000. New conversations after it only offer a person.
 export async function POST(request) {
   const action = await assistAction(request, 1024);
   if (action.res) return action.res;

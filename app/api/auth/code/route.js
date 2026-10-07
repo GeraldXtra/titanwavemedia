@@ -12,8 +12,6 @@ import { createUserClient } from "@/lib/supabaseUser";
 
 export const runtime = "nodejs";
 
-// The second step of signing in: the 6 digit code from an authenticator app, or a backup code.
-// A backup code turns two step sign in off (and emails the person), so it can be set up again.
 export async function POST(request) {
   if (!sameOrigin(request)) return json({ ok: false, error: "forbidden" }, 403);
   if (!accountsReady()) return json({ ok: false, error: "off" }, 503);
@@ -50,7 +48,6 @@ export async function POST(request) {
       await hit("code", user.id);
       return json({ ok: false, message: copy.errors.backupWrong }, 400);
     }
-    // The backup code is used up, and two step sign in is removed.
     const { data: listed } = await admin.auth.admin.mfa.listFactors({ userId: user.id });
     for (const f of (listed && listed.factors) || []) await admin.auth.admin.mfa.deleteFactor({ userId: user.id, id: f.id });
     await admin.from("backup_codes").delete().eq("user_id", user.id);

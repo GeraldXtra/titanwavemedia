@@ -1,5 +1,3 @@
-// Settings: Profile, Security, Notifications, Team and Your data.
-
 const settings = {
   meta: { title: "Settings, Titan Wave Media Console" },
   title: "Settings",

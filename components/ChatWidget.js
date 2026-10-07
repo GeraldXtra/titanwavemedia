@@ -10,7 +10,6 @@ import { askAssistant } from "@/lib/askAssistant";
 
 const STORE = "twm-chat";
 
-// The site assistant at the bottom right. Full screen on phones.
 export default function ChatWidget() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -22,7 +21,6 @@ export default function ChatWidget() {
   const logRef = useRef(null);
   const messagesRef = useRef(messages);
 
-  // The conversation is remembered while the browser tab stays open.
   function commit(next) {
     messagesRef.current = next;
     setMessages(next);
@@ -69,7 +67,6 @@ export default function ChatWidget() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // On a phone the assistant covers the page, so it closes when you go to another page.
   const firstPath = useRef(pathname);
   useEffect(() => {
     if (pathname === firstPath.current) return;

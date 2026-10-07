@@ -6,7 +6,6 @@ import { EMAIL } from "@/lib/validate";
 
 const copy = site.notifyForm;
 
-// "Get told when it launches": checks the email, saves it, and says thanks.
 export default function NotifyForm({ inputId, thanks = copy.thanks, source }) {
   const formRef = useRef(null);
   const inputRef = useRef(null);

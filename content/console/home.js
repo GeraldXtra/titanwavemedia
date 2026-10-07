@@ -1,13 +1,9 @@
-// The console home page for clients.
-
 const home = {
   meta: { title: "Home, Titan Wave Media Console" },
 
-  // The greeting follows the time in Lagos.
   morning: "Good morning, {name}",
   afternoon: "Good afternoon, {name}",
   evening: "Good evening, {name}",
-  // When we do not know their first name yet.
   greetNoName: "Welcome",
   lede: "{business}. Here's what's happening with your projects and invoices.",
   start: "Start a project",

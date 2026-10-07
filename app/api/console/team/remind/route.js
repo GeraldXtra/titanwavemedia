@@ -8,7 +8,6 @@ import { format } from "@/lib/text";
 
 export const runtime = "nodejs";
 
-// "Send a reminder" from Team view, for an unpaid invoice.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { team: true });
   if (res) return res;

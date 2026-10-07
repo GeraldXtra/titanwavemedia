@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { redactParts } from "@/lib/redact";
 
-// "See it work": paste a message, tick what should come out, and the clean copy follows.
 export default function PrivacyDemo({ copy }) {
   const [on, setOn] = useState(() => new Set(copy.kinds.map((k) => k.value)));
   const [text, setText] = useState("");

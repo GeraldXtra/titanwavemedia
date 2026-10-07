@@ -7,9 +7,6 @@ import WorkingLine from "./WorkingLine";
 import site from "@/content/site";
 import { emailHref } from "@/lib/text";
 
-// The founder on the About page: the photo (or the initials until there is one), the story,
-// three parts that open one at a time, a line that follows the time in Lagos and the working
-// hours, and two ways to get in touch.
 export default function Founder({ copy }) {
   const [openPart, setOpenPart] = useState(0);
 

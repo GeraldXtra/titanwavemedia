@@ -1,34 +1,9 @@
--- Titan Wave Media, phase 2: accounts, the client console, the Team view and Pay with Titan Wave.
---
--- Run this whole file in the Supabase dashboard, SQL Editor, after schema.sql.
--- It is safe to run more than once: it only adds what is missing and replaces the functions and
--- policies with the versions below. It keeps the three tables from schema.sql and their rows.
--- It runs as one transaction, so it either all goes in or none of it does.
---
--- How the rules work:
--- - Row level security is on for every table. A signed in client can only read rows that belong
---   to their own business, and cannot write any row directly.
--- - Every write goes through the website's server with the service key, after it has checked who
---   is asking. Money rows (invoices, payments, receipts, refunds, saved cards) are written only there.
--- - When someone has turned on two step sign in, they read nothing until they have typed their code.
--- - Money is kept in kobo, as whole numbers. Times are kept in UTC and shown in Lagos time.
--- - Card numbers are never kept. A saved card keeps only what Paystack returns: its authorization
---   code (in a table the browser can never read), card type, last 4 digits, expiry and bank.
--- - Project files sit in a private bucket that nobody can read or write directly. The server makes
---   one time upload links and short lived download links after checking who is asking.
-
 begin;
 
--- Helpers for the policies live in their own schema, which the Data API does not show.
 create schema if not exists private;
 revoke all on schema private from public, anon;
 grant usage on schema private to authenticated, service_role;
 
--- ============================================================================================
--- 1. Tables
--- ============================================================================================
-
--- A client business. Everyone who signs in as a client belongs to one.
 create table if not exists public.businesses (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -36,30 +11,22 @@ create table if not exists public.businesses (
   name text not null check (char_length(name) between 1 and 120),
   phone text check (char_length(phone) <= 40),
   address text check (char_length(address) <= 300),
-  -- Pay Care invoices automatically with the default saved card. Off until the owner turns it on.
   autopay boolean not null default false,
   created_by uuid references auth.users (id) on delete set null
 );
 
--- One row for every person who signs in, made when their account is made.
 create table if not exists public.profiles (
   user_id uuid primary key references auth.users (id) on delete cascade,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   email text check (email = lower(email)),
   full_name text not null default '' check (char_length(full_name) <= 120),
-  -- Email settings: project updates, invoices and receipts, product news.
   notify_projects boolean not null default true,
   notify_billing boolean not null default true,
   notify_news boolean not null default false,
-  -- When the welcome email went out, so it goes only once.
   welcomed_at timestamptz
 );
 
--- Who belongs to which business. A person belongs to one business at most.
--- Owner: can pay, invite and remove people, and delete the account. Member: can see projects,
--- chat and invoices, but cannot pay or invite. An invite counts only once the person has signed
--- in through it (joined_at).
 create table if not exists public.business_members (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -71,8 +38,6 @@ create table if not exists public.business_members (
   joined_at timestamptz
 );
 
--- Projects our team builds for a business. The tracker has 5 steps:
--- 1 First call, 2 Plan and quote, 3 Build, 4 Test with your team, 5 Live and care.
 create table if not exists public.projects (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -82,22 +47,17 @@ create table if not exists public.projects (
   summary text check (char_length(summary) <= 4000),
   works_on text check (char_length(works_on) <= 80),
   step smallint not null default 1 check (step between 1 and 5),
-  -- What happens next, written by our team. When empty, the console shows the words for the step.
   next_note text check (char_length(next_note) <= 1000),
-  -- From the accepted quote.
   setup_kobo bigint check (setup_kobo >= 0),
   care_kobo bigint check (care_kobo >= 0),
   live_at timestamptz,
-  -- Care: monthly invoices start the month after the project goes live.
   care_started_on date,
   care_next_on date,
   care_ended_on date,
   created_by uuid references auth.users (id) on delete set null,
-  -- Lets the tables below check that a row's business is its project's business.
   unique (id, business_id)
 );
 
--- A quote for a project: the setup price (paid in two halves) and the monthly Care price.
 create table if not exists public.quotes (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -113,8 +73,6 @@ create table if not exists public.quotes (
   foreign key (project_id, business_id) references public.projects (id, business_id) on delete cascade
 );
 
--- The updates list on a project: requests, step changes, files, quotes, payments and notes.
--- The words are made by the console from `kind` and `data`, so they live in content/console/.
 create table if not exists public.project_updates (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -127,8 +85,6 @@ create table if not exists public.project_updates (
   foreign key (project_id, business_id) references public.projects (id, business_id) on delete cascade
 );
 
--- Files on a project. The files themselves are in the private "project-files" bucket, under
--- <business id>/<project id>/<file id>/<name>.
 create table if not exists public.project_files (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -144,8 +100,6 @@ create table if not exists public.project_files (
   check (path like business_id::text || '/' || project_id::text || '/%')
 );
 
--- Invoices, numbered INV-0001 onwards. The "billed to" details are copied in when the invoice
--- is made, so the invoice stays complete for the tax records even after an account is deleted.
 create table if not exists public.invoices (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -165,16 +119,13 @@ create table if not exists public.invoices (
   total_kobo bigint not null check (total_kobo > 0),
   currency text not null default 'NGN' check (currency = 'NGN'),
   note text check (char_length(note) <= 500),
-  -- The month a Care invoice pays for.
   period_start date,
   period_end date,
   paid_at timestamptz,
-  -- Reminder emails: 3 days before the due date, on the day, and 3 days after.
   reminded_before_at timestamptz,
   reminded_due_at timestamptz,
   reminded_after_at timestamptz,
   last_reminder_at timestamptz,
-  -- Automatic Care payments: the last day one was tried, so the daily job tries once a day.
   autopay_tried_on date,
   created_by uuid references auth.users (id) on delete set null,
   check (kind <> 'care' or period_start is not null)
@@ -190,10 +141,6 @@ create table if not exists public.invoice_lines (
   amount_kobo bigint not null check (amount_kobo > 0)
 );
 
--- Payments through Paystack. A row is made when our server starts a transaction, and marked
--- successful only after our server has verified it with Paystack (or Paystack's signed webhook
--- says so). Once successful it stays successful. Fees are Paystack's own figures.
--- "review": Paystack took a different amount from the one we asked for; the team checks it.
 create table if not exists public.payments (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -201,7 +148,6 @@ create table if not exists public.payments (
   invoice_id uuid not null references public.invoices (id) on delete restrict,
   business_id uuid references public.businesses (id) on delete set null,
   user_id uuid references auth.users (id) on delete set null,
-  -- How they chose to pay in our window, and how they paid in the end.
   method text not null check (method in ('card', 'bank_transfer', 'ussd', 'saved_card')),
   channel text,
   source text not null default 'console' check (source in ('console', 'autopay')),
@@ -224,7 +170,6 @@ create table if not exists public.payments (
   check (refunded_kobo <= amount_kobo)
 );
 
--- Receipts, numbered RCP-0001 onwards, one for every successful payment.
 create table if not exists public.receipts (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -239,8 +184,6 @@ create table if not exists public.receipts (
   refunded_at timestamptz
 );
 
--- "Ask for a refund" on a receipt. The team approves it, and the refund goes through Paystack.
--- Only one open or finished request per receipt; a declined or failed one allows another.
 create table if not exists public.refund_requests (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -250,7 +193,6 @@ create table if not exists public.refund_requests (
   requested_by uuid references auth.users (id) on delete set null,
   reason text not null check (char_length(reason) between 1 and 120),
   details text check (char_length(details) <= 2000),
-  -- What was asked for, and what Paystack says it refunded.
   amount_kobo bigint not null check (amount_kobo > 0),
   refunded_kobo bigint check (refunded_kobo > 0),
   status text not null default 'requested' check (status in ('requested', 'processing', 'refunded', 'declined', 'failed')),
@@ -261,9 +203,6 @@ create table if not exists public.refund_requests (
   failure_reason text
 );
 
--- Every conversation in one place: the website's contact form and quote requests, project chats,
--- help tickets, refund requests and console feedback. The Team inbox lists these.
--- Status: new (waiting for us), replied, waiting (help ticket waiting on the client), solved.
 create table if not exists public.threads (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -295,7 +234,6 @@ create table if not exists public.thread_messages (
   body text not null check (char_length(body) between 1 and 4000)
 );
 
--- Saved cards. What the browser may see: type, last 4 digits, expiry and bank.
 create table if not exists public.saved_cards (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -305,22 +243,18 @@ create table if not exists public.saved_cards (
   exp_month text,
   exp_year text,
   bank text,
-  -- Paystack's fingerprint of the card, so the same card is saved once.
   signature text,
   is_default boolean not null default false,
   created_by uuid references auth.users (id) on delete set null
 );
 
--- The Paystack authorization code of a saved card. Only the server can read this table.
 create table if not exists public.card_authorizations (
   card_id uuid primary key references public.saved_cards (id) on delete cascade,
   created_at timestamptz not null default now(),
   authorization_code text not null,
-  -- The email the card was first charged with. Paystack needs the same one to charge it again.
   customer_email text not null
 );
 
--- The bell: one row per person. The words come from content/console/ by `kind`.
 create table if not exists public.notifications (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -332,7 +266,6 @@ create table if not exists public.notifications (
   read_at timestamptz
 );
 
--- Recent activity on a business's console home. The words come from content/console/ by `kind`.
 create table if not exists public.activity (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -342,8 +275,6 @@ create table if not exists public.activity (
   data jsonb not null default '{}'::jsonb
 );
 
--- "Notify me" on a coming soon product in the console. The Product interest page adds these to
--- the website's notify list.
 create table if not exists public.product_interest (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -352,7 +283,6 @@ create table if not exists public.product_interest (
   business_id uuid references public.businesses (id) on delete cascade
 );
 
--- Titan Wave Media team members, added by the owner (OWNER_EMAIL) in Team view.
 create table if not exists public.team_members (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -361,7 +291,6 @@ create table if not exists public.team_members (
   added_by uuid references auth.users (id) on delete set null
 );
 
--- A log of team actions: invoices sent, refunds approved, steps changed, members added.
 create table if not exists public.audit_log (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -372,9 +301,6 @@ create table if not exists public.audit_log (
   details jsonb not null default '{}'::jsonb
 );
 
--- Paystack webhook events. A row is written once an event has been handled, so a repeat of a
--- handled event is skipped. The money functions are safe to repeat, so an event that arrives
--- twice at the same moment is still recorded once.
 create table if not exists public.paystack_events (
   id bigint generated always as identity primary key,
   received_at timestamptz not null default now(),
@@ -385,8 +311,6 @@ create table if not exists public.paystack_events (
   processed_at timestamptz
 );
 
--- Counts for the limits on sign in links and codes (5 links per email and 20 per network an
--- hour). Keys are hashed. The daily job deletes old rows.
 create table if not exists public.rate_hits (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -394,8 +318,6 @@ create table if not exists public.rate_hits (
   key text not null
 );
 
--- Sign in links we have sent. Only a digest of the token is kept. A link works once, for
--- 15 minutes, and only the newest one for an email works.
 create table if not exists public.auth_links (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -408,7 +330,6 @@ create table if not exists public.auth_links (
   replaced_at timestamptz
 );
 
--- Backup codes for two step sign in, kept hashed. Shown once when they are made.
 create table if not exists public.backup_codes (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -417,7 +338,6 @@ create table if not exists public.backup_codes (
   used_at timestamptz
 );
 
--- The last 20 sign ins of each person: when, how, and on which browser and device.
 create table if not exists public.signin_events (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -427,14 +347,12 @@ create table if not exists public.signin_events (
   device text
 );
 
--- Counters for invoice and receipt numbers, so the numbers have no gaps.
 create table if not exists public.counters (
   name text primary key,
   value bigint not null default 0
 );
 insert into public.counters (name, value) values ('invoice', 0), ('receipt', 0) on conflict (name) do nothing;
 
--- Each run of the daily job: what it did, for checking it worked.
 create table if not exists public.cron_runs (
   id bigint generated always as identity primary key,
   started_at timestamptz not null default now(),
@@ -443,10 +361,6 @@ create table if not exists public.cron_runs (
   ok boolean,
   summary jsonb not null default '{}'::jsonb
 );
-
--- ============================================================================================
--- 2. Indexes
--- ============================================================================================
 
 create unique index if not exists business_members_email_key on public.business_members (email);
 create unique index if not exists business_members_user_key on public.business_members (user_id) where user_id is not null;
@@ -512,16 +426,9 @@ create index if not exists backup_codes_user_idx on public.backup_codes (user_id
 create index if not exists signin_events_user_idx on public.signin_events (user_id, created_at desc);
 create index if not exists cron_runs_started_idx on public.cron_runs (job, started_at desc);
 
--- For the website's own tables: the daily job deletes old messages and conversations, and
--- Product interest counts the notify list.
 create index if not exists chat_logs_created_at_idx on public.chat_logs (created_at);
 create index if not exists notify_list_source_idx on public.notify_list (source);
 
--- ============================================================================================
--- 3. Functions
--- ============================================================================================
-
--- The businesses the signed in person belongs to (invites count once accepted).
 create or replace function private.my_business_ids()
 returns setof uuid
 language sql stable security definer set search_path = ''
@@ -530,7 +437,6 @@ as $$
   where m.user_id = (select auth.uid()) and m.joined_at is not null;
 $$;
 
--- The businesses the signed in person owns.
 create or replace function private.my_owned_business_ids()
 returns setof uuid
 language sql stable security definer set search_path = ''
@@ -539,7 +445,6 @@ as $$
   where m.user_id = (select auth.uid()) and m.joined_at is not null and m.role = 'owner';
 $$;
 
--- True unless the person has turned on two step sign in and has not typed their code yet.
 create or replace function private.aal_ok()
 returns boolean
 language sql stable security definer set search_path = ''
@@ -551,7 +456,6 @@ as $$
       );
 $$;
 
--- A profile for every new account.
 create or replace function private.handle_new_user()
 returns trigger
 language plpgsql security definer set search_path = ''
@@ -568,7 +472,6 @@ begin
 end;
 $$;
 
--- Keeps the profile's email the same as the account's.
 create or replace function private.handle_user_email_change()
 returns trigger
 language plpgsql security definer set search_path = ''
@@ -583,8 +486,6 @@ begin
 end;
 $$;
 
--- Every message from the website's contact form starts a conversation in the Team inbox.
--- Requests for AI setup are quote requests; everything else is a contact message.
 create or replace function private.message_to_thread()
 returns trigger
 language plpgsql security definer set search_path = ''
@@ -612,7 +513,6 @@ begin
 end;
 $$;
 
--- A successful payment stays successful, and a finished refund stays finished.
 create or replace function private.keep_final_status()
 returns trigger
 language plpgsql set search_path = ''
@@ -628,7 +528,6 @@ begin
 end;
 $$;
 
--- "INV-0001": four digits until there are more.
 create or replace function public.doc_number(p_prefix text, p_seq bigint)
 returns text
 language sql immutable set search_path = ''
@@ -636,9 +535,6 @@ as $$
   select p_prefix || '-' || case when p_seq < 10000 then lpad(p_seq::text, 4, '0') else p_seq::text end;
 $$;
 
--- Makes an invoice and its lines in one go, with the next number. For the two halves of a setup
--- and for each month of Care, a second call returns the invoice already made instead of a new one.
--- p_lines: [{ "description": "...", "quantity": 1, "unit_kobo": 1250000 }, ...]
 create or replace function public.create_invoice(
   p_business_id uuid,
   p_project_id uuid,
@@ -680,7 +576,6 @@ begin
   if not found then raise exception 'create_invoice: business % not found', p_business_id; end if;
 
   if p_project_id is not null then
-    -- One call at a time for each project, so two calls cannot both make the same invoice.
     perform 1 from public.projects where id = p_project_id and business_id = p_business_id for update;
     if not found then
       raise exception 'create_invoice: project % is not in business %', p_project_id, p_business_id;
@@ -752,10 +647,6 @@ begin
 end;
 $$;
 
--- Records a payment that Paystack has confirmed: marks it successful, marks the invoice paid and
--- makes the receipt with the next number. Safe to call twice for the same payment (the verify
--- step and the webhook can both arrive): the second call returns the first result.
--- If Paystack took a different amount, the payment goes to "review" and the invoice stays due.
 create or replace function public.record_payment_success(
   p_reference text,
   p_paystack_id bigint,
@@ -827,7 +718,6 @@ begin
   if v_inv.status = 'due' then
     update public.invoices set status = 'paid', paid_at = v_paid_at where id = v_inv.id;
   else
-    -- The invoice was already paid by another payment: the team is told, to refund one of them.
     v_double := true;
   end if;
 
@@ -843,9 +733,6 @@ begin
 end;
 $$;
 
--- Records a refund that Paystack has finished, with the amount Paystack says it refunded.
--- The receipt shows Refunded once its whole payment is refunded, and the invoice once no money
--- is left on it. Safe to call twice.
 create or replace function public.record_refund_done(
   p_refund_id uuid,
   p_paystack_refund_id bigint,
@@ -898,8 +785,6 @@ begin
 end;
 $$;
 
--- Records a refund that Paystack could not make. The receipt goes back to Paid, so the client
--- can ask again. Does nothing to a refund that has finished.
 create or replace function public.record_refund_failed(p_refund_id uuid, p_reason text)
 returns jsonb
 language plpgsql security invoker set search_path = ''
@@ -917,10 +802,6 @@ begin
   return jsonb_build_object('ok', true, 'already', false, 'receipt_id', v_ref.receipt_id, 'business_id', v_ref.business_id);
 end;
 $$;
-
--- ============================================================================================
--- 4. Triggers
--- ============================================================================================
 
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
@@ -947,7 +828,6 @@ create trigger keep_final_status
   before update of status on public.refund_requests
   for each row execute function private.keep_final_status();
 
--- People who already had an account before this file was run get a profile too.
 insert into public.profiles (user_id, email, full_name)
 select u.id, nullif(lower(btrim(coalesce(u.email, ''))), ''),
        left(coalesce(u.raw_user_meta_data ->> 'full_name', u.raw_user_meta_data ->> 'name', ''), 120)
@@ -955,7 +835,6 @@ from auth.users u
 where not exists (select 1 from public.profiles p where p.user_id = u.id)
 on conflict do nothing;
 
--- Contact messages that arrived before this file was run join the inbox too.
 insert into public.threads (kind, status, message_id, from_name, from_email, details, created_at, updated_at, last_message_at, last_from)
 select case when m.need = 'ai-setup' then 'quote' else 'contact' end, 'new', m.id, m.name, lower(btrim(m.email)),
        jsonb_strip_nulls(jsonb_build_object('need', m.need, 'channel', m.channel, 'rows', m."rows", 'product', m.product, 'source', m.source)),
@@ -970,11 +849,6 @@ from public.threads t
 join public.messages m on m.id = t.message_id
 where not exists (select 1 from public.thread_messages tm where tm.thread_id = t.id);
 
--- ============================================================================================
--- 5. Who may do what
--- ============================================================================================
-
--- Functions: the policy helpers may be used by signed in people; the rest only by the server.
 revoke all on all functions in schema private from public, anon, authenticated;
 grant execute on function private.my_business_ids() to authenticated, service_role;
 grant execute on function private.my_owned_business_ids() to authenticated, service_role;
@@ -991,7 +865,6 @@ grant execute on function public.record_payment_success(text, bigint, bigint, te
 grant execute on function public.record_refund_done(uuid, bigint, bigint, timestamptz) to service_role;
 grant execute on function public.record_refund_failed(uuid, text) to service_role;
 
--- Row level security on every table.
 alter table public.businesses enable row level security;
 alter table public.profiles enable row level security;
 alter table public.business_members enable row level security;
@@ -1024,8 +897,6 @@ alter table public.messages enable row level security;
 alter table public.notify_list enable row level security;
 alter table public.chat_logs enable row level security;
 
--- Nobody signed out may touch any of them. Signed in people may only read, and only the tables
--- below with a policy. Every write is made by the server with the service key.
 revoke all on
   public.businesses, public.profiles, public.business_members, public.projects, public.quotes,
   public.project_updates, public.project_files, public.invoices, public.invoice_lines, public.payments,
@@ -1055,7 +926,6 @@ grant all on
 to service_role;
 grant usage, select on all sequences in schema public to service_role;
 
--- Reading: your own business, and your own rows.
 drop policy if exists "Businesses: members read" on public.businesses;
 create policy "Businesses: members read" on public.businesses for select to authenticated
   using (id in (select private.my_business_ids()));
@@ -1115,12 +985,10 @@ drop policy if exists "Thread messages: own business" on public.thread_messages;
 create policy "Thread messages: own business" on public.thread_messages for select to authenticated
   using (thread_id in (select t.id from public.threads t where t.business_id in (select private.my_business_ids())));
 
--- Saved cards: only the business owner, who is the one who pays.
 drop policy if exists "Saved cards: business owner" on public.saved_cards;
 create policy "Saved cards: business owner" on public.saved_cards for select to authenticated
   using (business_id in (select private.my_owned_business_ids()));
 
--- The client bell only. The team bell is read by the server after its team check.
 drop policy if exists "Notifications: your own" on public.notifications;
 create policy "Notifications: your own" on public.notifications for select to authenticated
   using (user_id = (select auth.uid()) and audience = 'client');
@@ -1137,7 +1005,6 @@ drop policy if exists "Sign ins: your own" on public.signin_events;
 create policy "Sign ins: your own" on public.signin_events for select to authenticated
   using (user_id = (select auth.uid()));
 
--- Two step sign in: with it on, nothing can be read until the code has been typed.
 do $$
 declare
   t text;
@@ -1154,12 +1021,6 @@ begin
 end;
 $$;
 
--- ============================================================================================
--- 6. File storage: a private bucket for project files
--- ============================================================================================
-
--- 20 MB a file. PDF, images, Word (.docx), Excel (.xlsx), CSV, plain text and zip. The console
--- sends each file with the type that matches its extension.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
   'project-files', 'project-files', false, 20971520,
@@ -1177,9 +1038,6 @@ set public = false,
     file_size_limit = excluded.file_size_limit,
     allowed_mime_types = excluded.allowed_mime_types;
 
--- No policies for signed in people on this bucket: nobody reads or writes it directly. Uploads
--- use one time upload links made by the server, and downloads use signed links that last
--- 60 seconds, made by the server after it has checked the person belongs to the business.
 drop policy if exists "Project files: own business can read" on storage.objects;
 
 commit;

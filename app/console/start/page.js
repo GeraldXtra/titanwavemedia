@@ -6,7 +6,6 @@ import copy from "@/content/console/start";
 
 export const metadata = { title: copy.meta.title };
 
-// For someone signed in with no business yet: their name and business name, then the console.
 export default async function StartPage() {
   const ctx = await getContext();
   if (!ctx.user) redirect("/signin");

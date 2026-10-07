@@ -1,5 +1,3 @@
-// The Privacy page.
-
 const privacy = {
   meta: {
     title: "Privacy, Titan Wave Media",
@@ -21,7 +19,6 @@ const privacy = {
     ],
   },
 
-  // The "On this page" bar. Each id is the section it jumps to.
   subnav: [
     { id: "priv-promises", label: "Our promises" },
     { id: "priv-demo", label: "See it work" },

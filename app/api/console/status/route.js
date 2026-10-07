@@ -5,8 +5,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// The console footer's status line: a real check of the database and of Paystack, at most
-// once a minute for each server.
 let last = null;
 
 async function checkDatabase() {
@@ -20,8 +18,6 @@ async function checkDatabase() {
 
 async function checkPaystack() {
   try {
-    // The balance needs a valid secret key, so this checks both that Paystack answers and that
-    // our key works.
     const res = await fetch("https://api.paystack.co/balance", {
       headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` },
       signal: AbortSignal.timeout(5000),

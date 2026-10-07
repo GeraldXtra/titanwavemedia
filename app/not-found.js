@@ -9,7 +9,6 @@ export const metadata = {
   description: notFound.meta.description,
 };
 
-// It sits outside app/(site), so it brings the site header and footer itself.
 export default function NotFound() {
   return (
     <SiteChrome>

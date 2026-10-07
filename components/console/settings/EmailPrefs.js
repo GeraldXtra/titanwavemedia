@@ -7,8 +7,6 @@ import copy from "@/content/console/settings";
 
 const n = copy.notifications;
 
-// Which emails to get: project news, invoices and receipts, product news. Each switch saves
-// as soon as it changes.
 export default function EmailPrefs({ prefs }) {
   const [v, setV] = useState(prefs);
 

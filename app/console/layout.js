@@ -13,8 +13,6 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-// The console needs a signed in person who has typed their code (when two step sign in is on).
-// Until accounts are switched on, it shows "Accounts are not switched on yet".
 export default async function ConsoleLayout({ children }) {
   const ctx = await getContext();
   if (!ctx.ready) {

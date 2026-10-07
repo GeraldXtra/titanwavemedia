@@ -8,10 +8,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// "Add an answer" on a question it couldn't answer: { key, question, answer }. The question and
-// answer join the setup's questions and answers (refused when there are 50 already); when the
-// same question is already there, its answer is replaced instead. Every customer message asked
-// that way is marked as answered, so it leaves the list.
 export async function POST(request) {
   const action = await assistAction(request, 16 * 1024);
   if (action.res) return action.res;
@@ -30,7 +26,6 @@ export async function POST(request) {
 
   const admin = getAdmin();
   try {
-    // Saved only if nobody changed the setup since it was read; one more try if they did.
     let assistant = null;
     let saved = false;
     for (let tries = 0; tries < 2 && !saved; tries++) {

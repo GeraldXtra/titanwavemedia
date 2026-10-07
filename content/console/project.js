@@ -1,6 +1,3 @@
-// One project: the 5 step tracker, what happens next, the quote, updates, files, payments and
-// the chat with us.
-
 const project = {
   crumb: "Projects",
   stepsLabel: "Project steps",
@@ -9,7 +6,6 @@ const project = {
 
   next: {
     title: "What happens next",
-    // When our team has not written its own note, the words for the step.
     byStep: {
       1: "We read your request and reply here within working hours with a few questions. Then we book a first call with you.",
       2: "We're planning your project. Your quote will show here, with the price to build it and the monthly price to keep it running.",
@@ -45,7 +41,6 @@ const project = {
   updates: {
     title: "Updates",
     empty: "Nothing yet.",
-    // The words for each kind of update. {Words in curly brackets} come from the update.
     kinds: {
       request: "You sent the request.",
       step: "Moved to step {n}, {step}.",

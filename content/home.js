@@ -1,5 +1,3 @@
-// The home page, top to bottom.
-
 const home = {
   meta: {
     title: "Titan Wave Media LTD, an AI company in Lagos, Nigeria",
@@ -20,7 +18,6 @@ const home = {
     title: "Try what we can do for your business",
     text: "Four things we do. You can try three of them right here.",
 
-    // A real chat with our own site assistant, with a few starter questions.
     chat: {
       title: "AI set up for your business",
       text: "Chat assistants that answer your customers, automation that takes repeat work off your team, and AI inside the apps you already use.",
@@ -34,7 +31,6 @@ const home = {
       foot: { label: "See AI setup", href: "/ai-setup" },
     },
 
-    // The remove personal details demo.
     privacy: {
       title: "Your data stays private",
       text: "Paste any message. We take the personal details out before an AI model reads it.",
@@ -45,7 +41,6 @@ const home = {
       empty: "There's nothing to clean yet. Paste a message first.",
       none: "We didn't find any personal details in this message.",
       removed: "Removed",
-      // One and more than one of each kind, for the count under the button.
       kinds: {
         NAME: ["name", "names"],
         PHONE: ["phone number", "phone numbers"],
@@ -55,7 +50,6 @@ const home = {
       foot: { label: "How we protect data", href: "/privacy" },
     },
 
-    // The dataset maker.
     data: {
       title: "Realistic data. No real people.",
       text: "Computer generated datasets for training AI and testing software.",
@@ -82,8 +76,6 @@ const home = {
       foot: { label: "How synthetic data works", href: "/synthetic-data" },
     },
 
-    // The rows in this tile come from content/product-list.js: every product you can use or ask
-    // for now, then one line for the ones on the way. {n} is how many are on the way.
     products: {
       title: "AI tools you can use today",
       text: "Small products, each one made to fix one real problem.",
@@ -190,7 +182,6 @@ const home = {
     ],
   },
 
-  // The product cards in this block are the first three in content/product-list.js.
   tools: {
     title: "AI tools you can use today, and more on the way",
     link: { label: "See all products", href: "/products" },
@@ -235,8 +226,6 @@ const home = {
     },
   },
 
-  // The tiles in the Work block are the first three published projects in content/project.js
-  // (the block hides when there are none). The posts come from content/updates.js.
   work: {
     title: "See what we've built",
     link: { label: "See all work", href: "/work" },

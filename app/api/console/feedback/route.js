@@ -6,7 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Feedback from the console footer. It lands in the Team inbox.
 export async function POST(request) {
   const { ctx, res } = await guard(request);
   if (res) return res;

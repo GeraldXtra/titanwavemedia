@@ -5,8 +5,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Deletes one conversation for good, with its messages and any details the customer left. Its
-// AI cost rows stay, without the conversation. For an owner of the business, or the team.
 export async function DELETE(request, { params }) {
   const { id } = await params;
   const action = await assistAction(request, 1024, { owner: true });

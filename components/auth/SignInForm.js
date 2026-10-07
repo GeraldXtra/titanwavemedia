@@ -3,11 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { SignInMark, TermsLine } from "./Parts";
 import { postJson, rememberLink } from "@/lib/client";
 import { isEmail } from "@/lib/validate";
 import copy from "@/content/console/signin";
 
-const GOOGLE = (
+export const GOOGLE = (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path fill="#4285F4" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.2h6a5.1 5.1 0 0 1-2.2 3.4v2.8h3.6c2.1-1.9 3.2-4.8 3.2-8.2z" />
     <path fill="#34A853" d="M12 23c3 0 5.5-1 7.4-2.7l-3.6-2.8c-1 .7-2.3 1.1-3.8 1.1a6.6 6.6 0 0 1-6.2-4.6H2.1v2.9A11 11 0 0 0 12 23z" />
@@ -16,7 +17,6 @@ const GOOGLE = (
   </svg>
 );
 
-// Sign in: type an email, get a link. "Continue with Google" shows when it is switched on.
 export default function SignInForm({ google = false, notice = null, email: initial = "", heading = true, button = copy.signin.button }) {
   const router = useRouter();
   const t = copy.signin;
@@ -51,16 +51,30 @@ export default function SignInForm({ google = false, notice = null, email: initi
     <>
       {heading && (
         <>
+          <SignInMark />
           {notice && (
-            <p className="auth__notice" role="status">
+            <p className="si__notice" role="status">
               {notice}
             </p>
           )}
           <h1>{t.title}</h1>
-          <p className="lede">{t.lede}</p>
+          <p className="si__sub">
+            {t.foot} <Link href="/signup">{t.footLink}</Link>
+          </p>
         </>
       )}
-      <form onSubmit={submit} noValidate>
+      <form className="si__form" onSubmit={submit} noValidate>
+        {google && (
+          <>
+            <a className="btn si__btn" href="/auth/google">
+              {GOOGLE}
+              {t.google}
+            </a>
+            <p className="si__or" aria-hidden="true">
+              {t.or}
+            </p>
+          </>
+        )}
         <div className="field" data-err={error ? "" : undefined}>
           <label htmlFor="si-email">{copy.fields.email}</label>
           <input
@@ -78,27 +92,15 @@ export default function SignInForm({ google = false, notice = null, email: initi
             {error}
           </p>
         </div>
-        <button className="btn btn--solid btn--block" type="submit" disabled={busy}>
+        <button className="btn btn--solid si__btn" type="submit" disabled={busy}>
           {busy ? t.sending : button}
         </button>
-        <p className="auth__err" role="alert">
+        <p className="si__err" role="alert">
           {formError}
         </p>
+        {heading && <p className="si__help">{t.help}</p>}
       </form>
-      {google && (
-        <>
-          <p className="auth__or">{t.or}</p>
-          <a className="btn btn--block auth__google" href="/auth/google">
-            {GOOGLE}
-            {t.google}
-          </a>
-        </>
-      )}
-      {heading && (
-        <p className="auth__foot">
-          {t.foot} <Link className="link" href="/signup">{t.footLink}</Link>
-        </p>
-      )}
+      {heading && <TermsLine t={t} />}
     </>
   );
 }

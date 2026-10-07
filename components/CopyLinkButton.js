@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Copies the page address, and says so for two seconds.
 export default function CopyLinkButton({ label, done, prompt }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef(null);

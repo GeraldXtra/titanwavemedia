@@ -7,8 +7,6 @@ import copy from "@/content/console/assist";
 
 export const metadata = { title: copy.meta.title };
 
-// Team view: one business's Wave Assist, with the same tabs the business sees, plus its monthly
-// limit. Every change made here goes in the team log.
 export default async function TeamAssistantPage({ params, searchParams }) {
   const { businessId } = await params;
   const sp = await searchParams;

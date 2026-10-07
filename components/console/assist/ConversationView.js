@@ -8,10 +8,6 @@ import { format } from "@/lib/text";
 import { isEmail } from "@/lib/validate";
 import copy from "@/content/console/assist";
 
-// One Wave Assist conversation in full: every message, who said it and when (Lagos time), the
-// details the customer left, Mark as handled, and Delete. The client console and Team view show
-// the same page. `canDelete`: an owner of the business, or the team.
-
 const linkableEmail = (e) => isEmail(e) && !/[?&#\s]/.test(e);
 
 export default async function ConversationView({ db, business, id, base, team = false, canDelete = false }) {

@@ -17,9 +17,6 @@ import shell from "@/content/console/shell";
 const f = shell.footer;
 const TABS = ["privacy", "terms", "refunds", "cookies"];
 
-// The console footer: Feedback, Help on WhatsApp, the system status line, and the policies.
-// The status line says "All systems working" only when the live check of the database and
-// Paystack passes.
 export default function ConsoleFooter({ legal }) {
   const pathname = usePathname();
   const [status, setStatus] = useState(null);

@@ -3,8 +3,6 @@
 import { useRef } from "react";
 import { format } from "@/lib/text";
 
-// Six boxes for a 6 digit code. Typing moves to the next box, Backspace goes back, and pasting
-// a whole code fills every box. `onFull` runs once all six are filled.
 export default function CodeBoxes({ value, onChange, onFull, legend, digitLabel, invalid, describedBy, idPrefix = "code" }) {
   const refs = useRef([]);
   const digits = Array.from({ length: 6 }, (_, i) => value[i] || "");

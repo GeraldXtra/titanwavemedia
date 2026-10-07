@@ -1,5 +1,3 @@
-// Team view, Clients: who we are building for, and where each one stands.
-
 const teamClients = {
   meta: { title: "Clients, Titan Wave Media Console" },
   title: "Clients",

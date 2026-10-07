@@ -12,7 +12,6 @@ import copy from "@/content/console/pay";
 
 const METHODS = ["card", "bank_transfer", "ussd"];
 
-// Paystack's own script, loaded once, only when someone pays.
 let paystackLoad = null;
 function loadPaystack() {
   if (!paystackLoad) {
@@ -33,8 +32,6 @@ function loadPaystack() {
 }
 let popup = null;
 
-// The Pay button and our pay window. `invoice`: { number, title, amount, totalKobo }.
-// `cards`: the business's saved cards [{ id, label, isDefault }]. `open`: open it straight away.
 export default function PayWindow({ invoice, cards = [], testMode = false, open: openFirst = false, label }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -122,7 +119,6 @@ export default function PayWindow({ invoice, cards = [], testMode = false, open:
       <button className="btn btn--solid" type="button" onClick={() => setOpen(true)}>
         {label || format(copy.card.button, { amount: invoice.amount })}
       </button>
-      {/* Our window steps aside while Paystack's is open: as a modal window it would sit above it. */}
       <Dialog open={open && step !== "waiting"} onClose={close} title={copy.title} labelId="pay-title">
         <div className="c-pay" style={{ margin: "-16px" }}>
           {testMode && <p className="c-test">{copy.test}</p>}

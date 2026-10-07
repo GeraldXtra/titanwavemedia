@@ -1,18 +1,8 @@
-// The script a business adds to its website for Wave Assist:
-// <script src="{SITE_URL}/assist.js" data-id="{public_id}" async></script>
-//
-// It asks our server for nothing itself. After the page has loaded it adds one element at the
-// end of the body, holding a hidden frame with our chat page. The chat page reads its settings
-// and tells this script whether to show the button, with its words, colours and corner. If the
-// chat page never says so (for example when the browser refuses to show it on this website),
-// everything is taken away again after 15 seconds and nothing shows. It uses inline styles only
-// and never touches the page's own styles. Running it twice on one page still makes one chat.
-// Every message between the two is checked: it must come from our address and from the frame.
-
-export const LOADER = String.raw`/* Wave Assist, Titan Wave Media */
-(function () {
+export const LOADER = String.raw`(function () {
   "use strict";
-  var w = window, d = document, SRC = "twm-assist", TAG = "twm-assist";
+  var w = window, d = document, SRC = "twm-assist", TAG = "twm-assist", KEY = "twm-assist", DAY = 864e5;
+  var SITE = __TWM_SITE__;
+  var ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
   if (w.__twmAssist || !w.postMessage) return;
   var me = d.currentScript || d.querySelector('script[src$="/assist.js"][data-id]');
   var id = me && me.getAttribute("data-id");
@@ -21,19 +11,46 @@ export const LOADER = String.raw`/* Wave Assist, Titan Wave Media */
   try { ours = new URL(me.src, location.href).origin; } catch (e) { return; }
   w.__twmAssist = 1;
 
-  var host, frame, button, timer, open = false, corner = "right", ring = "#0b0b0b";
+  var host, frame, button, timer, from = null, open = false, corner = "right", ring = "#0b0b0b", edge = false;
+  var dark = w.matchMedia ? w.matchMedia("(prefers-color-scheme: dark)") : null;
+  var SHADOW = "0 8px 24px -8px rgba(0,0,0,.35)";
+  function shadow() { return (edge && dark && dark.matches ? "0 0 0 1px #F2F0EB, " : "") + SHADOW; }
+
+  function allowed(o) { return o === ours || (SITE && o === SITE); }
+
+  function readAll() {
+    try {
+      var all = JSON.parse(w.localStorage.getItem(KEY) || "{}");
+      return all && typeof all === "object" && !Array.isArray(all) ? all : {};
+    } catch (e) { return {}; }
+  }
+  function saved() {
+    var e = readAll()[id];
+    return e && typeof e.c === "string" && ID.test(e.c) && typeof e.t === "number" && Date.now() - e.t < DAY ? e.c : null;
+  }
+  function keep(c) {
+    try {
+      var all = readAll(), now = Date.now(), k;
+      for (k in all) if (!all[k] || typeof all[k].t !== "number" || now - all[k].t >= DAY) delete all[k];
+      if (c) all[id] = { c: c, t: now }; else delete all[id];
+      if (Object.keys(all).length) w.localStorage.setItem(KEY, JSON.stringify(all));
+      else w.localStorage.removeItem(KEY);
+    } catch (e) {}
+  }
 
   function css(el, styles) {
     for (var k in styles) el.style.setProperty(k, styles[k], "important");
   }
-  // A value with a safe area, where the browser knows them.
   function safe(el, prop, px, side) {
     css(el, (function (o) { o[prop] = px + "px"; return o; })({}));
     el.style.setProperty(prop, "calc(" + px + "px + env(safe-area-inset-" + side + ", 0px))", "important");
   }
 
-  function post(kind) {
-    if (frame && frame.contentWindow) frame.contentWindow.postMessage({ source: SRC, kind: kind }, ours);
+  function post(kind, extra) {
+    if (!frame || !frame.contentWindow) return;
+    var m = { source: SRC, kind: kind }, k;
+    if (extra) for (k in extra) m[k] = extra[k];
+    frame.contentWindow.postMessage(m, from || ours);
   }
 
   function remove() {
@@ -44,7 +61,6 @@ export const LOADER = String.raw`/* Wave Assist, Titan Wave Media */
     host = frame = button = null;
   }
 
-  // The open chat: a panel above the button, or the whole screen on a phone.
   function place() {
     if (!frame) return;
     if (!open) return css(frame, { display: "none" });
@@ -78,16 +94,16 @@ export const LOADER = String.raw`/* Wave Assist, Titan Wave Media */
   function focusRing(on) {
     var visible = on;
     try { visible = on && button.matches(":focus-visible"); } catch (e) {}
-    css(button, visible ? { outline: "3px solid " + ring, "outline-offset": "2px", "box-shadow": "0 0 0 2px #fff, 0 8px 24px -8px rgba(0,0,0,.35)" } : { outline: "none", "box-shadow": "0 8px 24px -8px rgba(0,0,0,.35)" });
+    css(button, visible ? { outline: "3px solid " + ring, "outline-offset": "2px", "box-shadow": "0 0 0 2px #fff, " + SHADOW } : { outline: "none", "box-shadow": shadow() });
   }
 
-  // The button, once the chat page says it is ready.
   function build(m) {
     var label = String(m.label || "").slice(0, 120);
     var color = /^#[0-9a-f]{6}$/.test(m.color) ? m.color : "#0b0b0b";
     var text = m.textColor === "#000000" ? "#000000" : "#ffffff";
     if (!label) return remove();
     corner = m.corner === "left" ? "left" : "right";
+    edge = m.darkEdge === true;
     frame.title = label;
     button = d.createElement("button");
     button.type = "button";
@@ -99,7 +115,7 @@ export const LOADER = String.raw`/* Wave Assist, Titan Wave Media */
       padding: "12px 20px", border: "2px solid " + (text === "#000000" ? "#0b0b0b" : color), "border-radius": "24px", background: color, color: text,
       font: "700 16px/1.25 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif", "letter-spacing": "normal",
       "text-transform": "none", "white-space": "nowrap", overflow: "hidden", "text-overflow": "ellipsis", cursor: "pointer",
-      "box-shadow": "0 8px 24px -8px rgba(0,0,0,.35)", outline: "none"
+      "box-shadow": shadow(), outline: "none"
     });
     css(button, corner === "left" ? { right: "auto" } : { left: "auto" });
     safe(button, "bottom", 16, "bottom");
@@ -110,16 +126,23 @@ export const LOADER = String.raw`/* Wave Assist, Titan Wave Media */
     button.addEventListener("blur", function () { focusRing(false); });
     frame.parentNode.appendChild(button);
     w.addEventListener("resize", place);
+    if (dark && dark.addEventListener) dark.addEventListener("change", function () { if (button && d.activeElement !== host) css(button, { "box-shadow": shadow() }); });
   }
 
   function onMessage(e) {
-    if (!frame || e.origin !== ours || e.source !== frame.contentWindow) return;
+    if (!frame || !allowed(e.origin) || e.source !== frame.contentWindow) return;
     var m = e.data;
     if (!m || typeof m !== "object" || m.source !== SRC) return;
+    if (from && e.origin !== from) return;
     if (m.kind === "ready" && !button) {
       clearTimeout(timer);
-      if (m.show) build(m);
-      else remove();
+      from = e.origin;
+      if (m.show) {
+        build(m);
+        if (button) post("state", { conversation: saved() });
+      } else remove();
+    } else if (m.kind === "save") {
+      keep(typeof m.conversation === "string" && ID.test(m.conversation) ? m.conversation : null);
     } else if (m.kind === "hide") {
       remove();
     } else if (m.kind === "close" && open) {
@@ -135,7 +158,7 @@ export const LOADER = String.raw`/* Wave Assist, Titan Wave Media */
     frame = d.createElement("iframe");
     frame.id = "twm-assist-chat";
     frame.src = ours + "/assist/chat?id=" + encodeURIComponent(id) + "#o=" + encodeURIComponent(location.origin);
-    css(frame, { display: "none", position: "fixed", "z-index": "2", background: "#fff", "color-scheme": "light" });
+    css(frame, { display: "none", position: "fixed", "z-index": "2", background: "Canvas", "color-scheme": "light dark" });
     root.appendChild(frame);
     w.addEventListener("message", onMessage);
     d.body.appendChild(host);

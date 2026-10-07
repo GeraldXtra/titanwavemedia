@@ -3,8 +3,6 @@ import site from "@/content/site";
 import home from "@/content/home";
 import { brandUri, font, waveSvg } from "@/lib/brandImages";
 
-// The picture shown when a link to the site is shared: the black hero with its wave,
-// the wave mark, the company name and the headline.
 export const alt = `${site.name}. ${home.hero.title}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

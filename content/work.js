@@ -1,7 +1,3 @@
-// The Work page. The projects themselves, and the words for their own pages, are in
-// content/project.js; every published one gets a tile here, in the same order, and the first
-// three also show on the home page.
-
 import project from "./project";
 
 const work = {
@@ -15,11 +11,8 @@ const work = {
     text: "Projects we've built, with the problem each one fixes, who it's for and the tools we used.",
   },
 
-  // A heading for screen readers over the list below (it is not shown on the page).
   listTitle: "All projects",
 
-  // The buttons are "All", then one for each kind of project in content/project.js that has at
-  // least one published project.
   filters: {
     label: "Filter projects",
     all: "All",
@@ -28,7 +21,6 @@ const work = {
     empty: "Nothing matches yet. Try another word.",
   },
 
-  // The words that show when a tile is turned over.
   flip: {
     problem: "The problem",
     built: "What we built",

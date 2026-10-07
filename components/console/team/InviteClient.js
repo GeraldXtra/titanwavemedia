@@ -9,7 +9,6 @@ import copy from "@/content/console/team-clients";
 
 const FIELDS = ["business", "name", "email"];
 
-// "Invite a client": business name, contact name and email.
 export default function InviteClient() {
   const router = useRouter();
   const t = copy.invite;

@@ -1,8 +1,6 @@
 import { Fragment } from "react";
 import { linkParts } from "@/lib/assist/links";
 
-// One message's words, always as text. Line breaks are kept, and only the business's own
-// websites, WhatsApp, phone and email become links (lib/assist/links.js).
 export default function AssistText({ text, settings, links = true, newTab }) {
   return String(text ?? "")
     .split("\n")

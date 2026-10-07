@@ -2,28 +2,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Icon from "../../Icon";
 import AssistSwitch from "./AssistSwitch";
-import LimitForm from "./LimitForm";
+import PlanCard from "./PlanCard";
+import PlanForm from "./PlanForm";
 import SetupForm from "./SetupForm";
 import TestChat from "./TestChat";
 import CopyCode from "./CopyCode";
 import { AddAnswer, MarkHandled } from "./AssistActions";
-import { FILTERS, assistStats, listConversations, openQuestions, waitingHandovers } from "@/lib/assist/console";
+import { FILTERS, assistStats, listConversations, nextInvoiceOn, openQuestions, waitingHandovers } from "@/lib/assist/console";
+import { hasReach } from "@/lib/assist/setup";
 import { ensureAssistant, installCode } from "@/lib/assist/store";
 import { testToken } from "@/lib/assist/token";
-import { lagosDay, lagosDayTime, lagosShort } from "@/lib/format";
+import { lagosDay, lagosDayTime, lagosShort, naira } from "@/lib/format";
 import { siteUrl } from "@/lib/seo";
 import { format } from "@/lib/text";
 import { isEmail } from "@/lib/validate";
 import copy from "@/content/console/assist";
 import chatWords from "@/content/assist";
-
-// Wave Assist for one business: the switch and the numbers at the top, then the tabs (Setup,
-// Test, Install, Conversations, Questions it couldn't answer). The client console and Team view
-// show the same page:
-// - db: the person's own client (row level security) for their business, or the service client
-//   in Team view, after teamContext();
-// - base: the page's own address, which the tabs and the conversation links build on;
-// - team: Team view, so actions name the business and the monthly limit can be changed.
 
 export const TABS = ["setup", "test", "install", "conversations", "questions"];
 
@@ -65,9 +59,6 @@ async function Stats({ load }) {
   );
 }
 
-// Conversations started on each of the last 14 days. One series, so no legend: the title says
-// what it shows. Each day is a list item a screen reader reads as "5 Oct: 3"; the bars are for
-// the eye, and a pointer over one shows its day and number.
 function DayChart({ days }) {
   const t = copy.conversations;
   const max = Math.max(0, ...days.map((d) => d.count));
@@ -264,9 +255,13 @@ async function ConversationsPanel({ db, businessId, base, sp, team, stats }) {
                 </dl>
                 <div className="btns">
                   <MarkHandled id={h.id} business={business} label={`${copy.conversations.handled}: ${h.name}`} />
-                  <Link className="btn btn--sm" href={`${base}/conversations/${h.conversation_id}`} aria-label={format(t.openWith, { name: h.name })}>
-                    {t.open}
-                  </Link>
+                  {h.conversation_id ? (
+                    <Link className="btn btn--sm" href={`${base}/conversations/${h.conversation_id}`} aria-label={format(t.openWith, { name: h.name })}>
+                      {t.open}
+                    </Link>
+                  ) : (
+                    <span className="note as-noconv">{t.noConversation}</span>
+                  )}
                 </div>
               </li>
             ))}
@@ -428,7 +423,6 @@ export default async function AssistView({ db, business, sp = {}, base, team = f
   }
   if (!assistant) assistant = await ensureAssistant(business.id);
   if (!assistant) notFound();
-  // The numbers load while the tab loads its own data, not before it.
   const stats = assistStats(db, assistant);
   stats.catch(() => {});
   const sites = Array.isArray(assistant.sites) ? assistant.sites : [];
@@ -446,13 +440,14 @@ export default async function AssistView({ db, business, sp = {}, base, team = f
       email: assistant.email || "",
       qa: Array.isArray(assistant.qa) ? assistant.qa.map((p) => ({ q: String(p.q || ""), a: String(p.a || "") })) : [],
       extra: assistant.extra || "",
+      docs: Array.isArray(assistant.docs) ? assistant.docs.map((d) => ({ name: String(d.name || ""), text: String(d.text || ""), added: d.added || null })) : [],
       greeting: assistant.greeting || "",
       starters: Array.isArray(assistant.starters) ? assistant.starters.map(String) : [],
       color: assistant.color,
       corner: assistant.corner === "left" ? "left" : "right",
       sites,
     };
-    panel = <SetupForm initial={initial} business={team ? business.id : undefined} />;
+    panel = <SetupForm initial={initial} on={assistant.is_on} business={team ? business.id : undefined} />;
   }
   if (tab === "test") panel = <TestPanel assistant={assistant} />;
   if (tab === "install") panel = <InstallPanel assistant={assistant} base={base} />;
@@ -478,8 +473,19 @@ export default async function AssistView({ db, business, sp = {}, base, team = f
         </div>
       </div>
       <div className={`as-controls${team ? " as-controls--team" : ""}`}>
-        <AssistSwitch on={assistant.is_on} hasSites={sites.length > 0} business={team ? business.id : undefined} />
-        {team && <LimitForm business={business.id} limit={assistant.monthly_limit} />}
+        <AssistSwitch on={assistant.is_on} hasSites={sites.length > 0} hasReach={hasReach(assistant)} business={team ? business.id : undefined} />
+        {team ? (
+          <PlanForm
+            business={business.id}
+            price={assistant.plan_kobo ? Number(assistant.plan_kobo) : null}
+            limit={assistant.monthly_limit}
+            billingOn={assistant.billing_on}
+            nextDay={lagosDay(nextInvoiceOn(assistant))}
+            priceText={assistant.plan_kobo ? naira(assistant.plan_kobo) : ""}
+          />
+        ) : (
+          <PlanCard assistant={assistant} nextOn={nextInvoiceOn(assistant)} />
+        )}
       </div>
       <div className="c-sec">
         <Stats load={stats} />

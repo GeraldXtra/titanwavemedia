@@ -9,7 +9,6 @@ export const metadata = pageMeta({ ...syntheticData.meta, path: "/synthetic-data
 
 export default function SyntheticDataPage() {
   const { hero, who, build, how } = syntheticData;
-  // A first table for the first paint; the browser makes fresh rows straight away.
   const cols = build.fields.filter((f) => f.checked).map((f) => f.value);
   const count = Number((build.rows.find((r) => r.checked) || build.rows[0]).value);
   const initial = { cols, rows: Array.from({ length: count }, () => datasetRow(cols)) };

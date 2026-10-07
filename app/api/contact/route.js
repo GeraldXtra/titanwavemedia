@@ -8,9 +8,6 @@ export const runtime = "nodejs";
 
 const NEEDS = contact.form.needs.map((o) => o.value).filter(Boolean);
 
-// The extra answer for the chosen need ("Where should the assistant answer?" and the like),
-// kept only if it is one of the offered options. A product is sent as its slug and kept by its
-// name ("Not sure yet" by its words), so the inbox reads the way the form did.
 function extra(need, data) {
   const group = contact.form.extra[need];
   if (!group) return null;
@@ -26,7 +23,6 @@ export async function POST(request) {
   if (body.error) return json({ ok: false, error: body.error }, body.error === "too_large" ? 413 : 400);
   const data = body.data && typeof body.data === "object" ? body.data : {};
 
-  // Only robots fill in the hidden field: they get a thank you and nothing is kept.
   if (str(data.company).trim()) return json({ ok: true });
 
   const fields = {

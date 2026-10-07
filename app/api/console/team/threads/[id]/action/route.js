@@ -10,11 +10,6 @@ import { format } from "@/lib/text";
 
 export const runtime = "nodejs";
 
-// Team actions on a conversation:
-// - solve: marks a help request Solved.
-// - approve: refunds through Paystack. The receipt shows Refunded once Paystack finishes it
-//   (straight away, or through its webhook).
-// - decline: declines a refund request; the receipt goes back to Paid.
 export async function POST(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { team: true });
@@ -46,7 +41,6 @@ export async function POST(request, { params }) {
       return json({ ok: true, message: copy.refund.declined });
     }
 
-    // Only one approval goes to Paystack, even if the button is pressed twice at once.
     const { data: took } = await admin.from("refund_requests").update({ status: "processing", decided_at: now, decided_by: ctx.user.id }).eq("id", rr.id).eq("status", "requested").select("id").maybeSingle();
     if (!took) return json({ ok: false, error: "not_waiting" }, 409);
     const r = await paystackRefund({ reference: rr.payments.reference, amount: rr.amount_kobo, note: `Refund for ${number}` });

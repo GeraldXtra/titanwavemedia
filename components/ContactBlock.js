@@ -13,8 +13,6 @@ import { contactMessage, waLink } from "@/lib/whatsapp";
 
 const ORDER = ["name", "email", "need", "message"];
 
-// Reads ?need=, ?product=, ?msg=, ?from= and ?sector= from the address. Kept apart so the rest of
-// the form is part of the page's first paint.
 function Prefill({ onQuery }) {
   const params = useSearchParams();
   useEffect(() => {
@@ -28,9 +26,7 @@ const EMPTY = { name: "", email: "", need: "", channel: "", rows: "", product: "
 export default function ContactBlock({ copy, site }) {
   const f = copy.form;
   const router = useRouter();
-  // Nothing starts picked: the extra choices count only once the person picks one.
   const [values, setValues] = useState(EMPTY);
-  // True while the message box holds the setup builder's words.
   const [fromBuilder, setFromBuilder] = useState(false);
   const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
@@ -45,7 +41,6 @@ export default function ContactBlock({ copy, site }) {
     if (errors[key]) setErrors((e) => ({ ...e, [key]: "" }));
   };
 
-  // The WhatsApp message: only what is picked or typed on the form, as one natural message.
   const v = values;
   const waHref = waLink(site.whatsappUrl, contactMessage(copy, v, { fromBuilder }));
 
@@ -58,7 +53,6 @@ export default function ContactBlock({ copy, site }) {
     setValues((current) => {
       const next = { ...current };
       if (need && f.needs.some((o) => o.value === need)) next.need = need;
-      // ?product=<slug>, from a product page's Talk to us or Ask a question: picks that product.
       if (product && (!need || need === "tool") && f.extra.tool.options.some((o) => o.value === product)) {
         next.need = "tool";
         next.product = product;
@@ -69,7 +63,6 @@ export default function ContactBlock({ copy, site }) {
     });
   }
 
-  // The note on the thank you page of what was sent.
   function saveSummary() {
     const s = copy.summary;
     const sum = [[s.need, needWord(v.need)]];
@@ -89,7 +82,6 @@ export default function ContactBlock({ copy, site }) {
     e.preventDefault();
     if (sending) return;
     saveSummary();
-    // Something filled the hidden field: a robot. It sees the thank you page and nothing is sent.
     if (companyRef.current && companyRef.current.value) {
       router.push("/thank-you");
       return;

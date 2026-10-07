@@ -1,5 +1,3 @@
-// Team view, Log: what the team did, newest first.
-
 const teamLog = {
   meta: { title: "Log, Titan Wave Media Console" },
   title: "Log",
@@ -8,7 +6,6 @@ const teamLog = {
   who: "Who",
   what: "What",
   empty: "Nothing yet.",
-  // The words for each action. {target} is what it was about.
   actions: {
     invoice_sent: "Sent invoice {target}",
     reminder_sent: "Sent a reminder for {target}",
@@ -23,6 +20,10 @@ const teamLog = {
     assist_on: "Switched on Wave Assist for {target}",
     assist_off: "Switched off Wave Assist for {target}",
     assist_limit: "Set the Wave Assist limit of {target} to {limit} conversations a month",
+    assist_plan: "Set the Wave Assist plan of {target} to {price} a month for {limit} conversations",
+    assist_plan_cleared: "Took the Wave Assist price off {target}, with {limit} conversations a month",
+    assist_billing_on: "Switched on Wave Assist billing for {target}",
+    assist_billing_off: "Switched off Wave Assist billing for {target}",
     assist_handled: "Marked a Wave Assist handover for {target} as handled",
     assist_deleted: "Deleted a Wave Assist conversation of {target}",
     assist_answer: "Added an answer to the Wave Assist of {target}: {question}",

@@ -1,7 +1,3 @@
-// The words on every product page. There is one page for each product in content/product-list.js,
-// at /products/<slug>, made from its name, status, price, text and list, so a product is never
-// copied in here by hand. {name} is the product's name and {slug} its address.
-
 const product = {
   meta: {
     title: "{name}, Titan Wave Media",
@@ -9,11 +5,8 @@ const product = {
 
   labels: {
     crumb: "Products",
-    // Live products: opens the product's own website in a new tab.
     open: "Open {name}",
-    // Products that are available now: the contact form, with the product picked.
     talk: { label: "Talk to us", href: "/contact?need=tool&product={slug}" },
-    // Products that are coming soon: the email form at the bottom of the page.
     notify: "Notify me",
     ask: { label: "Ask a question", href: "/contact?need=tool&product={slug}" },
     features: "What it does",
@@ -30,8 +23,6 @@ const product = {
     thanks: "Thanks. We'll email you when it's ready.",
   },
 
-  // Questions that are true for every product with that status. A product can add its own
-  // questions with "faq" in content/product-list.js; they show first.
   faq: {
     live: [
       {

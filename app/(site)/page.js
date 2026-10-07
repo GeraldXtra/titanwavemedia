@@ -20,8 +20,6 @@ export const metadata = pageMeta({
   path: "/",
 });
 
-// The products tile in "What we do": every product you can use or ask for now, then one line for
-// the ones on the way.
 function productRows() {
   const ready = productList.items.filter((p) => p.status !== "soon");
   const soon = productList.items.length - ready.length;
@@ -94,7 +92,6 @@ export default function HomePage() {
         </Gap>
       </Section>
 
-      {/* Up to three published projects from content/project.js. */}
       {work.items.length > 0 && (
         <Section tone="white">
           <BlkHead title={home.work.title} link={home.work.link} />
@@ -102,10 +99,12 @@ export default function HomePage() {
         </Section>
       )}
 
-      <Section tone="grey">
-        <BlkHead title={home.updates.title} link={home.updates.link} />
-        <PostList items={updates.items.slice(0, 3)} />
-      </Section>
+      {updates.items.length > 0 && (
+        <Section tone="grey">
+          <BlkHead title={home.updates.title} link={home.updates.link} />
+          <PostList items={updates.items.slice(0, 3)} />
+        </Section>
+      )}
 
       <Section tone="white">
         <BlkHead title={home.faq.title} />

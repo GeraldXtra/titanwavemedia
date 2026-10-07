@@ -8,8 +8,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// The client's answer to a quote. "accept" (owner only) makes the first invoice, for half the
-// setup price. "changes" tells us they want a different quote; they say what in the chat.
 export async function POST(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { business: true });
@@ -27,7 +25,6 @@ export async function POST(request, { params }) {
 
   if (action === "accept") {
     if (ctx.role !== "owner") return json({ ok: false, message: copy.quote.ownerOnly }, 403);
-    // Only one answer counts, even if the button is pressed twice at once.
     const { data: took } = await admin.from("quotes").update({ status: "accepted", decided_at: now, decided_by: ctx.user.id }).eq("id", quote.id).eq("status", "sent").select("id").maybeSingle();
     if (!took) return json({ ok: false, error: "no_quote" }, 409);
     await admin.from("projects").update({ setup_kobo: quote.setup_kobo, care_kobo: quote.care_kobo, updated_at: now }).eq("id", project.id);

@@ -5,8 +5,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Marks the details a customer left as handled: { handled: true }. Done once; pressing it again
-// changes nothing.
 export async function POST(request, { params }) {
   const { id } = await params;
   const action = await assistAction(request, 1024);

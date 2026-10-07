@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Icon from "../Icon";
 
-// "Who we build for": pick a kind of business to see what we would set up for it.
 export default function Picker({ copy }) {
   const [key, setKey] = useState(copy.sectors[0].key);
   const sector = copy.sectors.find((s) => s.key === key);

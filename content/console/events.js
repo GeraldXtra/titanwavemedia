@@ -1,9 +1,4 @@
-// The lines in Recent activity on the console home, and in the bell. Each event is kept with a
-// short name and its details, and shown with the words below. {Words in curly brackets} are the
-// details: {project}, {number}, {amount}, {name}, {email}, {who}, {business}, {subject}, {step}.
-
 const events = {
-  // Recent activity on the client's home page.
   activity: {
     account_created: "You created your account",
     member_joined: "{email} joined your team",
@@ -25,8 +20,8 @@ const events = {
     payment_failed: "A payment for {number} didn't go through",
     card_saved: "{card} was saved",
     card_removed: "{card} was removed",
-    autopay_on: "Automatic payments for Care were turned on",
-    autopay_off: "Automatic payments for Care were turned off",
+    autopay_on: "Automatic payments for Care and Wave Assist were turned on",
+    autopay_off: "Automatic payments for Care and Wave Assist were turned off",
     refund_requested: "You asked for a refund on {number}",
     refund_done: "Your refund of {amount} on {number} is done",
     refund_declined: "Your refund request on {number} was declined",
@@ -36,12 +31,13 @@ const events = {
     assist_off: "Wave Assist was switched off",
     assist_setup: "Wave Assist's setup was changed",
     assist_answer: "Wave Assist learned a new answer: {question}",
-    // A message sent through the website before the account was made.
+    assist_plan: "Your Wave Assist plan is now {amount} a month, for up to {limit} conversations",
+    assist_billing_on: "Monthly invoices for Wave Assist were switched on",
+    assist_billing_off: "Monthly invoices for Wave Assist were switched off",
     message: "You sent us a message from the website",
     quote_request: "You asked us for a quote from the website",
   },
 
-  // The bell. Clients see the first list, the team the second.
   client: {
     invoice_new: "New invoice {number} for {amount}",
     invoice_reminder: "Reminder: {number} for {amount} is due on {date}",
@@ -76,9 +72,9 @@ const events = {
     file_client: "{business} sent a file: {name}",
     autopay_failed: "The automatic payment for {number} didn't go through",
     refund_failed: "The refund on {number} didn't go through at Paystack",
+    assist_late: "{business} is 14 days late paying the Wave Assist invoice {number} for {amount}",
   },
 
-  // The names of the 5 steps, used in the lines above and on the project pages.
   steps: ["First call", "Plan and quote", "Build", "Test with your team", "Live and care"],
 };
 

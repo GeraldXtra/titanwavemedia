@@ -9,8 +9,6 @@ import copy from "@/content/console/settings";
 
 const t = copy.data;
 
-// Your data: download everything, or delete the account (owners only, and not while an
-// invoice is unpaid).
 export default function DataPanel({ owner, business, unpaid }) {
   const [open, setOpen] = useState(false);
   const [typed, setTyped] = useState("");

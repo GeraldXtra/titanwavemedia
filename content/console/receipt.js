@@ -1,5 +1,3 @@
-// One receipt, as the client sees it (and as it prints or saves as a PDF).
-
 const receipt = {
   title: "Receipt {number}",
   crumb: "Payments and receipts",

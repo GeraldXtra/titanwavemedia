@@ -18,7 +18,6 @@ const MAX_MESSAGES = 12;
 const MAX_CHARS = 600;
 const MAX_BODY = 32 * 1024;
 
-// List prices for this model in dollars per million tokens, for the cost line in the log.
 const PRICE = { input: 3, output: 15, cacheWrite: 3.75, cacheRead: 0.3 };
 
 let client = null;
@@ -28,11 +27,8 @@ function getClient() {
   return client;
 }
 
-// Sessions that already handed over their contact details, so a person is told once.
 const contacted = new Set();
 
-// { sessionId, messages: [{ role, content }] } with at most 12 messages, each under 600 characters,
-// ending with the visitor's message. Anything else is refused.
 function validate(data) {
   if (!data || typeof data !== "object") return null;
   const { sessionId, messages } = data;
@@ -46,7 +42,6 @@ function validate(data) {
   return { sessionId, messages: messages.map((m) => ({ role: m.role, content: m.content.trim() })) };
 }
 
-// The conversation as the API takes it: it starts with the visitor, and turns alternate.
 function forModel(messages) {
   const out = [];
   for (const m of messages) {
@@ -58,14 +53,12 @@ function forModel(messages) {
   return out;
 }
 
-// Plain text in the site's style, whatever the model sent.
 function tidy(text) {
   return String(text)
     .replace(/\*\*(.+?)\*\*/g, "$1")
     .replace(/__(.+?)__/g, "$1")
     .replace(/^\s*(?:[-*•]|\d+[.)])\s+/gm, "")
     .replace(/^#+\s*/gm, "")
-    // En and em dashes: a range of numbers becomes "to", any other dash a comma.
     .replace(/(\d)\s*[\u2013\u2014]\s*(\d)/g, "$1 to $2")
     .replace(/\s+[\u2013\u2014]\s+/g, ", ")
     .replace(/[\u2013\u2014]/g, ", ")
@@ -92,7 +85,6 @@ async function askModel(api, messages) {
     model: MODEL,
     max_tokens: MAX_TOKENS,
     temperature: 0.3,
-    // The rules and the site copy stay the same between requests and are cached; the time does not.
     system: [
       { type: "text", text: systemPrompt(), cache_control: { type: "ephemeral" } },
       { type: "text", text: `The time in Lagos now is ${lagosTime()}.` },
@@ -148,8 +140,6 @@ export async function POST(request) {
     answer = { text: local.text, link: local.link, whatsapp: local.whatsapp, person: null };
   }
 
-  // After the reply has gone: keep the conversation with personal details taken out, and pass on
-  // a visitor's contact details so a person can reply.
   const { sessionId } = input;
   const person = answer.person && !contacted.has(sessionId) ? answer.person : null;
   if (person) contacted.add(sessionId);

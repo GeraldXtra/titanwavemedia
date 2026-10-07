@@ -4,8 +4,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// The customer pressed "Message {business} on WhatsApp": { token, conversationId } marks the
-// conversation as handed over. A test chat keeps nothing.
 export async function POST(request) {
   const { data, token, res } = await chatRequest(request, 2 * 1024);
   if (res) return res;

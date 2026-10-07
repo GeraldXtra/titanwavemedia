@@ -3,9 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { postJson } from "@/lib/client";
 
-// A conversation: the messages, and a box to write. It checks for new messages every 15
-// seconds. `url` answers GET with { messages } and POST { body } with { ok, messages }.
-// `quick`: ready replies that fill the box (Team inbox). `top`: anything shown above the messages.
 export default function Chat({ title, sub, status, url, initial = [], words, inputId, quick, top, chip, after }) {
   const [messages, setMessages] = useState(initial);
   const [text, setText] = useState("");
@@ -34,7 +31,6 @@ export default function Chat({ title, sub, status, url, initial = [], words, inp
     return () => clearInterval(id);
   }, [load]);
 
-  // New messages scroll into view.
   useEffect(() => {
     if (list.current && messages.length !== count.current) list.current.scrollTop = list.current.scrollHeight;
     count.current = messages.length;

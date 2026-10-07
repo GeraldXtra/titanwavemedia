@@ -45,9 +45,13 @@ export default function AboutPage() {
         <ol className="timeline">
           {timeline.items.map((t, i) => (
             <li key={i}>
-              <time className={ph(t.date)} dateTime={t.datetime}>
-                {t.date}
-              </time>
+              {t.date ? (
+                <time className={ph(t.date)} dateTime={t.datetime}>
+                  {t.date}
+                </time>
+              ) : (
+                <span />
+              )}
               <div>
                 <h3 className={ph(t.title)}>{t.title}</h3>
                 <p className={ph(t.text)}>

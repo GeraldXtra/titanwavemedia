@@ -13,7 +13,6 @@ export async function POST(request) {
 
   const email = str(data.email).trim().toLowerCase();
   if (!isEmail(email)) return json({ ok: false, error: "email" }, 400);
-  // Which form it came from, for example "home" or "product:example".
   const source = str(data.source).replace(/[^\w:-]/g, "").slice(0, 60) || "site";
 
   const kept = await keepNotify(email, source);

@@ -6,8 +6,6 @@ import { safeEqual } from "@/lib/security";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-// The daily job. Vercel Cron calls it at 07:00 UTC, which is 8 am in Lagos (vercel.json), with
-// "Authorization: Bearer <CRON_SECRET>". Anything else is refused.
 export async function GET(request) {
   const secret = process.env.CRON_SECRET;
   const auth = request.headers.get("authorization") || "";

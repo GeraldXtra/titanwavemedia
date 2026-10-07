@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Icon from "../Icon";
 import CodeBoxes from "./CodeBoxes";
+import { SignInMark } from "./Parts";
 import { postJson } from "@/lib/client";
 import copy from "@/content/console/signin";
 
-// "Enter your code": the 6 digits from an authenticator app, or a backup code.
 export default function CodeForm() {
   const t = copy.code;
   const [code, setCode] = useState("");
@@ -52,12 +51,10 @@ export default function CodeForm() {
 
   return (
     <>
-      <div className="auth__icon">
-        <Icon name="lock" />
-      </div>
+      <SignInMark icon="lock" />
       <h1>{t.title}</h1>
-      <p className="lede">{t.lede}</p>
-      <form onSubmit={submit} noValidate>
+      <p className="si__sub">{t.lede}</p>
+      <form className="si__form" onSubmit={submit} noValidate>
         {backupMode ? (
           <div className="field" data-err={error ? "" : undefined}>
             <label htmlFor="backup-in">{t.backupLabel}</label>
@@ -79,16 +76,16 @@ export default function CodeForm() {
         ) : (
           <CodeBoxes value={code} onChange={setCode} onFull={send} legend={t.group} digitLabel={t.digit} invalid={Boolean(error)} describedBy="code-err" />
         )}
-        <p className="auth__err" id="code-err" role="alert">
+        <p className="si__err" id="code-err" role="alert">
           {error}
         </p>
-        <button className="btn btn--solid btn--block" type="submit" disabled={busy}>
+        <button className="btn btn--solid si__btn" type="submit" disabled={busy}>
           {busy ? copy.verify.code : t.button}
         </button>
       </form>
-      <p className="auth__foot">
+      <p className="si__links">
         <button
-          className="linkbtn"
+          className="si__textlink"
           type="button"
           onClick={() => {
             setError("");
@@ -98,8 +95,8 @@ export default function CodeForm() {
           {backupMode ? t.useApp : t.useBackup}
         </button>
       </p>
-      <form className="auth__foot" action="/auth/signout" method="post">
-        <button className="linkbtn" type="submit">
+      <form className="si__links" action="/auth/signout" method="post">
+        <button className="si__textlink" type="submit">
           {t.signOut}
         </button>
       </form>

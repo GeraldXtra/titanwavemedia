@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Icon from "../Icon";
 import shell from "@/content/console/shell";
 
-// Search the console's pages. Arrow keys move through the results and Enter opens one.
 export default function ConsoleSearch({ mode }) {
   const router = useRouter();
   const [q, setQ] = useState("");

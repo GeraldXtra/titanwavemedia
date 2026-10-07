@@ -1,11 +1,6 @@
-// The Privacy Policy page.
-// Each section is a heading and its paragraphs. A { list: [...] } is a bulleted list, and
-// { link: "Words", href: "/page" } inside a paragraph is a link. A section with an "id" keeps that
-// id as its link on the page; the others are numbered (see components/LegalPage.js).
-
 const privacyPolicy = {
   meta: { title: "Privacy Policy, Titan Wave Media", description: "How Titan Wave Media collects, uses and protects personal data." },
-  hero: { title: "Privacy Policy", updated: "Last updated 6 October 2026" },
+  hero: { title: "Privacy Policy", updated: "Last updated 7 October 2026" },
   tocLabel: "On this page",
   sections: [
     {
@@ -62,7 +57,6 @@ const privacyPolicy = {
       ],
     },
     {
-      // Its own id, so the Wave Assist chat can link straight to it: /privacy-policy#wave-assist
       id: "wave-assist",
       title: "When a business uses Wave Assist",
       body: [
@@ -74,6 +68,8 @@ const privacyPolicy = {
             "Your messages go to our AI provider to write the answers.",
             "Before your words are kept or sent to our AI provider, we take out email addresses and long numbers, like card, account and phone numbers.",
             "If you choose to leave your name and a phone number or email, we share them with that business so it can get back to you.",
+            "The chat keeps a conversation id in your browser on that business's website, so it remembers your conversation for up to 24 hours. It does this without cookies.",
+            "When a business uploads a document to teach its assistant, we read the document to take out its text, then delete the file straight away.",
           ],
         },
       ],
@@ -107,7 +103,7 @@ const privacyPolicy = {
     {
       title: "How long we keep it",
       body: [
-        "We keep personal data only as long as we need it for the reason we collected it. Contact messages are kept for 12 months, and conversations with our site assistant and with Wave Assist for 6 months, then deleted. Invoices and receipts are kept for [NUMBER] years, as tax law requires.",
+        "We keep personal data only as long as we need it for the reason we collected it. Contact messages are kept for 12 months, and conversations with our site assistant and with Wave Assist for 6 months, then deleted. Invoices and receipts are kept for as long as tax law requires.",
       ],
     },
     {
@@ -135,6 +131,7 @@ const privacyPolicy = {
       title: "Cookies",
       body: [
         "We use one cookie. It keeps you signed in, and the console needs it to work. We do not use advertising or tracking cookies.",
+        "We also remember whether you picked light or dark mode, in your browser. This choice stays on your device.",
       ],
     },
     {

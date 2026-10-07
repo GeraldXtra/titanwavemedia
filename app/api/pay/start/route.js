@@ -9,10 +9,6 @@ import { format } from "@/lib/text";
 export const runtime = "nodejs";
 const METHODS = ["card", "bank_transfer", "ussd", "saved_card"];
 
-// Starts a payment for an invoice (business owners only).
-// - card, bank_transfer, ussd: our server starts the transaction with Paystack for that way only,
-//   and the browser opens Paystack's own window with the access code.
-// - saved_card: our server charges the saved card, then checks the result with Paystack.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { business: true });
   if (res) return res;

@@ -7,8 +7,6 @@ import copy, { priceOf } from "@/content/console/products";
 
 export const metadata = { title: copy.meta.title };
 
-// Every product, from the shared list: LedgerWatch is live on its own website, Wave Assist works
-// here in the console, and the rest are coming soon with Notify me.
 export default async function ProductsPage() {
   const ctx = await clientContext();
   const { data } = await ctx.supabase.from("product_interest").select("product");

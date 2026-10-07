@@ -1,13 +1,9 @@
-// The console around every page: the top bar, the side menu, the search, the bell, the account
-// menu, the footer, and its windows (the legal pages, feedback and system status).
-
 const shell = {
   brand: "Titan Wave Media",
   tag: "Console",
   homeLabel: "Console home",
   skip: "Skip to content",
   titleEnd: ", Titan Wave Media Console",
-  // The browser tab, when a page has no title of its own.
   title: "Titan Wave Media Console",
 
   menu: "Open the menu",
@@ -21,7 +17,6 @@ const shell = {
     more: " view",
   },
 
-  // The side menu for clients. `count: "due"` shows how many invoices are waiting to be paid.
   clientNav: [
     { items: [{ label: "Home", href: "/console", icon: "home", exact: true }] },
     {
@@ -33,15 +28,11 @@ const shell = {
         { label: "Settings", href: "/console/settings", icon: "gear" },
       ],
     },
-    // The products come from content/console/products.js. One that works in the console opens
-    // its page here; a live product with its own website says Live; the rest say Soon.
     { title: "Products", products: true },
   ],
   soon: "Soon",
   live: "Live",
 
-  // The side menu in Team view. `count: "inbox"` shows how many messages wait for a reply.
-  // `owner: true` shows only to the owner.
   teamNav: [
     {
       title: "Titan Wave team",
@@ -127,7 +118,6 @@ const shell = {
     label: "Console footer",
     feedback: "Feedback",
     whatsapp: "Help on WhatsApp",
-    // The message the WhatsApp chat opens with.
     whatsappText: "Hi Titan Wave Media, I need help with my console. ",
     ok: "All systems working",
     bad: "Something isn't working. We're on it.",
@@ -141,7 +131,6 @@ const shell = {
 
   legal: {
     title: "Privacy, terms and cookies",
-    // {date} is the date on the Privacy Policy.
     updated: "{updated}. The same pages are on our website.",
     tabs: { privacy: "Privacy Policy", terms: "Terms of Service", refunds: "Refund Policy", cookies: "Cookies" },
     cookiesText: "We only use the cookies the console needs to work. One of them keeps you signed in. We don't use advertising or tracking cookies.",

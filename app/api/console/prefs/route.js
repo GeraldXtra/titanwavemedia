@@ -6,7 +6,6 @@ export const runtime = "nodejs";
 
 const KEYS = ["notify_projects", "notify_billing", "notify_news"];
 
-// One email setting, from Settings, Notifications.
 export async function POST(request) {
   const { ctx, res } = await guard(request);
   if (res) return res;

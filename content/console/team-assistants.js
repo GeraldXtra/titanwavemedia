@@ -1,5 +1,3 @@
-// Team view, Assistants: every business's Wave Assist, this Lagos calendar month.
-
 const teamAssistants = {
   meta: { title: "Assistants, Titan Wave Media Console" },
   title: "Assistants",
@@ -19,7 +17,7 @@ const teamAssistants = {
   openLabel: "Open the Wave Assist of {business}",
   empty: "No businesses yet.",
   total: "{cost} in AI costs this month, for every business together.",
-  costNote: "AI costs are in US dollars, the way the AI provider bills them, for this Lagos calendar month. They include the test chats in the console. They're worked out from the prices checked on {date}.",
+  costNote: "AI costs are in US dollars, the way the AI provider bills them, for this Lagos calendar month. They include the test chats in the console. They're worked out from the prices on the AI provider's pricing page, checked on {date}.",
 };
 
 export default teamAssistants;

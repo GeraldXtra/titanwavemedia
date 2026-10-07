@@ -9,11 +9,11 @@ import ConsoleSprite from "./ConsoleSprite";
 import ConsoleSearch from "./ConsoleSearch";
 import Bell from "./Bell";
 import ConsoleFooter from "./ConsoleFooter";
+import ThemeSwitch from "../ThemeSwitch";
+import site from "@/content/site";
 import shell from "@/content/console/shell";
 import products from "@/content/console/products";
 
-// The console around every page. `me` is who is signed in; `counts` the first numbers for the
-// side menu (the bell's check keeps them up to date).
 export default function ConsoleShell({ me, counts: firstCounts, legal, children }) {
   const pathname = usePathname();
   const mode = pathname.startsWith("/console/team") ? "team" : "client";
@@ -28,13 +28,11 @@ export default function ConsoleShell({ me, counts: firstCounts, legal, children 
 
   const onCounts = useCallback((c) => setCounts((old) => ({ ...old, ...c })), []);
 
-  // A new page closes the menus, and its heading is announced by its title.
   useEffect(() => {
     setSideOpen(false);
     setAcctOpen(false);
   }, [pathname]);
 
-  // The side menu on narrow screens: Escape closes it, and focus starts inside it.
   useEffect(() => {
     if (!sideOpen) return;
     const first = side.current && side.current.querySelector("a,button");
@@ -68,7 +66,6 @@ export default function ConsoleShell({ me, counts: firstCounts, legal, children 
     };
   }, [acctOpen]);
 
-  // Toasts: short messages near the bottom, for 4 seconds.
   useEffect(() => {
     let timer = null;
     function onToast(e) {
@@ -177,6 +174,10 @@ export default function ConsoleShell({ me, counts: firstCounts, legal, children 
                   </form>
                 </li>
               </ul>
+              <div className="c-menu__theme">
+                <b id="acct-theme">{site.theme.appearance}</b>
+                <ThemeSwitch labelledBy="acct-theme" />
+              </div>
             </div>
           )}
         </div>

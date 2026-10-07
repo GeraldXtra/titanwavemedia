@@ -1,6 +1,3 @@
--- Titan Wave Media: the tables the website writes to. Safe to run more than once.
-
--- Messages from the contact form.
 create table if not exists public.messages (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -14,7 +11,6 @@ create table if not exists public.messages (
   source text not null default 'contact'
 );
 
--- People who asked to hear about launches and news. One row per email.
 create table if not exists public.notify_list (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -22,7 +18,6 @@ create table if not exists public.notify_list (
   source text
 );
 
--- Conversations with the site assistant, with personal details taken out.
 create table if not exists public.chat_logs (
   id bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
@@ -35,7 +30,6 @@ create index if not exists messages_created_at_idx on public.messages (created_a
 create index if not exists notify_list_created_at_idx on public.notify_list (created_at desc);
 create index if not exists chat_logs_session_idx on public.chat_logs (session_id, created_at);
 
--- Only the website's server can read or write these tables.
 alter table public.messages enable row level security;
 alter table public.notify_list enable row level security;
 alter table public.chat_logs enable row level security;

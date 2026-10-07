@@ -12,7 +12,6 @@ import copy from "@/content/console/team-invoices";
 
 const blank = () => ({ d: "", q: "1", p: "" });
 
-// Build an invoice line by line, with a live preview of what the client will see.
 export default function InvoiceBuilder({ clients }) {
   const router = useRouter();
   const f = copy.form;

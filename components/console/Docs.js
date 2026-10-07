@@ -5,8 +5,6 @@ import invoiceCopy from "@/content/console/invoice";
 import receiptCopy from "@/content/console/receipt";
 import billing from "@/content/console/billing";
 
-// Invoices and receipts, as documents: the same on screen, on paper and as a PDF.
-
 function Company() {
   return (
     <div>
@@ -66,7 +64,6 @@ function Lines({ lines }) {
   );
 }
 
-// `inv`: an invoice row, or a draft with the same fields. `lines`: its lines.
 export function InvoiceDoc({ inv, lines, mini = false }) {
   const d = invoiceCopy.doc;
   const stamp = inv.status === "paid" ? d.stampPaid : inv.status === "refunded" ? d.stampRefunded : inv.status === "due" ? d.stampDue : null;
@@ -121,7 +118,6 @@ export function InvoiceDoc({ inv, lines, mini = false }) {
   );
 }
 
-// `r`: a receipt row; `payment`, `inv` and `lines` belong to it. `method`: how it was paid.
 export function ReceiptDoc({ r, payment, inv, lines, method }) {
   const d = receiptCopy.doc;
   return (

@@ -5,12 +5,10 @@ import { datasetRow } from "@/lib/fakeData";
 import { format } from "@/lib/text";
 import { loadChoice, saveChoice } from "@/lib/choices";
 
-// "Build a sample dataset": pick fields and rows, make made up data, copy it as CSV.
 export default function DatasetBuilder({ copy, initial }) {
   const [fields, setFields] = useState(() => new Set(copy.fields.filter((f) => f.checked).map((f) => f.value)));
   const [count, setCount] = useState(() => (copy.rows.find((r) => r.checked) || copy.rows[0]).value);
   const [data, setData] = useState({ gen: 0, cols: initial.cols, rows: initial.rows, fresh: false });
-  // "5 rows, 1 field" or "5 rows, 2 fields".
   const made = (rows, n) => format(copy.made, { rows, fields: n === 1 ? copy.oneField : format(copy.manyFields, { n }) });
   const [msg, setMsg] = useState(made(initial.rows.length, initial.cols.length));
   const [csvText, setCsvText] = useState(null);
@@ -33,8 +31,6 @@ export default function DatasetBuilder({ copy, initial }) {
     return { cols, rows };
   }
 
-  // Fresh rows on every visit, like the design. With "Remember my choices" on (Cookie
-  // preferences), they use the fields and size picked last time.
   const started = useRef(false);
   useEffect(() => {
     const saved = loadChoice("dataset");
@@ -75,7 +71,6 @@ export default function DatasetBuilder({ copy, initial }) {
     else fallback();
   }
 
-  // When the clipboard is not available, the CSV appears in a box, already selected.
   useEffect(() => {
     if (csvText !== null && csvRef.current) csvRef.current.select();
   }, [csvText]);
@@ -93,7 +88,6 @@ export default function DatasetBuilder({ copy, initial }) {
                 value={f.value}
                 checked={fields.has(f.value)}
                 onChange={(e) => {
-                  // Read the tick now: by the time React runs the update, the box may be set back.
                   const on = e.target.checked;
                   setFields((prev) => {
                     const next = new Set(prev);
@@ -133,7 +127,7 @@ export default function DatasetBuilder({ copy, initial }) {
             readOnly
             value={csvText}
             aria-label={copy.csvLabel}
-            style={{ width: "100%", minHeight: 120, marginTop: 10, border: "2px solid #0B0B0B", padding: 10, fontSize: 14 }}
+            style={{ width: "100%", minHeight: 120, marginTop: 10, border: "2px solid var(--line)", padding: 10, fontSize: 14 }}
           />
         )}
       </form>

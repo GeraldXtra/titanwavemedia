@@ -1,5 +1,3 @@
-// Team view, Emails: every email the console sends, exactly as the client sees it.
-
 const teamEmails = {
   meta: { title: "Emails, Titan Wave Media Console" },
   title: "Emails",
@@ -11,7 +9,6 @@ const teamEmails = {
   example: "Filled with: {what}",
   blank: "Nothing has happened yet that sends this email, so the details are blank.",
   frameTitle: "The {name} email",
-  // A gap where a detail would go.
   gap: "____",
   examples: {
     signin: "the newest sign in link",

@@ -5,17 +5,16 @@ import words from "@/content/assist";
 import { checkDetails } from "@/lib/assist/details";
 
 const fill = (text, values) => String(text).replace(/\{(\w+)\}/g, (m, k) => (k in values ? String(values[k]) : m));
+const MAILABLE = /^[^\s@?&#]+@[^\s@?&#]+\.[^\s@?&#]+$/;
 
-// "Talk to a person": the business's WhatsApp with the customer's question already typed, and
-// "Leave your details" (a name, plus a phone number or an email). `onDetails` sends the details
-// and resolves to { ok, error, fields }.
-export default function Handover({ business, whatsapp, question, canLeaveDetails, onWhatsapp, onDetails }) {
+export default function Handover({ business, whatsapp, phone, email, question, canLeaveDetails, onWhatsapp, onDetails, note, focusOnOpen }) {
   const h = words.handover;
   const [open, setOpen] = useState(false);
   const [fields, setFields] = useState({ name: "", phone: "", email: "" });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
   const [problem, setProblem] = useState("");
+  const titleRef = useRef(null);
   const nameRef = useRef(null);
   const phoneRef = useRef(null);
   const emailRef = useRef(null);
@@ -23,7 +22,10 @@ export default function Handover({ business, whatsapp, question, canLeaveDetails
   const detailsRef = useRef(null);
   const wasOpen = useRef(false);
 
-  // Opening the form moves to its first field; Not now goes back to the button.
+  useEffect(() => {
+    if (focusOnOpen && titleRef.current) titleRef.current.focus();
+  }, [focusOnOpen]);
+
   useEffect(() => {
     if (open && nameRef.current) nameRef.current.focus();
     if (!open && wasOpen.current && detailsRef.current) detailsRef.current.focus();
@@ -36,6 +38,10 @@ export default function Handover({ business, whatsapp, question, canLeaveDetails
 
   const text = question && question.trim() ? fill(h.whatsappText, { business, question: question.trim() }) : fill(h.whatsappStart, { business });
   const waHref = whatsapp ? `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}` : null;
+  const shownPhone = String(phone || "").trim();
+  const telHref = shownPhone ? `tel:${shownPhone.startsWith("+") ? "+" : ""}${shownPhone.replace(/\D/g, "")}` : null;
+  const shownEmail = String(email || "").trim();
+  const mailHref = shownEmail && MAILABLE.test(shownEmail) ? `mailto:${shownEmail}` : null;
 
   async function submit(e) {
     e.preventDefault();
@@ -60,7 +66,6 @@ export default function Handover({ business, whatsapp, question, canLeaveDetails
     setProblem(r && r.error === "limit" ? h.errors.limit : h.errors.failed);
   }
 
-  // A field's own error shows under it. "A phone number or an email" shows once, after both.
   const field = (key, label, ref, type, autoComplete) => {
     const own = errors[key];
     const contact = key !== "name" && errors.contact;
@@ -91,13 +96,17 @@ export default function Handover({ business, whatsapp, question, canLeaveDetails
 
   return (
     <section className="wa-hand" aria-labelledby="wa-hand-title">
-      <h2 id="wa-hand-title">{h.title}</h2>
+      <h2 id="wa-hand-title" ref={titleRef} tabIndex={-1}>
+        {h.title}
+      </h2>
+      {note && <p className="wa-line">{note}</p>}
       {status === "sent" ? (
         <p className="wa-thanks" ref={thanksRef} tabIndex={-1} role="status">
           {fill(h.thanks, { business })}
         </p>
       ) : (
         <>
+          {(waHref || telHref || mailHref) && <p className="wa-line">{fill(h.ways, { business })}</p>}
           <div className="wa-hand__ways">
             {waHref && (
               <a className="wa-btn wa-btn--main" href={waHref} target="_blank" rel="noopener noreferrer" onClick={onWhatsapp}>
@@ -106,6 +115,16 @@ export default function Handover({ business, whatsapp, question, canLeaveDetails
                 </svg>
                 {fill(h.whatsapp, { business })}
                 <span className="sr-only"> {words.newTab}</span>
+              </a>
+            )}
+            {telHref && (
+              <a className="wa-btn wa-btn--way" href={telHref}>
+                {fill(h.call, { phone: shownPhone })}
+              </a>
+            )}
+            {mailHref && (
+              <a className="wa-btn wa-btn--way" href={mailHref}>
+                {fill(h.email, { email: shownEmail })}
               </a>
             )}
             {canLeaveDetails && !open && (
@@ -123,7 +142,7 @@ export default function Handover({ business, whatsapp, question, canLeaveDetails
               </p>
               {field("name", h.name, nameRef, "text", "name")}
               {field("phone", h.phone, phoneRef, "tel", "tel")}
-              {field("email", h.email, emailRef, "email", "email")}
+              {field("email", h.emailField, emailRef, "email", "email")}
               {errors.contact && (
                 <p className="wa-err" id="wa-contact-err">
                   {h.errors.contact}

@@ -13,7 +13,6 @@ import { emailHref, fill } from "@/lib/text";
 
 export const metadata = pageMeta({ ...support.meta, path: "/support" });
 
-// One way to reach us: WhatsApp (the main button here), email or the contact form.
 function ReachCard({ card }) {
   const b = card.button;
   return (
@@ -41,7 +40,6 @@ function ReachCard({ card }) {
   );
 }
 
-// A short block of help: a heading, its words and, when there is one, a link.
 function HelpBox({ item }) {
   return (
     <div className="box">

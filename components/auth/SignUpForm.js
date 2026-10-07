@@ -3,14 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { GOOGLE } from "./SignInForm";
+import { SignInMark, TermsLine } from "./Parts";
 import { postJson, rememberLink } from "@/lib/client";
 import { isEmail } from "@/lib/validate";
 import copy from "@/content/console/signin";
 
 const FIELDS = ["name", "business", "email", "terms"];
 
-// Create your account: name, business name and email, then the same sign in link.
-export default function SignUpForm({ email: initial = "" }) {
+export default function SignUpForm({ email: initial = "", google = false, notice = null }) {
   const router = useRouter();
   const t = copy.signup;
   const [v, setV] = useState({ name: "", business: "", email: initial, terms: false });
@@ -63,38 +64,56 @@ export default function SignUpForm({ email: initial = "" }) {
 
   return (
     <>
+      <SignInMark />
+      {notice && (
+        <p className="si__notice" role="status">
+          {notice}
+        </p>
+      )}
       <h1>{t.title}</h1>
-      <p className="lede">{t.lede}</p>
-      <form onSubmit={submit} noValidate>
-        {field("name", copy.fields.name, { autoComplete: "name", maxLength: 120 })}
-        {field("business", copy.fields.business, { autoComplete: "organization", maxLength: 120 })}
+      <p className="si__sub">
+        {t.foot} <Link href="/signin">{t.footLink}</Link>
+      </p>
+      <form className="si__form" onSubmit={submit} noValidate>
+        {google && (
+          <>
+            <a className="btn si__btn" href="/auth/google">
+              {GOOGLE}
+              {t.google}
+            </a>
+            <p className="si__or" aria-hidden="true">
+              {copy.signin.or}
+            </p>
+          </>
+        )}
+        {field("name", copy.fields.name, { autoComplete: "name", maxLength: 120, placeholder: copy.fields.namePlaceholder })}
+        {field("business", copy.fields.business, { autoComplete: "organization", maxLength: 120, placeholder: copy.fields.businessPlaceholder })}
         {field("email", copy.fields.email, { type: "email", autoComplete: "email", inputMode: "email", placeholder: copy.fields.emailPlaceholder })}
-        <label className="check">
+        <label className="si__agree">
           <input id="su-terms" type="checkbox" checked={v.terms} onChange={set("terms")} aria-invalid={errors.terms ? "true" : undefined} aria-describedby={errors.terms ? "su-terms-err" : undefined} />
           <span>
             {t.termsBefore}
-            <a className="link" href="/terms" target="_blank" rel="noopener">
+            <a href="/terms" target="_blank" rel="noopener">
               {t.terms}
             </a>
             {t.termsMiddle}
-            <a className="link" href="/privacy-policy" target="_blank" rel="noopener">
+            <a href="/privacy-policy" target="_blank" rel="noopener">
               {t.privacy}
             </a>
           </span>
         </label>
-        <p className="field__err" id="su-terms-err">
+        <p className="field__err si__agree-err" id="su-terms-err">
           {errors.terms}
         </p>
-        <button className="btn btn--solid btn--block" type="submit" disabled={busy}>
+        <button className="btn btn--solid si__btn" type="submit" disabled={busy}>
           {busy ? copy.signin.sending : t.button}
         </button>
-        <p className="auth__err" role="alert">
+        <p className="si__err" role="alert">
           {formError}
         </p>
+        <p className="si__help">{t.help}</p>
       </form>
-      <p className="auth__foot">
-        {t.foot} <Link className="link" href="/signin">{t.footLink}</Link>
-      </p>
+      {google && <TermsLine t={t.googleTerms} />}
     </>
   );
 }

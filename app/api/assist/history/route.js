@@ -4,10 +4,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// The messages of the visitor's open conversation, so the chat picks up where it was after a
-// page load: { token, conversationId } -> { ok, open, messages: [{ role, text, handover }] }.
-// A conversation that has ended, or had no message for 24 hours, comes back empty with open
-// false, and the chat starts fresh.
 export async function POST(request) {
   const { data, token, res } = await chatRequest(request, 2 * 1024);
   if (res) return res;

@@ -1,5 +1,3 @@
-// Help: ask for help, and the list of your requests with our replies.
-
 const help = {
   meta: { title: "Help, Titan Wave Media Console" },
   title: "Help",
@@ -31,7 +29,6 @@ const help = {
     open: "Open",
   },
 
-  // The three states of a request.
   status: {
     new: "New",
     replied: "Waiting on you",

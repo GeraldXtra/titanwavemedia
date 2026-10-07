@@ -1,6 +1,3 @@
-// The Support page.
-// {phone} and {email} are filled in from content/site.js.
-
 const support = {
   meta: {
     title: "Support, Titan Wave Media",
@@ -10,10 +7,8 @@ const support = {
   hero: {
     title: "Get help.",
     text: "Message us on WhatsApp or email us. We reply the same working day.",
-    // The live line under it follows the time in Lagos and the working hours in content/site.js.
     open: "It is {time} in Lagos. We're open now, and we'll reply today.",
     closed: "It is {time} in Lagos. We're closed now, and we'll reply from {next}.",
-    // {next} in the line above is one of these three.
     nextToday: "{time} today",
     nextTomorrow: "{time} tomorrow",
     nextLater: "{time} on {day}",
@@ -28,7 +23,6 @@ const support = {
         title: "WhatsApp",
         value: "{phone}",
         text: "Quick questions and anything urgent.",
-        // The main button here. The chat opens with these words already typed.
         button: { label: "Message us on WhatsApp", whatsapp: "Hi Titan Wave Media, I need help with " },
       },
       {
@@ -47,7 +41,6 @@ const support = {
     ],
   },
 
-  // If the hours change, change them here and in hours in content/site.js.
   hours: {
     title: "Our hours and our promise",
     paragraphs: [
@@ -74,7 +67,7 @@ const support = {
 
   data: {
     title: "Your data",
-    text: "You can ask for a copy of your data, ask us to correct it, or ask us to delete it. Email us from the address you used with us. We confirm we have your request the same working day, and finish it within 30 days. We keep contact messages for 12 months and assistant conversations for 6 months, then delete them. Invoices and receipts are kept for [NUMBER] years, as tax law requires.",
+    text: "You can ask for a copy of your data, ask us to correct it, or ask us to delete it. Email us from the address you used with us. We confirm we have your request the same working day, and finish it within 30 days. We keep contact messages for 12 months and assistant conversations for 6 months, then delete them. Invoices and receipts are kept for as long as tax law requires.",
     link: { label: "Read the Privacy Policy", href: "/privacy-policy" },
   },
 

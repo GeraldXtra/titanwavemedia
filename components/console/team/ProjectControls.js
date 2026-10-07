@@ -8,7 +8,6 @@ import copy from "@/content/console/team-project";
 import events from "@/content/console/events";
 import shell from "@/content/console/shell";
 
-// The team's controls on a project: step, what happens next, quote, and updates.
 export default function ProjectControls({ projectId, step, nextNote, quoteLine }) {
   const router = useRouter();
   const [n, setN] = useState(String(step));

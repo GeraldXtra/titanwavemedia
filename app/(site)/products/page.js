@@ -9,7 +9,6 @@ export const metadata = pageMeta({ ...products.meta, path: "/products" });
 
 export default function ProductsPage() {
   const f = products.filters;
-  // A filter button for each kind of product that has at least one product in it.
   const options = [
     { value: "all", label: f.all },
     ...Object.entries(f.cats)

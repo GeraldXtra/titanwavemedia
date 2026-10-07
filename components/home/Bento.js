@@ -10,10 +10,6 @@ import { demoRow } from "@/lib/fakeData";
 
 const KINDS = ["NAME", "PHONE", "ACCOUNT", "EMAIL"];
 
-// "What we do": four things a visitor can try: our own site assistant, the tool that takes
-// personal details out of a message, and the maker of made up data.
-// `productRows` is the products tile's list ({ name, tag, status }), made by the home page from
-// content/product-list.js.
 export default function Bento({ copy, productRows = [] }) {
   const c = copy.chat;
   const p = copy.privacy;
@@ -33,7 +29,6 @@ export default function Bento({ copy, productRows = [] }) {
     return () => all.forEach(clearTimeout);
   }, []);
 
-  // A real conversation with our site assistant, with a few starter questions.
   const greeting = [{ role: "assistant", text: c.greeting }];
   const [chat, setChat] = useState(greeting);
   const [pending, setPending] = useState(0);
@@ -58,7 +53,6 @@ export default function Bento({ copy, productRows = [] }) {
     setPending(0);
     if (asked === round.current) commit([...chatRef.current, reply]);
   }
-  // Start again begins a new round, so an answer still on its way is dropped.
   function resetChat() {
     round.current += 1;
     setPending(0);
@@ -68,7 +62,6 @@ export default function Bento({ copy, productRows = [] }) {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [chat, pending]);
 
-  // Take the personal details out of the message.
   const [message, setMessage] = useState("");
   const [cleaned, setCleaned] = useState(null);
   const [count, setCount] = useState("");
@@ -89,7 +82,6 @@ export default function Bento({ copy, productRows = [] }) {
     );
   }
 
-  // Five fresh rows of made up data.
   const [kind, setKind] = useState(d.kinds[0].value);
   const [table, setTable] = useState({ gen: 0, head: d.heads[d.kinds[0].value], rows: d.rows, fresh: false });
 

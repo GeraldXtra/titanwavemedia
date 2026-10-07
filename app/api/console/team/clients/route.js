@@ -10,8 +10,6 @@ import { isEmail } from "@/lib/validate";
 
 export const runtime = "nodejs";
 
-// "Invite a client": makes the business and its owner's account, and emails the welcome with a
-// sign in link. They join when they first sign in.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { team: true });
   if (res) return res;
@@ -46,7 +44,6 @@ export async function POST(request) {
     });
     if (userId) {
       await admin.from("business_members").update({ user_id: userId }).eq("id", member.id);
-      // The welcome has gone out, so it is not sent again at their first sign in.
       await admin.from("profiles").update({ full_name: name, welcomed_at: new Date().toISOString() }).eq("user_id", userId);
     }
   } catch (err) {

@@ -1,5 +1,3 @@
-// The Synthetic Data page.
-
 const syntheticData = {
   meta: {
     title: "Synthetic Data, Titan Wave Media",
@@ -21,7 +19,6 @@ const syntheticData = {
     ],
   },
 
-  // The "On this page" bar. Each id is the section it jumps to.
   subnav: [
     { id: "data-who", label: "Who it's for" },
     { id: "data-build", label: "Build a sample" },
@@ -32,7 +29,6 @@ const syntheticData = {
     title: "Build a sample dataset",
     text: "Choose the fields and how many rows. Every value is generated. None of it belongs to a real person.",
     fieldsLegend: "Fields",
-    // The labels are also the column headings of the table and the CSV.
     fields: [
       { value: "name", label: "Name", checked: true },
       { value: "state", label: "State", checked: true },
@@ -53,7 +49,6 @@ const syntheticData = {
     caption: "Every row is made up on purpose. No real person is in it.",
     noFields: "Tick at least one field.",
     made: "{rows} rows, {fields}. All made up.",
-    // {fields} in the line above is one of these two.
     oneField: "1 field",
     manyFields: "{n} fields",
     copied: "Copied {rows} rows as CSV. Paste it into a spreadsheet.",

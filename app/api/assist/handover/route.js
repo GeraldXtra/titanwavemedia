@@ -1,11 +1,12 @@
 import { after } from "next/server";
 import { checkDetails } from "@/lib/assist/details";
 import { businessName } from "@/lib/assist/engine";
+import { hideDetails } from "@/lib/assist/privacy";
 import { chatRequest, loadConversation } from "@/lib/assist/request";
 import { loadAssistant } from "@/lib/assist/store";
+import { takeHandover } from "@/lib/assist/turns";
 import { businessPeople, notifyBusiness } from "@/lib/events";
-import { clientIp, json } from "@/lib/http";
-import { check, hit } from "@/lib/limits";
+import { clientIp, json, str } from "@/lib/http";
 import { sendEmail } from "@/lib/mail";
 import { siteUrl } from "@/lib/seo";
 import { getAdmin } from "@/lib/supabase";
@@ -13,8 +14,6 @@ import emails from "@/content/console/emails";
 
 export const runtime = "nodejs";
 
-// The question the handover is about: the last one the assistant couldn't answer, or else the
-// last one the customer asked.
 async function lastQuestion(conversationId) {
   const { data } = await getAdmin()
     .from("assist_messages")
@@ -28,11 +27,8 @@ async function lastQuestion(conversationId) {
   return ((missed || rows[0] || {}).body || "").slice(0, 600) || null;
 }
 
-// The business hears about it: a bell notice and an email for everyone on its team. An email
-// that can't be sent (Resend only delivers to its own sign up address until the domain is
-// verified) is logged, and the handover is still in the console.
 async function tellBusiness({ assistant, conversationId, name, phone, email, question }) {
-  const link = `/console/assist/conversations/${conversationId}`;
+  const link = conversationId ? `/console/assist/conversations/${conversationId}` : "/console/assist?tab=conversations";
   try {
     await notifyBusiness(assistant.business_id, "assist_handover", { name }, link);
   } catch (error) {
@@ -56,9 +52,6 @@ async function tellBusiness({ assistant, conversationId, name, phone, email, que
   }
 }
 
-// "Leave your details": { token, conversationId, name, phone, email }. A name plus a phone
-// number or an email. The handover lands in the business's console with a bell notice and an
-// email. A test chat checks the details and keeps nothing.
 export async function POST(request) {
   const { data, token, res } = await chatRequest(request, 4 * 1024);
   if (res) return res;
@@ -71,29 +64,28 @@ export async function POST(request) {
     const assistant = await loadAssistant(token.p);
     if (!assistant || assistant.id !== token.a) return json({ ok: false, error: "token" }, 401);
     const conversation = await loadConversation(assistant.id, data.conversationId);
-    if (!conversation) return json({ ok: false, error: "conversation" }, 404);
 
-    const key = `${assistant.id}:${clientIp(request)}`;
-    const limit = await check("assistHandover", key);
-    if (!limit.ok) return json({ ok: false, error: "limit" }, 429, { "Retry-After": String(limit.retryAfter) });
+    const limit = await takeHandover(assistant.id, clientIp(request));
+    if (!limit || !limit.ok) return json({ ok: false, error: "limit" }, 429, { "Retry-After": String((limit && limit.retry_after) || 3600) });
 
-    const question = await lastQuestion(conversation.id);
+    const asked = hideDetails(str(data.question).replace(/\s+/g, " ").trim()).slice(0, 600) || null;
+    const question = (conversation && (await lastQuestion(conversation.id))) || asked;
     const admin = getAdmin();
     const { error } = await admin.from("assist_handovers").insert({
-      conversation_id: conversation.id,
-      business_id: conversation.business_id,
+      conversation_id: conversation ? conversation.id : null,
+      business_id: assistant.business_id,
       name,
       phone: phone || null,
       email: email || null,
       question,
     });
     if (error) throw new Error(error.message);
-    await Promise.all([
-      admin.from("assist_conversations").update({ outcome: "handed_over" }).eq("id", conversation.id),
-      hit("assistHandover", key),
-    ]);
+    if (conversation) {
+      const { error: outcome } = await admin.from("assist_conversations").update({ outcome: "handed_over" }).eq("id", conversation.id);
+      if (outcome) console.error("[assist] handover outcome:", outcome.message);
+    }
 
-    after(() => tellBusiness({ assistant, conversationId: conversation.id, name, phone, email, question }));
+    after(() => tellBusiness({ assistant, conversationId: conversation ? conversation.id : null, name, phone, email, question }));
     return json({ ok: true });
   } catch (error) {
     console.error("[assist] handover:", error.message);

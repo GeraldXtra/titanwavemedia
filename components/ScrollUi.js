@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import Icon from "./Icon";
 import site from "@/content/site";
 
-// The back to top button, shown once the page has scrolled 600px.
 export default function ScrollUi() {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(true);
@@ -15,7 +14,6 @@ export default function ScrollUi() {
       setHidden(window.scrollY < 600);
     }
     onScroll();
-    // After a page change the page has a new height.
     const later = setTimeout(onScroll, 50);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {

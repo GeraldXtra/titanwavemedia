@@ -1,4 +1,3 @@
-// The wave mark. It follows the text colour, so it works on light and dark backgrounds.
 export default function BrandMark() {
   return (
     <svg className="brand__mark" viewBox="0 0 40 28" aria-hidden="true">

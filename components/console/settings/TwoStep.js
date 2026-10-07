@@ -9,11 +9,9 @@ import copy from "@/content/console/settings";
 
 const t = copy.security.twostep;
 
-// Two step sign in: a code from an authenticator app after the sign in link, with 10 backup
-// codes shown once.
 export default function TwoStep({ on }) {
   const router = useRouter();
-  const [win, setWin] = useState(null); // "setup", "codes", "off", "new"
+  const [win, setWin] = useState(null);
   const [setup, setSetup] = useState(null);
   const [code, setCode] = useState("");
   const [codes, setCodes] = useState([]);

@@ -6,13 +6,11 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Notify me on a coming soon product: on puts the person on its list, off takes them off.
 export async function POST(request) {
   const { ctx, res } = await guard(request);
   if (res) return res;
   const body = await readJson(request, 1024);
   const data = (body.data && typeof body.data === "object" && body.data) || {};
-  // Only products on the way have a list; a product that works today has nothing to wait for.
   const product = products.items.find((p) => p.slug === data.product && p.status === "soon");
   if (!product) return json({ ok: false, error: "not_found" }, 404);
   const admin = getAdmin();

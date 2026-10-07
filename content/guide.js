@@ -1,12 +1,3 @@
-// The site guide at /guide: a short tour of every page.
-//
-// The screenshots in public/guide/ show the pages as they looked when they were taken. Retake
-// them after any design change; a prompt asking for new screenshots is enough.
-//
-// Each screenshot lists its markers: the number, where the square sits (x and y, as a
-// percentage of the screenshot's width and height), where its arrow ends (to.x and to.y, the
-// same way), and the words in the list beside it.
-
 const guide = {
   meta: {
     title: "Site guide, Titan Wave Media",
@@ -18,7 +9,6 @@ const guide = {
     text: "A quick tour of every page: what it's for and what you can do there.",
   },
 
-  // The button under each part. {page} is the page name.
   go: "Go to {page}",
 
   end: "This guide covers the public website. If you get stuck in your console, message us on WhatsApp and we'll help.",
@@ -91,12 +81,12 @@ const guide = {
           src: "/guide/ai-setup-builder.webp",
           width: 1440,
           height: 900,
-          alt: "The setup builder on the AI Setup page: questions with boxes to tick on the left, and on the right the setup so far, its price and the Ask for a quote button.",
+          alt: "The setup builder on the AI Setup page: questions with boxes to tick on the left, and on the right the setup so far and the Ask for a quote button.",
           markers: [
             { n: 1, x: 30.9, y: 35.3, to: { x: 30.9, y: 40.3 }, text: "Tick what the AI should do." },
             { n: 2, x: 62.5, y: 81.2, to: { x: 56.5, y: 81.2 }, text: "Choose where it answers and how big your team is." },
-            { n: 3, x: 78.5, y: 83.8, to: { x: 78.5, y: 77.8 }, text: "Your setup and its price update as you tick." },
-            { n: 4, x: 79.6, y: 67.5, to: { x: 73.6, y: 67.5 }, text: "Ask for a quote. The contact form opens with your setup filled in." },
+            { n: 3, x: 78.5, y: 70.8, to: { x: 78.5, y: 64.8 }, text: "Your setup updates as you tick." },
+            { n: 4, x: 79.6, y: 54.5, to: { x: 73.6, y: 54.5 }, text: "Ask for a quote. The contact form opens with your setup filled in." },
           ],
         },
       ],
@@ -288,7 +278,7 @@ const guide = {
           markers: [
             { n: 1, x: 21.5, y: 44.3, to: { x: 21.5, y: 50.3 }, text: "Chat on WhatsApp. Your message starts with what you picked on the form." },
             { n: 2, x: 69.1, y: 40.4, to: { x: 69.1, y: 46.4 }, text: "Tell us about your project in the form." },
-            { n: 3, x: 33.6, y: 91.8, to: { x: 28.6, y: 91.8 }, text: "Need help, not a new project? Go to Support." },
+            { n: 3, x: 34, y: 91.8, to: { x: 29, y: 91.8 }, text: "Need help, not a new project? Go to Support." },
           ],
         },
         {
@@ -318,8 +308,8 @@ const guide = {
           height: 900,
           alt: "The top of the Updates page: buttons to filter by kind, and a list of updates, each with a date, a title, a short summary and its kind.",
           markers: [
-            { n: 1, x: 33.6, y: 54.6, to: { x: 28.6, y: 57.6 }, text: "Filter the updates by kind." },
-            { n: 2, x: 29.4, y: 65.5, to: { x: 23.4, y: 65.5 }, text: "Open an update to read it in full." },
+            { n: 1, x: 18, y: 54.6, to: { x: 13, y: 57.6 }, text: "Filter the updates by kind." },
+            { n: 2, x: 33.9, y: 65.5, to: { x: 28.9, y: 65.5 }, text: "Open an update to read it in full." },
             { n: 3, x: 91.9, y: 59.2, to: { x: 93.9, y: 64.2 }, text: "Each update says what kind it is." },
           ],
         },
@@ -329,18 +319,18 @@ const guide = {
       id: "post",
       name: "An update post",
       purpose: "One update to read in full.",
-      links: [{ page: "an update post", href: "/updates/example" }],
+      links: [{ page: "an update post", href: "/updates/meet-wave-assist" }],
       shots: [
         {
           src: "/guide/post-top.webp",
           width: 1440,
           height: 900,
-          alt: "The top of an update post: the way back to Updates, the title, the date and the writer, and the start of the post with a picture.",
+          alt: "The top of an update post: the way back to Updates, the title, the date and the writer, and the start of the post with its first heading.",
           markers: [
-            { n: 1, x: 18.3, y: 18, to: { x: 13.3, y: 18 }, text: "Go back to all updates from here." },
-            { n: 2, x: 18.6, y: 29.8, to: { x: 13.6, y: 29.8 }, text: "When it was posted, and who wrote it." },
-            { n: 3, x: 56.3, y: 56.1, to: { x: 50.3, y: 56.1 }, text: "Read the update here." },
-            { n: 4, x: 56.3, y: 83.4, to: { x: 50.3, y: 83.4 }, text: "Pictures sit between the paragraphs." },
+            { n: 1, x: 4.7, y: 10.9, to: { x: 4.7, y: 16.9 }, text: "Go back to all updates from here." },
+            { n: 2, x: 25.2, y: 29.8, to: { x: 19.2, y: 29.8 }, text: "When it was posted, and who wrote it." },
+            { n: 3, x: 56.3, y: 57.8, to: { x: 50.3, y: 57.8 }, text: "Read the update here." },
+            { n: 4, x: 56.3, y: 67.7, to: { x: 50.3, y: 67.7 }, text: "Headings break the update into short parts." },
           ],
         },
       ],
@@ -377,7 +367,7 @@ const guide = {
           height: 900,
           alt: "The top of the Privacy Policy: the date it was last updated, the contents list on the left, and the policy text on the right. The Terms and the Refund Policy look the same.",
           markers: [
-            { n: 1, x: 22.8, y: 25.6, to: { x: 17.8, y: 25.6 }, text: "The date it was last changed." },
+            { n: 1, x: 23.6, y: 25.6, to: { x: 18.6, y: 25.6 }, text: "The date it was last changed." },
             { n: 2, x: 11.8, y: 30.9, to: { x: 11.8, y: 34.9 }, text: "Jump to any part from the contents. The part you're reading is marked." },
             { n: 3, x: 85.7, y: 38.8, to: { x: 77.7, y: 44.8 }, text: "Read each part in plain words." },
           ],

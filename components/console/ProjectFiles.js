@@ -9,8 +9,6 @@ import { format } from "@/lib/text";
 import { toast } from "@/lib/toast";
 import copy from "@/content/console/project";
 
-// The Files card on a project: the list with downloads, and "Send us a file". The file goes
-// straight from the browser to the private bucket with a one time link from our server.
 export default function ProjectFiles({ projectId, files, words = copy.files }) {
   const router = useRouter();
   const input = useRef(null);

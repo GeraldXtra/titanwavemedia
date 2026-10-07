@@ -6,10 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Paystack's webhook. It must carry Paystack's signature (an HMAC of the raw body with our
-// secret key). Repeats are ignored. Handled: successful charges, and refunds.
-// We answer 200 once an event is handled, so Paystack stops sending it; on our own failure we
-// answer 500, so Paystack tries again later.
 export async function POST(request) {
   const raw = await request.text();
   if (!signatureOk(raw, request.headers.get("x-paystack-signature"))) return json({ ok: false }, 401);
@@ -35,7 +31,6 @@ export async function POST(request) {
     if (!payment) {
       outcome = "not_ours";
     } else if (name === "charge.success") {
-      // The webhook says it worked; our server still asks Paystack, and takes the fees from there.
       const s = await settle(payment.reference);
       outcome = s.status;
     } else if (isRefund) {

@@ -6,8 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// After Paystack's window: our server asks Paystack how the payment went, and only a payment
-// Paystack confirms marks the invoice paid. Also says whether the card can be saved.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { business: true });
   if (res) return res;

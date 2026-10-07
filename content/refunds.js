@@ -1,7 +1,3 @@
-// The Refund Policy page.
-// Each section is a heading and its paragraphs. A { list: [...] } is a bulleted list, and
-// { link: "Words", href: "/page" } inside a paragraph is a link.
-
 const refunds = {
   meta: { title: "Refund Policy, Titan Wave Media", description: "When and how you can get a refund from Titan Wave Media." },
   hero: { title: "Refund Policy", updated: "Last updated 4 October 2026" },

@@ -3,12 +3,12 @@ import Rich from "./Rich";
 import { Year } from "./Live";
 import Email from "./Email";
 import CookiePrefs from "./CookiePrefs";
+import ThemeSwitch from "./ThemeSwitch";
 import site from "@/content/site";
 import { emailHref } from "@/lib/text";
 
 const f = site.footer;
 
-// A link in a footer column: a page, the WhatsApp chat, or the company email.
 function FootLink({ item }) {
   if (item.whatsapp) {
     return (
@@ -27,7 +27,6 @@ function FootLink({ item }) {
   return <Link href={item.href}>{item.label}</Link>;
 }
 
-// Four columns of plain links, then a bottom row with the company line and the policies.
 export default function Footer() {
   return (
     <footer className="foot">
@@ -60,6 +59,7 @@ export default function Footer() {
               <CookiePrefs copy={site.cookies} />
             </li>
           </ul>
+          <ThemeSwitch className="foot__theme" />
         </div>
       </div>
     </footer>

@@ -24,7 +24,6 @@ async function projectThread(project, ctx) {
 const shaped = async (thread, ctx, side) =>
   shapeMessages(await loadMessages(thread.id), { viewer: side, userId: ctx.user.id, you: copy.chat.you });
 
-// The project chat, from the client's side or ours.
 export async function GET(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { write: false });
@@ -57,7 +56,6 @@ export async function POST(request, { params }) {
   }
 
   if (fromTeam) {
-    // A reply from us: the client's people hear about it, and get an email if they want one.
     await teamReplyEffects(thread, ctx, text);
   } else {
     await notifyTeam("project_message", { business: ctx.business.name, project: project.title }, `/console/team/inbox?item=${thread.id}`, { except: ctx.user.id });

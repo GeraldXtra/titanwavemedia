@@ -11,10 +11,6 @@ import { format } from "@/lib/text";
 
 export const runtime = "nodejs";
 
-// A receipt's actions:
-// - email: sends a copy of the receipt to the person asking.
-// - refund: asks for a refund (owners only). It lands in our Team inbox, and the client gets
-//   the "We got your refund request" email.
 export async function POST(request, { params }) {
   const { number } = await params;
   const { ctx, res } = await guard(request, { business: true });

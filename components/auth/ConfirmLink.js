@@ -2,11 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { SignInMark } from "./Parts";
 import { postJson, rememberLink } from "@/lib/client";
 import copy from "@/content/console/signin";
 
-// The page a sign in link opens: "Signing you in". It uses the link from here, not on opening,
-// so an email scanner that only looks at the link cannot use it up.
 export default function ConfirmLink() {
   const router = useRouter();
   const started = useRef(false);
@@ -19,7 +18,6 @@ export default function ConfirmLink() {
     const token_hash = params.get("token_hash") || "";
     postJson("/api/auth/confirm", { token_hash }).then(({ status, data }) => {
       if (data.ok && data.next) {
-        // A full page load, so the console sees the new sign in cookie.
         window.location.replace(data.next);
         return;
       }
@@ -34,9 +32,10 @@ export default function ConfirmLink() {
 
   return (
     <>
+      <SignInMark />
       <div className="spin" aria-hidden="true" />
-      <h1 className="center">{copy.verify.title}</h1>
-      <p className="lede center" role="status">
+      <h1>{copy.verify.title}</h1>
+      <p className="si__sub" role="status">
         {failed ? copy.errors.failed : copy.verify.link}
       </p>
     </>

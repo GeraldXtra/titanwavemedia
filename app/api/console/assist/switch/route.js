@@ -1,13 +1,12 @@
 import copy from "@/content/console/assist";
 import { afterChange, assistAction, ensureAssistant } from "@/lib/assist/consoleApi";
+import { hasReach } from "@/lib/assist/setup";
 import { addActivity } from "@/lib/events";
 import { json } from "@/lib/http";
 import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Switches Wave Assist on or off: { on: true | false }. Off, the chat leaves the business's
-// websites within a minute; the test chat in the console still works.
 export async function POST(request) {
   const action = await assistAction(request, 1024);
   if (action.res) return action.res;
@@ -17,6 +16,7 @@ export async function POST(request) {
   try {
     const assistant = await ensureAssistant(business.id);
     if (!assistant) return json({ ok: false, error: "not_found" }, 404);
+    if (data.on && !hasReach(assistant)) return json({ ok: false, error: "reach", message: copy.switch.noReach }, 409);
     const { error } = await getAdmin()
       .from("assistants")
       .update({ is_on: data.on, updated_by: ctx.user.id, updated_at: new Date().toISOString() })

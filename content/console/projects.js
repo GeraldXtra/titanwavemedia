@@ -1,5 +1,3 @@
-// Projects: the list of a client's projects.
-
 const projects = {
   meta: { title: "Projects, Titan Wave Media Console" },
   title: "Projects",
@@ -9,7 +7,6 @@ const projects = {
   emptyTitle: "No projects yet",
   emptyText: "Tell us what you need. We read every request ourselves, reply within working hours, and set up a first call.",
   emptyButton: "Start a project",
-  // The chip on each project, by step. "quote" shows once a quote is waiting for an answer.
   status: {
     1: "Request sent",
     2: "Planning",

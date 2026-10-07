@@ -1,18 +1,14 @@
-// Team view, Team: the people who work in the Titan Wave Media team view. Only the owner
-// (OWNER_EMAIL) can add or remove them.
-
 const teamMembers = {
   meta: { title: "Team, Titan Wave Media Console" },
   title: "Team",
   lede: "The people who can open Team view: the inbox, payments, invoices and clients. Only you can add or remove them.",
 
-  // In the invite email: "{inviter} added you to {team} on Titan Wave Media".
   teamName: "the Titan Wave Media team",
 
   form: {
     title: "Add a team member",
     label: "Email",
-    placeholder: "colleague@titanwavemedia.com",
+    placeholder: "name@yourcompany.com",
     button: "Add to the team",
     help: "They get an email with a sign in link. They sign in with this email.",
   },

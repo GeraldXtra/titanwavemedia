@@ -11,8 +11,6 @@ import shell from "@/content/console/shell";
 
 const m = copy.methods;
 
-// How you pay: saved cards (make default, remove) and automatic payments for Care, with a plain
-// line saying exactly what will be charged and when.
 export default function BillingMethods({ cards, autopay, autoLine }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);

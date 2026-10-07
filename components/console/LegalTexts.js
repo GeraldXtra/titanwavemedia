@@ -3,8 +3,6 @@ import privacyPolicy from "@/content/privacy-policy";
 import terms from "@/content/terms";
 import refunds from "@/content/refunds";
 
-// The Privacy Policy, Terms and Refund Policy for the console's legal window: the same words as
-// the website's pages, without their page frame. Made on the server and handed to the window.
 function Doc({ content }) {
   return (
     <div className="c-legal">

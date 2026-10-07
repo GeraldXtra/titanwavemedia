@@ -7,7 +7,6 @@ import copy from "@/content/console/assist";
 
 export const metadata = { title: copy.meta.conversation };
 
-// Team view: one Wave Assist conversation of a business, the same page the business sees.
 export default async function TeamAssistConversationPage({ params }) {
   const { businessId, id } = await params;
   if (!isUuid(businessId)) notFound();

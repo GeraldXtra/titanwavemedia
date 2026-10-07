@@ -5,12 +5,16 @@ import { createUserClient } from "@/lib/supabaseUser";
 
 export const runtime = "nodejs";
 
-// Where Google sends people back. Signs them in, then asks for their code if two step sign in
-// is on.
 export async function GET(request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const failed = () => NextResponse.redirect(new URL("/signin?error=google", request.url), 303);
+  const problem = `${url.searchParams.get("error_code") || ""} ${url.searchParams.get("error_description") || ""}`;
+  if (!code && /signup_disabled|signups? not allowed/i.test(problem)) {
+    console.error("[auth] google: this Google account has no account here yet, and new sign ups are switched off in Supabase");
+    return NextResponse.redirect(new URL("/signup?error=google_new", request.url), 303);
+  }
+  if (!code && url.searchParams.get("error")) console.error("[auth] google callback:", url.searchParams.get("error_code") || url.searchParams.get("error"));
   if (!accountsReady() || !code) return failed();
 
   const supabase = await createUserClient();

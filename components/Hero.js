@@ -21,7 +21,6 @@ export function Crumbs({ items }) {
   );
 }
 
-// The black block at the top of every page. `home` is the large version without "hero--page".
 export default function Hero({ title, text, home = false, crumbs, buttons, children }) {
   return (
     <section className={cx("hero", !home && "hero--page")}>

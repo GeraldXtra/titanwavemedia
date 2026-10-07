@@ -1,7 +1,3 @@
-// The sign in pages: Sign in, Create your account, Check your email, Signing you in, Enter your
-// code, This link has expired, and the page shown while accounts are not switched on.
-// {email} is the address the link went to. {year} and {rc} are filled in.
-
 const signin = {
   meta: {
     signin: { title: "Sign in, Titan Wave Media", description: "Sign in to your Titan Wave Media console to follow your projects and pay invoices." },
@@ -15,23 +11,31 @@ const signin = {
 
   brand: "Titan Wave Media",
   homeLabel: "Titan Wave Media, home",
+  home: "Home",
 
   fields: {
     email: "Email",
-    emailPlaceholder: "you@business.com",
+    emailPlaceholder: "you@yourbusiness.com",
     name: "Your name",
+    namePlaceholder: "Your full name",
     business: "Business name",
+    businessPlaceholder: "Your business",
   },
 
   signin: {
-    title: "Sign in",
-    lede: "No password to remember. Type your email and we'll send you a link that signs you in.",
+    title: "Sign in to Titan Wave Media",
+    foot: "New here?",
+    footLink: "Create an account",
     button: "Send me a sign in link",
     sending: "Sending",
     or: "or",
     google: "Continue with Google",
-    foot: "New here?",
-    footLink: "Create an account",
+    help: "No password to remember. We'll email you a link that signs you in.",
+    termsBefore: "By signing in, you agree to our ",
+    terms: "Terms",
+    termsMiddle: " and ",
+    privacy: "Privacy Policy",
+    termsAfter: ".",
     signedOut: "You're signed out.",
     deleted: "Your account is deleted. Invoices and receipts are kept for the tax records, as our Privacy Policy says.",
     googleFailed: "Google sign in didn't work. Use your email instead.",
@@ -39,25 +43,32 @@ const signin = {
 
   signup: {
     title: "Create your account",
-    lede: "One place for your projects, your invoices and our products as they open. It's free, and no card is needed.",
-    // The tick box: [Terms] and [Privacy Policy] are links.
+    foot: "Already have one?",
+    footLink: "Sign in",
+    google: "Sign up with Google",
     termsBefore: "I agree to the ",
     terms: "Terms",
     termsMiddle: " and the ",
     privacy: "Privacy Policy",
     button: "Create my account",
-    foot: "Already have an account?",
-    footLink: "Sign in",
+    help: "We'll email you a link to finish. It works once, for 15 minutes.",
+    googleTerms: {
+      termsBefore: "By signing up with Google, you agree to our ",
+      terms: "Terms",
+      termsMiddle: " and ",
+      privacy: "Privacy Policy",
+      termsAfter: ".",
+    },
+    googleNew: "Signing up with Google isn't open yet. Please message us on WhatsApp, and we'll set up your account.",
   },
 
   check: {
     title: "Check your email",
-    lede: "We sent a sign in link to {email}. It works once, for the next 15 minutes.",
-    // When the page is opened without having just asked for a link.
-    ledeNoEmail: "We sent you a sign in link. It works once, for the next 15 minutes.",
-    spam: "Not there? Look in Spam or Promotions.",
+    lede: "We sent a sign in link to {email}. It works once, for 15 minutes.",
+    ledeNoEmail: "We sent you a sign in link. It works once, for 15 minutes.",
+    spam: "Can't find it? Look in your spam folder.",
     resend: "Send it again",
-    resendIn: "in {time}",
+    resendIn: "Send it again in {time}",
     resent: "We sent a new link. Only the newest one works.",
     other: "Use a different email",
   },
@@ -81,7 +92,6 @@ const signin = {
     button: "Continue",
     useBackup: "Use a backup code instead",
     useApp: "Use the code from my app",
-    // What happens when a backup code is used, shown under the backup code box.
     backupNote: "Using a backup code turns off two step sign in. We email you, so you can turn it on again.",
     signOut: "Sign out",
   },
@@ -92,12 +102,11 @@ const signin = {
     button: "Send me a new link",
   },
 
-  // Form messages.
   errors: {
     email: "Enter your email.",
-    emailFormat: "Enter an email like name@business.com.",
-    name: "Enter your name.",
-    business: "Enter your business name.",
+    emailFormat: "Enter an email like name@yourbusiness.com.",
+    name: "Tell us your name.",
+    business: "Tell us your business name.",
     terms: "Tick the box to agree to the Terms and the Privacy Policy.",
     wait: "Wait {seconds} seconds before you ask for another link.",
     tooManyEmail: "Too many sign in links for this email. Try again in an hour.",
@@ -110,20 +119,17 @@ const signin = {
     codeTooMany: "Too many tries. Wait 15 minutes, then try again.",
   },
 
-  // The bottom of the sign in pages.
   footer: {
     line: "© {year} Titan Wave Media LTD. RC {rc}. Lagos, Nigeria.",
-    label: "Policies and help",
+    label: "Legal and help",
     privacy: "Privacy",
     terms: "Terms",
     help: "Help",
   },
 
-  // "Chrome on Windows", for the sign in email and the sign in history.
   device: "{browser} on {device}",
   deviceUnknown: "A browser",
 
-  // /console while the settings in .env.example are not all filled in.
   off: {
     title: "Accounts aren't switched on yet",
     text: "The client console isn't open on this site yet. To reach us, message us on WhatsApp or use the contact form.",

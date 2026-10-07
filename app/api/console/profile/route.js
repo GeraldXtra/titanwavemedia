@@ -5,7 +5,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Your name, from Settings, Profile.
 export async function POST(request) {
   const { ctx, res } = await guard(request);
   if (res) return res;

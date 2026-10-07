@@ -1,5 +1,3 @@
-// Billing: what you owe, what you paid, your receipts and how you pay.
-
 const billing = {
   meta: { title: "Billing, Titan Wave Media Console" },
   title: "Billing",
@@ -30,6 +28,8 @@ const billing = {
     plansMonthly: "Per month",
     plansSince: "Since",
     plansNone: "No Care plans yet. Care starts when a project goes live.",
+    assist: "Your Wave Assist plan",
+    assistHelp: "Your website chat assistant. We invoice it on the same day each month.",
   },
 
   invoices: {
@@ -79,13 +79,13 @@ const billing = {
     defaultSet: "{card} is now your default card.",
     ownerOnly: "Only an owner of {business} can see and change how the business pays.",
     auto: "Automatic payments",
-    autoLabel: "Pay Care automatically",
+    autoLabel: "Pay Care and Wave Assist automatically",
     autoOn: "We charge {amount} to {card} on {date} for Care on {project}, and on the same day each month after.",
-    autoOnNoCare: "On. When a Care invoice is due, we charge your default card, {card}, on its due date.",
-    autoOff: "Off. We send you each Care invoice by email, and you pay it here.",
+    autoOnNoCare: "On. When a Care or Wave Assist invoice is due, we charge your default card, {card}, on its due date.",
+    autoOff: "Off. We send you each Care and Wave Assist invoice by email, and you pay it here.",
     autoNeedsCard: "Save a card first. Pay an invoice by card and choose Save this card.",
     autoTurnedOn: "Automatic payments are on.",
-    autoTurnedOff: "Automatic payments are off. We'll email you each Care invoice.",
+    autoTurnedOff: "Automatic payments are off. We'll email you each Care and Wave Assist invoice.",
     other: "Other ways to pay",
     transfer: "Bank transfer",
     transferText: "Paystack gives you an account number for each payment, so we know it's you.",
@@ -93,7 +93,6 @@ const billing = {
     ussdText: "Dial a code from the phone linked to your bank account. No internet needed.",
   },
 
-  // How a payment was made, as people read it.
   method: {
     card: "{brand} ending {last4}",
     cardNoNumber: "Card",
@@ -103,19 +102,19 @@ const billing = {
     other: "Paystack",
   },
 
-  // What invoices we make ourselves are called, and their line. {setup} is the whole setup price.
   titles: {
     setupFirst: "{project}: setup, first half",
     setupSecond: "{project}: setup, second half",
     care: "{project}: Care for {month}",
+    assist: "Wave Assist, {from} to {to}",
   },
   lines: {
     setupFirst: "Setup of {project}, first half of {setup}",
     setupSecond: "Setup of {project}, second half of {setup}",
     care: "Care for {project}, {from} to {to}",
+    assist: "Wave Assist, up to {limit} conversations a month, {from} to {to}",
   },
 
-  // The status of an invoice, as clients see it.
   invoiceStatus: { due: "To pay", paid: "Paid", refunded: "Refunded", void: "Cancelled" },
   receiptStatus: { paid: "Paid", refund_requested: "Refund asked for", refunded: "Refunded" },
   paymentStatus: { success: "Successful", failed: "Didn't go through", abandoned: "Not finished", pending: "Waiting", review: "Being checked" },

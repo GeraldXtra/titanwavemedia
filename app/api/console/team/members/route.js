@@ -9,7 +9,6 @@ import { isEmail } from "@/lib/validate";
 
 export const runtime = "nodejs";
 
-// Adds someone to the Titan Wave Media team (owner only), and emails them a sign in link.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { siteOwner: true });
   if (res) return res;
@@ -36,7 +35,6 @@ export async function POST(request) {
   return json({ ok: true, message: format(copy.done.added, { email }) });
 }
 
-// Removes someone from the team (owner only). Their team notifications go too.
 export async function DELETE(request) {
   const { ctx, res } = await guard(request, { siteOwner: true });
   if (res) return res;

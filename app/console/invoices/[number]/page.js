@@ -18,7 +18,6 @@ export async function generateMetadata({ params }) {
   return { title: `${format(copy.title, { number })}, Titan Wave Media Console` };
 }
 
-// One invoice. Clients can pay it here (owners); our team can send a reminder.
 export default async function InvoicePage({ params, searchParams }) {
   const { number } = await params;
   const sp = await searchParams;
@@ -26,7 +25,6 @@ export default async function InvoicePage({ params, searchParams }) {
   if (!ctx.user) redirect("/signin");
   let found = await loadInvoice(ctx, number);
   if (!found) notFound();
-  // A transfer may have gone through since the window closed: ask Paystack before showing it.
   if (found.inv.status === "due" && (await settleWaitingFor(found.inv.id))) found = await loadInvoice(ctx, number);
   const { inv, lines, receipts, side } = found;
   const client = side === "client";

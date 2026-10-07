@@ -1,5 +1,3 @@
-// The AI Setup page.
-
 const aiSetup = {
   meta: {
     title: "AI Setup, Titan Wave Media",
@@ -12,7 +10,6 @@ const aiSetup = {
     buttons: [{ label: "Start a project", href: "/contact?need=ai-setup", style: "solid" }],
   },
 
-  // The "On this page" bar. Each id is the section it jumps to.
   subnav: [
     { id: "setup-what", label: "What we set up" },
     { id: "setup-build", label: "Build your setup" },
@@ -67,18 +64,14 @@ const aiSetup = {
       care: { label: "Care", value: "{carePrice} per month" },
       button: "Ask for a quote",
       note: "You get a written quote before any work starts.",
-      // The message that lands in the contact form when someone presses Ask for a quote. {picks}
-      // is what they picked, as one phrase. Nothing starts ticked, so only their own picks go in.
       message: "I used the setup builder on your site and I'd like a price for {picks}.",
       messageNothing: "I used the setup builder on your site and I'd like a price.",
-      // When something is picked under Where or Team but nothing under What.
       setupWord: "a setup",
       and: " and ",
     },
   },
 
   how: {
-    // What a chat assistant does, said plainly.
     example: {
       title: "What a chat assistant does",
       text: "It answers your customers on WhatsApp or your website, day and night, from what you teach it.",
@@ -104,6 +97,7 @@ const aiSetup = {
       { title: "Setup", price: "{setupPrice}", text: "Paid once." },
       { title: "Care", price: "{carePrice}", text: "Per month for hosting, updates and fixes." },
     ],
+    ask: { label: "Ask for a quote", href: "/contact?need=ai-setup" },
     strip: {
       text: "Every system we build follows our privacy rules.",
       link: { label: "How we protect data", href: "/privacy" },

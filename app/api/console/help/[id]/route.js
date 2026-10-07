@@ -15,7 +15,6 @@ async function ticket(ctx, id) {
 
 const shaped = async (t, ctx) => shapeMessages(await loadMessages(t.id), { viewer: "client", userId: ctx.user.id, you: copy.ticket.you });
 
-// A help request's messages, for the client who asked.
 export async function GET(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { write: false, business: true });
@@ -25,7 +24,6 @@ export async function GET(request, { params }) {
   return json({ ok: true, messages: await shaped(t, ctx), status: t.status });
 }
 
-// The client's reply. It makes the request New again for us (a Solved one opens again).
 export async function POST(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { business: true });

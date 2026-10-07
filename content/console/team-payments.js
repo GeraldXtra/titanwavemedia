@@ -1,5 +1,3 @@
-// Team view, Payments: money in, what is owed, and what reached the bank.
-
 const teamPayments = {
   meta: { title: "Payments, Titan Wave Media Console" },
   title: "Payments",

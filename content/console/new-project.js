@@ -1,5 +1,3 @@
-// Start a new project: the request lands in our Team inbox at step 1, First call.
-
 const newProject = {
   meta: { title: "Start a new project, Titan Wave Media Console" },
   crumb: "Projects",

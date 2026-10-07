@@ -12,11 +12,6 @@ export const runtime = "nodejs";
 
 const label = (c) => methodLabel({ channel: "card", card_type: c.card_type, card_last4: c.last4 });
 
-// Saved cards (business owners only):
-// - save: after a card payment, saves that card. Our server asks Paystack for it again, so
-//   nothing about the card comes from the browser.
-// - default: makes a card the default for automatic payments.
-// - remove: removes a card. With no cards left, automatic payments switch off.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { owner: true });
   if (res) return res;

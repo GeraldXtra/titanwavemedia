@@ -1,23 +1,8 @@
-// Every email the console sends. The Team view's Emails page lists them in this order.
-//
-// Each email is a subject, a preview line (the grey text after the subject in an inbox) and a
-// list of blocks:
-// - { p: "..." } a paragraph. **Words between double stars** are bold.
-// - { box: [["Label", "value"], ...] } a small table of details.
-// - { quote: "..." } someone's message, in a box.
-// - { button: "Label" } the one red button. It opens the email's link.
-// - { link: "..." } a line with the link written out, for pasting.
-// {Words in curly brackets} are filled in when the email is sent. {first} is the person's first
-// name, {phone} our WhatsApp number, {rc} our RC number.
-
 const emails = {
-  // The bottom of every email.
   footer: "Titan Wave Media LTD, RC {rc}, Lagos, Nigeria.",
   reason: "You got this email because you have an account with Titan Wave Media.",
   logoAlt: "Titan Wave Media",
-  // Who the email is from, when the sender's own name is not known.
   team: "Titan Wave Media",
-  // When the person's first name is not known.
   firstFallback: "there",
 
   templates: {
@@ -69,7 +54,6 @@ const emails = {
       name: "Invoice reminder",
       when: "3 days before an invoice is due, on the day, 3 days after, or when we press Send a reminder",
       subject: "Reminder: {number} for {amount} is due on {due}",
-      // The subject for the reminder on the due date, and for one sent after it.
       subjectToday: "Reminder: {number} for {amount} is due today",
       subjectLate: "Reminder: {number} for {amount} was due on {due}",
       preview: "A friendly reminder about your invoice.",
@@ -188,7 +172,6 @@ const emails = {
         { button: "Open your console" },
         { p: "You can also reply to this email." },
       ],
-      // Contact form messages from people without an account get no button.
       noAccount: "You can reply to this email.",
       reason: "You got this email because you wrote to Titan Wave Media.",
     },
@@ -207,7 +190,6 @@ const emails = {
         { button: "Open the conversation" },
         { p: "Once you've got back to them, mark it as handled in your console." },
       ],
-      // In place of a phone number, an email or a question the customer didn't give.
       notGiven: "Not given",
       reason: "You got this email because your business uses Wave Assist from Titan Wave Media.",
     },

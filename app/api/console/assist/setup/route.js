@@ -1,17 +1,12 @@
 import copy from "@/content/console/assist";
 import { afterChange, assistAction, ensureAssistant } from "@/lib/assist/consoleApi";
-import { checkSetup } from "@/lib/assist/setup";
+import { checkSetup, hasReach } from "@/lib/assist/setup";
 import { addActivity } from "@/lib/events";
 import { json } from "@/lib/http";
 import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Saves Wave Assist's setup: the business's details, the questions and answers, anything else
-// it should know, the greeting and starter questions, the button and the websites. Everything is
-// checked again here with the same rules as the form. Returns { ok, message, values } with what
-// was saved (the colour may have moved to reach 4.6:1), or { ok: false, errors } with the codes
-// from lib/assist/setup.js.
 export async function POST(request) {
   const action = await assistAction(request, 400 * 1024);
   if (action.res) return action.res;
@@ -23,6 +18,7 @@ export async function POST(request) {
   try {
     const assistant = await ensureAssistant(business.id);
     if (!assistant) return json({ ok: false, error: "not_found" }, 404);
+    if (assistant.is_on && !hasReach(values)) return json({ ok: false, errors: { reach: "reach" }, message: copy.setup.errors.reach }, 400);
     const { error } = await getAdmin()
       .from("assistants")
       .update({
@@ -36,6 +32,7 @@ export async function POST(request) {
         email: values.email,
         qa: values.qa,
         extra: values.extra,
+        docs: values.docs,
         greeting: values.greeting,
         starters: values.starters,
         color: values.color,

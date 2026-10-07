@@ -1,12 +1,3 @@
-// Every product we make, in one list. The website's Products pages and the console both read it,
-// so a product is added or changed here once.
-//
-// status: "live" (works today, open it), "available" (ready now, ask us to set it up), or
-// "soon" (on the way, Notify me). The words for each status and price are below the list.
-// cat: the filter it sits under on the website's Products page (its name is in content/products.js).
-// list: what it does, in short lines.
-// url: a live product's own website. faq: a product's own questions on its page (optional).
-
 const productList = {
   status: {
     live: "Live",
@@ -14,7 +5,6 @@ const productList = {
     soon: "Coming soon",
   },
 
-  // The price line for each status, when a product has no price of its own.
   price: {
     available: "Ask us for a price",
     soon: "Price at launch",
@@ -30,7 +20,6 @@ const productList = {
       price: "Free",
       url: "https://useledgerwatch.co",
       text: "Reminders on who owes you and on the crypto markets, for small businesses and crypto holders.",
-      // Each line is said on LedgerWatch's own site, its guide or its README (design-handoff/phase3-ledgerwatch.md).
       list: [
         "Keeps track of who owes you and when it was due",
         "Sends reminders over WhatsApp or email, with your bank details already in them",
@@ -51,7 +40,6 @@ const productList = {
         "Shows you every conversation, and the questions it couldn't answer",
         "Goes on your website with one line of code",
       ],
-      // Its own questions on its product page, before the ones every available product shares.
       faq: [
         {
           q: "How does it go on my website?",
@@ -132,7 +120,6 @@ const productList = {
   ],
 };
 
-// The price line of a product: its own price, or the words for its status.
 export function priceOf(item) {
   return item.price || productList.price[item.status] || "";
 }

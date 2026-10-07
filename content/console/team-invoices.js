@@ -1,5 +1,3 @@
-// Team view, Invoices: ask a client for money, and every invoice sent.
-
 const teamInvoices = {
   meta: { title: "Invoices, Titan Wave Media Console" },
   title: "Invoices",

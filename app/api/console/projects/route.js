@@ -6,8 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Starts a project: a request at step 1, First call. It lands in the Team inbox as a project chat
-// whose first message is the request.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { business: true });
   if (res) return res;
@@ -36,7 +34,6 @@ export async function POST(request) {
     .insert({ kind: "project", status: "new", business_id: biz.id, project_id: project.id, subject: title, from_name: name, from_email: ctx.email, details: { where }, created_by: ctx.user.id, last_message_at: now, last_from: "client" })
     .select("id")
     .single();
-  // The request as the first message, in the person's own words.
   const first = [title, where, more].filter(Boolean).join("\n\n");
   if (thread) await admin.from("thread_messages").insert({ thread_id: thread.id, from_team: false, author_id: ctx.user.id, author_name: name, body: first.slice(0, 4000) });
   await admin.from("project_updates").insert({ project_id: project.id, business_id: biz.id, kind: "request", created_by: ctx.user.id });

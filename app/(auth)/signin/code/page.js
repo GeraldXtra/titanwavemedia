@@ -7,7 +7,6 @@ import copy from "@/content/console/signin";
 
 export const metadata = { ...copy.meta.code, robots: { index: false, follow: false } };
 
-// The second step of signing in, for people with two step sign in on.
 export default async function CodePage() {
   if (!accountsReady()) return <NotSwitchedOn />;
   const ctx = await getContext();

@@ -7,13 +7,10 @@ import { Cta, OutLink, Section, Strip } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
 import { ph } from "@/lib/text";
 
-// One page per entry in content/project.js. Other addresses get the "Page not found" page.
 export const dynamicParams = false;
 
-// The published projects in order, for the "Next project" link.
 const published = Object.keys(project.pages).filter((slug) => project.pages[slug].published);
 
-// How wide a picture shows: the width of the page, up to 1360 pixels.
 const SIZES = "(max-width: 1440px) 94vw, 1360px";
 
 export function generateStaticParams() {
@@ -27,8 +24,6 @@ export async function generateMetadata({ params }) {
   return pageMeta({ ...p.meta, path: `/work/${slug}`, index: p.published });
 }
 
-// A picture of the project, with the copy half as wide for phones. The first one on the page
-// loads straight away; the others load as they come near.
 function Shot({ shot, first }) {
   return (
     <figure className="shot">
@@ -53,7 +48,6 @@ export default async function ProjectPage({ params }) {
   const l = project.labels;
   const facts = [{ label: l.kind, value: project.kinds[p.kind] }, ...p.facts];
   const shots = p.shots || [];
-  // The next published project, when there is more than one.
   const at = published.indexOf(slug);
   const next = published.length > 1 && at >= 0 ? published[(at + 1) % published.length] : null;
   return (

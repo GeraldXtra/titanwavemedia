@@ -6,7 +6,6 @@ import { accountsReady } from "@/lib/accounts";
 import { Section } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
 
-// Only reached after sending the form, so it stays out of search results.
 export const metadata = pageMeta({ ...thankYou.meta, path: "/thank-you", index: false });
 
 export default function ThankYouPage() {

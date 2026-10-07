@@ -1,4 +1,3 @@
-// The Contact page and its form.
 import productList from "./product-list";
 
 const contact = {
@@ -20,7 +19,6 @@ const contact = {
     locationValue: "{location}",
     time: "Time in Lagos",
     timeUnit: " WAT",
-    // A line under the list for people who need help rather than a new project.
     help: "Need help, not a new project?",
     helpLink: { label: "Go to Support", href: "/support" },
   },
@@ -38,8 +36,6 @@ const contact = {
       { value: "privacy", label: "Keeping customer data private" },
       { value: "other", label: "Something else" },
     ],
-    // Extra questions that show for what is picked above. Nothing starts ticked.
-    // "sentence" and "phrase" are how a choice reads in the WhatsApp message.
     extra: {
       "ai-setup": {
         name: "channel",
@@ -59,8 +55,6 @@ const contact = {
           { value: "More than 100,000 rows", label: "More than 100,000", phrase: "more than 100,000 rows" },
         ],
       },
-      // Every product in content/product-list.js, then "Not sure yet". /contact?need=tool&product=<slug>
-      // picks one. The message keeps the product's name.
       tool: {
         name: "product",
         legend: "Which product?",
@@ -83,7 +77,6 @@ const contact = {
     failed: "Your message didn't send. Please try again, or message us on WhatsApp.",
   },
 
-  // What each choice is called in the WhatsApp message and on the thank you page.
   needWords: {
     "ai-setup": "AI setup",
     tool: "an AI tool",
@@ -93,14 +86,9 @@ const contact = {
     none: "help",
   },
 
-  // The WhatsApp message. It uses only what the person picked or typed, as one natural message:
-  // the greeting, then "I'm {name}." if they typed a name, then one sentence for what they
-  // picked, then their own message exactly as they wrote it. With nothing picked or typed it is
-  // only the greeting, so they write their own words.
   whatsapp: {
     greeting: "Hi Titan Wave Media, ",
     name: "I'm {name}.",
-    // One sentence for what they picked. With an extra choice (above) its own sentence is used.
     need: {
       "ai-setup": "I'm interested in an AI assistant for my business.",
       data: "I need a dataset.",
@@ -112,8 +100,6 @@ const contact = {
     },
   },
 
-  // Put in the message box when someone arrives from "Start a project for my shop" and the like
-  // on the home page, after picking their kind of business there.
   sectorMessages: {
     shops: "I run a shop or restaurant.",
     banks: "I work for a bank or fintech.",
@@ -121,7 +107,6 @@ const contact = {
     logistics: "I run a logistics or delivery business.",
   },
 
-  // The list on the thank you page.
   summary: {
     need: "What you need",
     channel: "Answers on",

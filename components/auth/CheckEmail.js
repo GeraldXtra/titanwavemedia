@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Icon from "../Icon";
+import { SignInMark } from "./Parts";
 import { postJson, recallLink, rememberLink } from "@/lib/client";
 import { format } from "@/lib/text";
 import copy from "@/content/console/signin";
 
 const clock = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
-// "Check your email", with "Send it again" once a minute has passed.
 export default function CheckEmail() {
   const t = copy.check;
   const [email, setEmail] = useState("");
@@ -46,37 +45,31 @@ export default function CheckEmail() {
 
   return (
     <>
-      <div className="auth__icon">
-        <Icon name="mail" />
-      </div>
+      <SignInMark icon="mail" />
       <h1>{t.title}</h1>
-      <p className="lede">{email ? format(t.lede, { email }) : t.ledeNoEmail}</p>
-      <ul className="auth__list">
-        <li>
-          <Icon name="search" />
-          <span>{t.spam}</span>
-        </li>
-        {email && (
-          <li>
-            <Icon name="mail" />
-            <span>
-              <button className="linkbtn" type="button" onClick={resend} disabled={busy || left > 0}>
-                {t.resend}
-              </button>
-              {left > 0 && <span className="note"> {format(t.resendIn, { time: clock(left) })}</span>}
-            </span>
-          </li>
+      <p className="si__sent">
+        {email ? (
+          <>
+            {t.lede.split("{email}")[0]}
+            <b>{email}</b>
+            {t.lede.split("{email}")[1]}
+          </>
+        ) : (
+          t.ledeNoEmail
         )}
-        <li>
-          <Icon name="out" />
-          <span>
-            <Link className="link" href="/signin">
-              {t.other}
-            </Link>
-          </span>
-        </li>
-      </ul>
-      <p className="auth__notice" role="status" style={{ marginTop: 16, display: message ? undefined : "none" }}>
+      </p>
+      <p className="si__help">{t.spam}</p>
+      <div className="si__actions">
+        {email && (
+          <button className="btn si__btn" type="button" onClick={resend} disabled={busy || left > 0}>
+            {left > 0 ? format(t.resendIn, { time: clock(left) }) : t.resend}
+          </button>
+        )}
+        <Link className="si__textlink" href="/signin">
+          {t.other}
+        </Link>
+      </div>
+      <p className="si__notice" role="status" style={{ marginTop: 16, display: message ? undefined : "none" }}>
         {message}
       </p>
     </>

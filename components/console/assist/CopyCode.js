@@ -7,8 +7,6 @@ import copy from "@/content/console/assist";
 
 const t = copy.install;
 
-// The install code, with a copy button. Where the browser won't copy, the code is selected so
-// it can be copied with the keyboard.
 export default function CopyCode({ code }) {
   const box = useRef(null);
 

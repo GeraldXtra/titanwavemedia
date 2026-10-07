@@ -3,8 +3,6 @@
 import { useRef, useState } from "react";
 import { remembering, setRemembering } from "@/lib/choices";
 
-// "Cookie preferences" in the footer, and the small dialog it opens. Escape or Close leaves
-// without saving; focus goes back to the link.
 export default function CookiePrefs({ copy }) {
   const dialogRef = useRef(null);
   const openRef = useRef(null);
@@ -32,6 +30,7 @@ export default function CookiePrefs({ copy }) {
         <form onSubmit={save}>
           <h2 id="cookies-title">{copy.title}</h2>
           <p>{copy.text}</p>
+          <p>{copy.theme}</p>
           <label className="switch">
             <input type="checkbox" role="switch" checked={remember} aria-describedby="cookies-help" onChange={(e) => setRemember(e.target.checked)} />
             <span className="switch__track" aria-hidden="true" />

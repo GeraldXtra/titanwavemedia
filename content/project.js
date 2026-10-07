@@ -1,23 +1,4 @@
-// The projects. Each entry in `pages` is a page at /work/<key>, and a tile on the Work page (in
-// the same order; the first three also show on the home page). The words every project page
-// shares are at the top.
-//
-// To add a project, copy an entry, give it a new key and change the words. Put its pictures in
-// public/work/<key>/ as WebP, up to 1600 pixels wide, each with a copy half as wide for phones,
-// and each under 250 KB. Set `published` to true once it has real words: it then shows on the
-// Work page, in the site search and the sitemap, and search engines are told about it.
-//
-// kind: its honest label, one of the kinds below.
-// card: the line on its tile. needed and built: what the tile says when it turns over.
-// line: the line under its name at the top of its page.
-// links: buttons at the top of its page, to other websites (they open in a new tab).
-// Pictures are WebP: src is the full size, small is the copy half as wide for phones, and
-// width and height are the full size in pixels. alt says what the picture shows, for people
-// who can't see it. The cover is the tile's picture; the shots show on the project's page.
-
 const project = {
-  // The honest label on each project, in the order the Work page's filter buttons show.
-  // A button shows only when at least one published project has that kind.
   kinds: {
     client: "Client work",
     product: "Our product",
@@ -25,7 +6,6 @@ const project = {
     team: "Team project",
   },
 
-  // Shared by every project page.
   labels: {
     crumb: "Work",
     kind: "Type of project",
@@ -42,8 +22,6 @@ const project = {
   },
 
   pages: {
-    // From design-handoff/work/ledgerwatch: its info.txt, its live site, its guide and its
-    // README (what each one says is in design-handoff/phase3-ledgerwatch.md).
     ledgerwatch: {
       published: true,
       kind: "product",
@@ -88,7 +66,6 @@ const project = {
           alt: "LedgerWatch's Market Watch page in paper trading mode. A simulated portfolio shows its total value, and four tiles show cash, total profit or loss, active watches, and alerts waiting for approval.",
         },
       ],
-      // A story's text can be one paragraph, or a list of them.
       stories: [
         {
           title: "The problem",
@@ -113,10 +90,6 @@ const project = {
         {
           title: "Tools we used",
           text: "Node, Express and MongoDB on the server. React and Vite in the browser, with ethers for the blockchain work. An AI model handles the writing and the conversation, with a plain template behind each, so the app keeps working when the AI is unavailable.",
-        },
-        {
-          title: "Where it stands",
-          text: "LedgerWatch is live and free to use. Its code is public to read on GitHub, but it isn't open source. It hasn't had an outside security review yet, and its own security notes say so plainly, so anyone using it with real money should read them first.",
         },
       ],
     },

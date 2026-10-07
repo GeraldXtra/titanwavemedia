@@ -3,19 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Rich from "./Rich";
-import { format } from "@/lib/text";
+import { format, pricesReady } from "@/lib/text";
 import { builderMessage } from "@/lib/whatsapp";
 import { loadChoice, saveChoice } from "@/lib/choices";
 
-// "Build your setup": the summary and the quote link follow the form. Nothing starts ticked,
-// so the quote request carries only what the person picked.
 export default function SetupBuilder({ copy }) {
   const [what, setWhat] = useState(() => new Set());
   const [where, setWhere] = useState("");
   const [size, setSize] = useState("");
   const s = copy.summary;
 
-  // With "Remember my choices" on (Cookie preferences), the last setup picked here comes back.
   const started = useRef(false);
   useEffect(() => {
     const saved = loadChoice("setup");
@@ -33,7 +30,6 @@ export default function SetupBuilder({ copy }) {
     saveChoice("setup", { what: [...what], where, size });
   }, [what, where, size]);
 
-  // Ticked items in the order of the form.
   const ticked = copy.what.options.filter((o) => what.has(o.value)).map((o) => o.value);
   const message = builderMessage(copy, { what: ticked, where, size });
 
@@ -86,20 +82,22 @@ export default function SetupBuilder({ copy }) {
           {where && <li>{format(s.answers, { where })}</li>}
           {size && <li>{format(s.team, { size })}</li>}
         </ul>
-        <dl className="cfg__price">
-          <div>
-            <dt>{s.setup.label}</dt>
-            <dd>
-              <Rich text={s.setup.value} />
-            </dd>
-          </div>
-          <div>
-            <dt>{s.care.label}</dt>
-            <dd>
-              <Rich text={s.care.value} />
-            </dd>
-          </div>
-        </dl>
+        {pricesReady() && (
+          <dl className="cfg__price">
+            <div>
+              <dt>{s.setup.label}</dt>
+              <dd>
+                <Rich text={s.setup.value} />
+              </dd>
+            </div>
+            <div>
+              <dt>{s.care.label}</dt>
+              <dd>
+                <Rich text={s.care.value} />
+              </dd>
+            </div>
+          </dl>
+        )}
         <div className="btns">
           <Link className="btn btn--solid" id="cfg-cta" href={"/contact?need=ai-setup&from=builder&msg=" + encodeURIComponent(message)}>
             {s.button}

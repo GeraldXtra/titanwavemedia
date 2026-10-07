@@ -1,6 +1,3 @@
-// The site assistant at the bottom right of every page.
-// How the assistant behaves with the AI model is set out in content/assistant-rules.md.
-
 const assistant = {
   open: "Ask us anything",
   title: "Titan Wave Media assistant",
@@ -15,16 +12,10 @@ const assistant = {
   you: "You",
   bot: "Assistant",
   whatsappLink: "Continue on WhatsApp",
-  // The WhatsApp message when the assistant hands over: the greeting, then the visitor's own
-  // question exactly as they typed it. With no question it is only the greeting.
   whatsappStart: "Hi Titan Wave Media, ",
   whatsappQuestion: "I asked your site assistant this and it didn't have the answer: {question}",
-  // Shown when one visitor sends more than 30 messages in an hour.
   busy: "You've sent a lot of messages in the last hour, so I have to stop here for now. Please try again later, or ask a person on WhatsApp.",
 
-  // The scripted answers, used when the AI model is switched off or does not reply.
-  // A question is matched against the words; {time} is the time in Lagos.
-  // An answer that is a list picks one at random.
   brain: [
     {
       words: ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "start"],
@@ -40,8 +31,6 @@ const assistant = {
       answer: "AI setup means we build AI to handle the work that eats your team's time, connect it to your tools and keep it running: chat assistants, automation, dashboards and AI inside the software you already use. You see a working demo before we start the full build.",
       link: { label: "Build your setup", href: "/ai-setup" },
     },
-    // The two products people can use or ask for now. They sit before prices, so "How much is
-    // Wave Assist?" gets the Wave Assist answer.
     {
       words: ["wave assist", "waveassist", "on my website", "for my website", "my website", "my site", "website chat", "chat widget", "chatbot"],
       answer: "Wave Assist is a chat assistant for your own website. It answers your customers in English, day and night, from what you teach it, and when it isn't sure it hands them to you on WhatsApp or takes their details. It goes on your website with one line of code. It's available now, and we agree the price with you. Press Talk to us on its page to ask.",

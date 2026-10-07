@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-// "What you sent us" on the thank you page, from the note the contact form left in this tab.
 export default function SentSummary({ title }) {
   const [items, setItems] = useState(null);
   useEffect(() => {

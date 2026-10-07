@@ -1,5 +1,3 @@
-// One invoice, as the client sees it (and as it prints or saves as a PDF).
-
 const invoice = {
   title: "Invoice {number}",
   crumb: "Invoices",
@@ -23,7 +21,6 @@ const invoice = {
     questions: "Questions about this invoice? Message us on WhatsApp at {phone}.",
     note: "Note:",
   },
-  // The company block at the top of invoices and receipts.
   company: ["Titan Wave Media LTD", "Lagos, Nigeria", "RC {rc}", "{email}", "WhatsApp {phone}"],
   pay: "Pay {amount}",
   receipt: "See the receipt",

@@ -1,5 +1,3 @@
-// Team view, Product interest: who asked to be told when each product opens.
-
 const teamInterest = {
   meta: { title: "Product interest, Titan Wave Media Console" },
   title: "Product interest",

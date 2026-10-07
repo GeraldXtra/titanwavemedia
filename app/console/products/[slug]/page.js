@@ -12,9 +12,6 @@ export async function generateMetadata({ params }) {
   return { title: p ? `${p.name}, Titan Wave Media Console` : copy.meta.title };
 }
 
-// One product: what it does (or will do), and how to use it. A live product opens on its own
-// website, one that works in the console opens its console page, and one on the way has
-// Notify me.
 export default async function ProductPage({ params }) {
   const { slug } = await params;
   const p = copy.items.find((i) => i.slug === slug);

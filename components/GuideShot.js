@@ -1,7 +1,3 @@
-// One screenshot in the site guide, with numbered squares and arrows drawn on top of it (real
-// text and lines, not part of the image, so they stay sharp and can be read), and the numbered
-// list that says what each one is. Positions come from content/guide.js, as percentages of the
-// screenshot. Under 700px wide the arrows are hidden and the list sits under the picture.
 export default function GuideShot({ shot, id, eager = false }) {
   const { width: w, height: h } = shot;
   const px = (p, size) => Math.round((p / 100) * size * 10) / 10;
@@ -9,7 +5,6 @@ export default function GuideShot({ shot, id, eager = false }) {
     <div className="gshot">
       <figure className="gshot__fig">
         <div className="gshot__img">
-          {/* Phones get a copy half as wide, from public/guide/phone/. */}
           <picture>
             <source media="(max-width: 700px)" srcSet={shot.src.replace("/guide/", "/guide/phone/")} width={w / 2} height={h / 2} />
             <img

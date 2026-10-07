@@ -1,6 +1,3 @@
-// Team view, one client's project: move it through the steps, send the quote, post updates,
-// share files and chat.
-
 const teamProject = {
   crumb: "Clients",
   for: "For {business}",

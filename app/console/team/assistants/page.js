@@ -9,15 +9,12 @@ import copy from "@/content/console/team-assistants";
 
 export const metadata = { title: copy.meta.title };
 
-// Dollars the way the AI provider bills them: cents, or tenths of a cent for small amounts.
 function dollars(x) {
   const v = Number(x || 0);
   const digits = v > 0 && v < 1 ? 4 : 2;
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: digits, maximumFractionDigits: digits }).format(v);
 }
 
-// Every business's Wave Assist this Lagos calendar month: on or off, its websites, its
-// conversations against its limit, and what its AI answers cost (test chats included).
 export default async function TeamAssistantsPage() {
   await teamContext();
   const admin = getAdmin();

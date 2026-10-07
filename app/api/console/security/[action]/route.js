@@ -7,13 +7,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Two step sign in, from Settings, Security:
-// - start: makes a new authenticator app key and its QR code.
-// - confirm: checks the first code from the app, turns two step sign in on, and returns 10
-//   backup codes. They are shown once and kept only as hashes.
-// - codes: replaces the backup codes with 10 new ones.
-// - off: turns two step sign in off.
-// While two step sign in is on, these need the code typed in this session (the guard checks).
 export async function POST(request, { params }) {
   const { action } = await params;
   const { ctx, res } = await guard(request);
@@ -25,7 +18,6 @@ export async function POST(request, { params }) {
 
   if (action === "start") {
     if (ctx.twoStep) return json({ ok: false, error: "already_on" }, 409);
-    // Keys from setups that were never finished are removed first.
     const { data: listed } = await admin.auth.admin.mfa.listFactors({ userId: ctx.user.id });
     for (const f of (listed && listed.factors) || []) {
       if (f.status !== "verified") await admin.auth.admin.mfa.deleteFactor({ userId: ctx.user.id, id: f.id });
@@ -76,7 +68,6 @@ export async function POST(request, { params }) {
   return json({ ok: false, error: "not_found" }, 404);
 }
 
-// 10 new backup codes in place of any old ones. Returns them as people read them: "abcd efgh".
 async function saveBackupCodes(userId) {
   const admin = getAdmin();
   const codes = newBackupCodes(10);

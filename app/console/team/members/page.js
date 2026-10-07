@@ -5,7 +5,6 @@ import copy from "@/content/console/team-members";
 
 export const metadata = { title: copy.meta.title };
 
-// The Titan Wave Media team. Only the owner (OWNER_EMAIL) can open this page.
 export default async function TeamMembersPage() {
   const ctx = await teamContext({ owner: true });
   const admin = getAdmin();

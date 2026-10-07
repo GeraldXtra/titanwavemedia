@@ -5,7 +5,6 @@ import { daysSince } from "@/lib/lagos";
 
 const noop = () => () => {};
 
-// The current year. The server renders the year of the build and the browser corrects it.
 export function Year({ initial }) {
   const year = useSyncExternalStore(
     noop,
@@ -15,7 +14,6 @@ export function Year({ initial }) {
   return <span data-year="">{year}</span>;
 }
 
-// Days since a date, counted in the visitor's browser.
 export function DaysSince({ date, initial }) {
   const days = useSyncExternalStore(
     noop,

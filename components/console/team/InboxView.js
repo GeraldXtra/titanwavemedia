@@ -12,7 +12,6 @@ import copy from "@/content/console/team-inbox";
 
 const FILTERS = ["all", "new", "replied"];
 
-// The Team inbox: the list on the left (checked every 15 seconds), the conversation on the right.
 export default function InboxView({ items: firstItems, selected: firstSelected }) {
   const router = useRouter();
   const [filter, setFilter] = useState("all");

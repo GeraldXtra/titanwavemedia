@@ -8,7 +8,6 @@ import copy from "@/content/console/team-clients";
 
 export const metadata = { title: copy.meta.title };
 
-// Every client business: its project and stage, what it paid, what it owes, and Care.
 export default async function TeamClientsPage() {
   await teamContext();
   const admin = getAdmin();

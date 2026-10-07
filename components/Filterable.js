@@ -3,9 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 
-// The filter buttons and search above a list (Products, Work, Updates). The list itself is
-// rendered by the page; every item with a data-cat inside the [data-list] after the filters
-// is shown or hidden, and the search looks through each item's words.
 export default function Filterable({ name, label, options, searchLabel, searchPlaceholder, empty, children }) {
   const barRef = useRef(null);
   const [cat, setCat] = useState("all");

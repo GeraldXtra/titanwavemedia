@@ -7,14 +7,11 @@ import { getAdmin } from "@/lib/supabase";
 export const runtime = "nodejs";
 
 
-// Wave Assist: its setup (without our own ids), and every conversation with its messages and the
-// details customers left. Test chats are never kept, so they are not in it. Null for a business
-// that has never opened Wave Assist.
 async function waveAssist(admin, biz) {
   if (!biz) return null;
   const { data: setup } = await admin
     .from("assistants")
-    .select("created_at, updated_at, public_id, is_on, name, sells, prices, hours, areas, whatsapp, phone, email, qa, extra, greeting, starters, color, text_color, corner, sites, monthly_limit, seen_at, seen_site")
+    .select("created_at, updated_at, public_id, is_on, name, sells, prices, hours, areas, whatsapp, phone, email, qa, extra, docs, greeting, starters, color, text_color, corner, sites, monthly_limit, plan_kobo, billing_on, billing_next_on, seen_at, seen_site")
     .eq("business_id", biz)
     .maybeSingle();
   if (!setup) return null;
@@ -36,11 +33,10 @@ async function waveAssist(admin, biz) {
   return {
     setup,
     conversations: conversations.map(({ id, ...c }) => ({ ...c, messages: said.get(id) || [], handovers: left.get(id) || [] })),
+    handovers_without_conversation: left.get(null) || [],
   };
 }
 
-// Your data: everything we hold about you and your business, as one JSON file. Paystack's
-// authorization codes for saved cards are never in it.
 export async function GET(request) {
   const { ctx, res } = await guard(request, { write: false });
   if (res) return res;

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { cx } from "@/lib/text";
 import site from "@/content/site";
 
-// Searches the page list in content/site.js. Enter opens the first match. `light` is for white panels.
 export default function SiteSearch({ inputId, label, placeholder, light = false }) {
   const router = useRouter();
   const [value, setValue] = useState("");

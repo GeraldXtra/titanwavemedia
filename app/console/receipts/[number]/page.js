@@ -14,7 +14,6 @@ export async function generateMetadata({ params }) {
   return { title: `${format(copy.title, { number })}, Titan Wave Media Console` };
 }
 
-// One receipt. Clients can email themselves a copy, and owners can ask for a refund.
 export default async function ReceiptPage({ params }) {
   const { number } = await params;
   const ctx = await getContext();

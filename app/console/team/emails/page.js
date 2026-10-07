@@ -10,7 +10,6 @@ export const metadata = { title: copy.meta.title };
 
 const FROM = process.env.CONTACT_FROM_EMAIL || "Titan Wave Media <onboarding@resend.dev>";
 
-// Every email the console sends, shown exactly as it lands in an inbox.
 export default async function TeamEmailsPage({ searchParams }) {
   await teamContext();
   const sp = await searchParams;

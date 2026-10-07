@@ -4,11 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { cx, ph } from "@/lib/text";
 
-// How wide a tile's picture shows: one tile a row on phones, two on tablets, three after that.
 const SIZES = "(max-width: 640px) 92vw, (max-width: 1000px) 46vw, (max-width: 1440px) 30vw, 430px";
 
-// A project tile. Pointing at it shows the problem and what was built; on a touch screen the
-// first tap turns it over for four seconds and the second tap opens the project.
 export default function WorkTile({ item, flip }) {
   const [flipped, setFlipped] = useState(false);
   const timer = useRef(null);
@@ -27,7 +24,6 @@ export default function WorkTile({ item, flip }) {
   return (
     <Link className={cx("wtile tile", flipped && "is-flipped")} href={`/work/${item.slug}`} data-cat={item.kind} onClick={onClick}>
       <div className="wtile__img">
-        {/* Phones get the copy half as wide. */}
         <img
           src={c.src}
           srcSet={`${c.small} ${Math.round(c.width / 2)}w, ${c.src} ${c.width}w`}

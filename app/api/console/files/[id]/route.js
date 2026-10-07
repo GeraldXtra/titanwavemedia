@@ -5,8 +5,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Downloads a project file: a signed link that works for 60 seconds, made only for members of
-// the file's business and for our team.
 export async function GET(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { write: false });

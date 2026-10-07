@@ -1,6 +1,3 @@
-// The Updates page. The first three posts also show on the home page.
-// Each post links to its own page; the words for those pages are in content/post.js.
-
 const updates = {
   meta: {
     title: "Updates, Titan Wave Media",
@@ -12,12 +9,10 @@ const updates = {
     text: "Product launches, what we're building, and what we learn along the way.",
   },
 
-  // A heading for screen readers over the list below (it is not shown on the page).
   listTitle: "All updates",
 
   filters: {
     label: "Filter updates",
-    // "value" must match the "cat" of the posts below.
     options: [
       { value: "all", label: "All" },
       { value: "product", label: "Product" },
@@ -27,9 +22,24 @@ const updates = {
   },
 
   items: [
-    { slug: "example", cat: "product", tag: "Product", date: "[Date]", title: "[Post title]", summary: "[Two line summary of the post]" },
-    { slug: "example", cat: "news", tag: "News", date: "[Date]", title: "[Post title]", summary: "[Two line summary of the post]" },
-    { slug: "example", cat: "learned", tag: "What we learned", date: "[Date]", title: "[Post title]", summary: "[Two line summary of the post]" },
+    {
+      slug: "meet-wave-assist",
+      cat: "product",
+      tag: "Product",
+      date: "6 October 2026",
+      datetime: "2026-10-06",
+      title: "Meet Wave Assist",
+      summary: "A chat assistant for your own website. It answers your customers from what you teach it, and hands them to you when it isn't sure.",
+    },
+    {
+      slug: "ledgerwatch-is-live",
+      cat: "product",
+      tag: "Product",
+      date: "6 August 2026",
+      datetime: "2026-08-06",
+      title: "LedgerWatch is live",
+      summary: "Our app for businesses that sell on credit is live and free. It keeps track of who owes you, sends the reminders, and watches coin prices.",
+    },
   ],
 
   notify: {

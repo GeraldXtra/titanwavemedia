@@ -6,7 +6,6 @@ import copy from "@/content/console/team-log";
 
 export const metadata = { title: copy.meta.title };
 
-// What the team did, newest first: invoices sent, refunds, steps changed, members added.
 export default async function TeamLogPage() {
   await teamContext();
   const { data: rows } = await getAdmin().from("audit_log").select("created_at, actor_email, action, target, details").order("created_at", { ascending: false }).limit(300);

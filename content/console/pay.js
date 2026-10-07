@@ -1,6 +1,3 @@
-// Pay with Titan Wave: our window. It shows what you are paying for and the amount, and you
-// pick how to pay. Card details are only ever typed into Paystack's own secure window.
-
 const pay = {
   title: "Pay with Titan Wave",
   test: "Test mode. No real money moves.",

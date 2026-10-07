@@ -4,7 +4,6 @@ import { useState } from "react";
 import { postJson } from "@/lib/client";
 import copy from "@/content/console/start";
 
-// Name and business name for a new console.
 export default function StartForm({ name: firstName = "" }) {
   const [v, setV] = useState({ name: firstName, business: "" });
   const [errors, setErrors] = useState({});

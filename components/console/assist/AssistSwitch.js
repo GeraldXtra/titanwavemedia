@@ -8,8 +8,7 @@ import copy from "@/content/console/assist";
 
 const s = copy.switch;
 
-// The on and off switch at the top of Wave Assist. `business` is set in Team view.
-export default function AssistSwitch({ on: first, hasSites, business }) {
+export default function AssistSwitch({ on: first, hasSites, hasReach = true, business }) {
   const router = useRouter();
   const [on, setOn] = useState(first);
   const [busy, setBusy] = useState(false);
@@ -32,6 +31,7 @@ export default function AssistSwitch({ on: first, hasSites, business }) {
           <small id="as-on-line">
             {on ? s.on : s.off}
             {on && !hasSites ? ` ${s.noSites}` : ""}
+            {!on && !hasReach ? ` ${s.noReach}` : ""}
           </small>
         </span>
         <label className="switch">
@@ -40,7 +40,7 @@ export default function AssistSwitch({ on: first, hasSites, business }) {
             role="switch"
             checked={on}
             aria-checked={on ? "true" : "false"}
-            disabled={busy}
+            disabled={busy || (!on && !hasReach)}
             onChange={(e) => change(e.target.checked)}
             aria-labelledby="as-on-label"
             aria-describedby="as-on-line"

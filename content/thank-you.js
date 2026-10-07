@@ -1,4 +1,3 @@
-// The page people see after sending the contact form.
 import site from "./site";
 
 const thankYou = {
@@ -20,13 +19,11 @@ const thankYou = {
     title: "What you sent us",
   },
 
-  // An optional line for people who want to follow their request in the client console.
   follow: {
     text: "Want to follow your request?",
     link: "Create a free account",
   },
 
-  // For people who asked about one of our products.
   bought: {
     title: "Asked about a product?",
     text: "We'll reply with how to get it and what it costs. When you pay us, you get a receipt.",

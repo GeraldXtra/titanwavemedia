@@ -13,9 +13,6 @@ const BUCKET = "project-files";
 
 const pathFor = (project, fileId, name) => `${project.business_id}/${project.id}/${fileId}/${storageName(name)}`;
 
-// Files on a project, in two steps:
-// - start: checks the name and size, and returns a one time upload link to the private bucket.
-// - done: checks the file arrived with the right size and type, then lists it on the project.
 export async function POST(request) {
   const { ctx, res } = await guard(request);
   if (res) return res;

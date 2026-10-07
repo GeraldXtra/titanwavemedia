@@ -8,8 +8,6 @@ import { format } from "@/lib/text";
 import { toast } from "@/lib/toast";
 import copy from "@/content/console/project";
 
-// The quote on a project: the price to build it, in two halves, and Care. The owner can accept
-// it (which makes the first invoice) or ask for changes in the chat.
 export default function QuoteCard({ projectId, quote, isOwner, business }) {
   const router = useRouter();
   const t = copy.quote;

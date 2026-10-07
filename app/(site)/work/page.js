@@ -9,7 +9,6 @@ export const metadata = pageMeta({ ...work.meta, path: "/work" });
 
 export default function WorkPage() {
   const f = work.filters;
-  // A filter button for each kind of project that has at least one project in it.
   const options = [
     { value: "all", label: f.all },
     ...Object.entries(project.kinds)

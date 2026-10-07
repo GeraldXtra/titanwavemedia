@@ -10,8 +10,6 @@ import { isEmail } from "@/lib/validate";
 export const runtime = "nodejs";
 const t = copy.team;
 
-// Invites someone to the business (owners only). They get an email with a sign in link, and
-// join when they sign in. A person belongs to one business at most.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { owner: true });
   if (res) return res;
@@ -27,7 +25,6 @@ export async function POST(request) {
   if (existing) {
     if (existing.business_id === ctx.business.id) return json({ ok: false, message: format(t.errors.already, { email }) }, 409);
     if (existing.joined_at) return json({ ok: false, message: format(t.errors.elsewhere, { email }) }, 409);
-    // An invite from another business that was never accepted gives way to this one.
     await admin.from("business_members").delete().eq("email", email).is("joined_at", null);
   }
   const { data: row, error } = await admin.from("business_members").insert({ business_id: ctx.business.id, email, role, invited_by: ctx.user.id }).select("id").single();
@@ -46,7 +43,6 @@ export async function POST(request) {
   return json({ ok: true, message: format(t.invited, { email }) });
 }
 
-// Removes someone from the business (owners only). The business keeps at least one owner.
 export async function DELETE(request) {
   const { ctx, res } = await guard(request, { owner: true });
   if (res) return res;

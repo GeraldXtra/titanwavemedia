@@ -3,7 +3,6 @@
 import { useSyncExternalStore } from "react";
 import { lagosTime } from "@/lib/lagos";
 
-// One shared timer for every clock on the page. It ticks every 15 seconds, like the design.
 let current = null;
 let timer = null;
 const listeners = new Set();
@@ -39,7 +38,6 @@ function getSnapshot() {
   return current;
 }
 
-// The server does not know the visitor's moment, so the time appears once the page runs.
 function getServerSnapshot() {
   return "";
 }

@@ -6,7 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// A new help request. It starts as New and lands in the Team inbox.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { business: true });
   if (res) return res;

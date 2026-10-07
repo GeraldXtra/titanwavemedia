@@ -3,12 +3,6 @@ import Link from "next/link";
 import LagosClock from "./LagosClock";
 import { fill, isExternal } from "@/lib/text";
 
-// Renders copy from the content folder.
-// - [Square brackets] become grey placeholders, like the design.
-// - {email}, {rc} and the other values in content/site.js are filled in.
-// - {clock} shows the time in Lagos. Other {tokens} can be passed in with `tokens`.
-// - Text can also be a list of parts, where { link: "Words", href: "/page" } is a link.
-
 const PARTS = /(\{\w+\}|\[[^\]]+\])/;
 
 function renderText(text, tokens, prefix) {

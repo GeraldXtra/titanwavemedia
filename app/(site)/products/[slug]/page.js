@@ -8,7 +8,6 @@ import { BlkHead, Cta, Faq, Gap, Notify, OutLink, Section, StatusTag, Strip } fr
 import { pageMeta } from "@/lib/seo";
 import { format } from "@/lib/text";
 
-// One page for each product in content/product-list.js. Other addresses get the "Page not found" page.
 export const dynamicParams = false;
 
 const find = (slug) => productList.items.find((p) => p.slug === slug);
@@ -30,7 +29,6 @@ export default async function ProductPage({ params }) {
   if (!p) notFound();
   const l = product.labels;
   const values = { name: p.name, slug: p.slug };
-  // The product's own questions first, then the ones every product with its status shares.
   const faq = [...(p.faq || []), ...(product.faq[p.status] || [])];
   return (
     <main className="page" id="main-products-product">
@@ -64,7 +62,6 @@ export default async function ProductPage({ params }) {
             </ul>
           </div>
         )}
-        {/* A live product runs on its own website; the others run with us. */}
         {p.status === "available" && (
           <Gap>
             <Strip icon="shield" text={l.privacy.text} link={l.privacy.link} />

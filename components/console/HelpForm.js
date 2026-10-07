@@ -6,7 +6,6 @@ import { postJson } from "@/lib/client";
 import { toast } from "@/lib/toast";
 import copy from "@/content/console/help";
 
-// Ask for help: it becomes a request with the status New, and lands in our Team inbox.
 export default function HelpForm() {
   const router = useRouter();
   const f = copy.form;

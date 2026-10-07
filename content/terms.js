@@ -1,7 +1,3 @@
-// The Terms of Service page.
-// Each section is a heading and its paragraphs. A { list: [...] } is a bulleted list, and
-// { link: "Words", href: "/page" } inside a paragraph is a link.
-
 const terms = {
   meta: { title: "Terms of Service, Titan Wave Media", description: "The terms for using the Titan Wave Media website, products and services." },
   hero: { title: "Terms of Service", updated: "Last updated 6 October 2026" },

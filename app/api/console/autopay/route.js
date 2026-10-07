@@ -6,7 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Automatic payments for Care: on only when the owner switches it on, with a saved card.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { owner: true });
   if (res) return res;

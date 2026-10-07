@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-// "How we work with you": four steps in a row. Each one opens to say what happens, and the red
-// line above them draws itself as the row scrolls into view (see SiteEffects).
 export default function StepsRow({ copy }) {
   const [open, setOpen] = useState([]);
   const toggle = (i) => setOpen((list) => (list.includes(i) ? list.filter((x) => x !== i) : [...list, i]));

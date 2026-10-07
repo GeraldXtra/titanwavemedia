@@ -7,7 +7,6 @@ import site from "@/content/site";
 import { format } from "@/lib/text";
 import { waLink } from "@/lib/whatsapp";
 
-// Placeholders like [SETUP PRICE] show in grey; line breaks are kept.
 function ChatText({ text }) {
   return String(text)
     .split("\n")
@@ -27,8 +26,6 @@ function ChatText({ text }) {
     ));
 }
 
-// One message in a conversation with the site assistant: the visitor's, or the assistant's
-// with its page link and its WhatsApp handover.
 export default function AssistantMessage({ m }) {
   if (m.role === "user") {
     return (

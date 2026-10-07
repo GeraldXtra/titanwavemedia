@@ -4,8 +4,6 @@ import { useEffect, useRef } from "react";
 import Icon from "../Icon";
 import shell from "@/content/console/shell";
 
-// A window over the console, built on the browser's own <dialog>: focus stays inside it,
-// Escape closes it, and focus goes back to what opened it.
 export default function Dialog({ open, onClose, title, sub, wide = false, children, labelId }) {
   const ref = useRef(null);
   const opener = useRef(null);

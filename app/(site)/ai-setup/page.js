@@ -3,7 +3,9 @@ import Hero from "@/components/Hero";
 import SetupBuilder from "@/components/SetupBuilder";
 import { BlkHead, Cards, Cta, Gap, Section, StepList, Strip, Subnav } from "@/components/Blocks";
 import { pageMeta } from "@/lib/seo";
-import { fill, ph } from "@/lib/text";
+import Link from "next/link";
+import site from "@/content/site";
+import { fill, ph, pricesReady } from "@/lib/text";
 
 export const metadata = pageMeta({ ...aiSetup.meta, path: "/ai-setup" });
 
@@ -46,18 +48,29 @@ export default function AiSetupPage() {
 
       <Section tone="white" id="setup-price">
         <BlkHead title={price.title} />
-        <div className="prices">
-          {price.items.map((p, i) => {
-            const value = fill(p.price);
-            return (
-              <div className="price" key={i}>
-                <h3>{p.title}</h3>
-                <strong className={ph(value)}>{value}</strong>
-                <p>{p.text}</p>
-              </div>
-            );
-          })}
-        </div>
+        {pricesReady() ? (
+          <div className="prices">
+            {price.items.map((p, i) => {
+              const value = fill(p.price);
+              return (
+                <div className="price" key={i}>
+                  <h3>{p.title}</h3>
+                  <strong className={ph(value)}>{value}</strong>
+                  <p>{p.text}</p>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="price price--ask">
+            <p>{site.prices.quote}</p>
+            <div className="btns">
+              <Link className="btn" href={price.ask.href}>
+                {price.ask.label}
+              </Link>
+            </div>
+          </div>
+        )}
         <Gap>
           <Strip icon="shield" text={price.strip.text} link={price.strip.link} />
         </Gap>

@@ -6,8 +6,6 @@ import { createUserClient } from "@/lib/supabaseUser";
 
 export const runtime = "nodejs";
 
-// Signs someone in with the link from their email. The /auth/confirm page calls this, so a mail
-// scanner that only opens the link uses nothing up.
 export async function POST(request) {
   if (!sameOrigin(request)) return json({ ok: false, error: "forbidden" }, 403);
   if (!accountsReady()) return json({ ok: false, error: "off" }, 503);
@@ -15,7 +13,6 @@ export async function POST(request) {
   const tokenHash = str(body.data && body.data.token_hash).trim();
   if (body.error || !/^[a-f0-9]{20,128}$/i.test(tokenHash)) return json({ ok: false, expired: true, email: "" }, 400);
 
-  // Our own rule first: the newest link for the email, unused, within 15 minutes.
   const link = await useLink(tokenHash);
   if (!link.ok) return json({ ok: false, expired: true, email: link.email });
 

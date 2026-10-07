@@ -1,6 +1,5 @@
 "use client";
 
-// "Notify me" on a product card: brings the page's email form into view and puts the cursor in it.
 export default function NotifyButton({ label }) {
   function onClick(e) {
     const page = e.currentTarget.closest("main");

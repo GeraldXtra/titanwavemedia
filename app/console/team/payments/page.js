@@ -14,7 +14,6 @@ export const metadata = { title: copy.meta.title };
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-// Money in, what is owed, and what reached the bank. Fees and payouts are Paystack's own figures.
 export default async function TeamPaymentsPage() {
   await teamContext();
   const admin = getAdmin();
@@ -35,7 +34,6 @@ export default async function TeamPaymentsPage() {
   const k = copy.kpis;
   const count = (due.data || []).length;
 
-  // Payments that need a look: a different amount than asked, or an invoice paid twice.
   const paidCount = new Map();
   list.filter((p) => p.status === "success").forEach((p) => paidCount.set(p.invoice_id, (paidCount.get(p.invoice_id) || 0) + 1));
   const attention = [

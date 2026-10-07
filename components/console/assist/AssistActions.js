@@ -9,11 +9,8 @@ import { format } from "@/lib/text";
 import { toast } from "@/lib/toast";
 import copy from "@/content/console/assist";
 
-// The small actions on Wave Assist's conversations. `business` is set in Team view, so the
-// server knows it is a team request for that business.
 const withBusiness = (business, body) => (business ? { ...body, business } : body);
 
-// "Mark as handled" on the details a customer left.
 export function MarkHandled({ id, business, label }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -34,7 +31,6 @@ export function MarkHandled({ id, business, label }) {
   );
 }
 
-// "Delete this conversation", after a question. Back to the list once it is gone.
 export function DeleteConversation({ id, business, back }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -75,7 +71,6 @@ export function DeleteConversation({ id, business, back }) {
   );
 }
 
-// "Add an answer" on a question it couldn't answer: a small form with the question already in.
 export function AddAnswer({ questionKey, text, business, n }) {
   const router = useRouter();
   const t = copy.questions;

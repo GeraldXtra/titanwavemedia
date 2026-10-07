@@ -10,7 +10,6 @@ import invoiceCopy from "@/content/console/invoice";
 import receiptCopy from "@/content/console/receipt";
 import shell from "@/content/console/shell";
 
-// Print or save as PDF: the browser's own print, with the console around it hidden.
 export function PrintButton() {
   return (
     <button className="btn" type="button" onClick={() => window.print()}>
@@ -20,7 +19,6 @@ export function PrintButton() {
   );
 }
 
-// The team's "Send a reminder" on an invoice.
 export function RemindButton({ number, solid = false }) {
   const [busy, setBusy] = useState(false);
   async function send() {
@@ -36,7 +34,6 @@ export function RemindButton({ number, solid = false }) {
   );
 }
 
-// A receipt's actions for clients: email me a copy, and ask for a refund (owners).
 export function ReceiptActions({ number, canRefund, what }) {
   const router = useRouter();
   const r = receiptCopy.refund;

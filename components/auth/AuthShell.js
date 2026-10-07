@@ -1,46 +1,41 @@
 import "@/app/console.css";
 import Link from "next/link";
-import BrandMark from "../BrandMark";
 import Rich from "../Rich";
 import CookiePrefs from "../CookiePrefs";
+import ThemeSwitch from "../ThemeSwitch";
+import Wave from "../Wave";
 import { Year } from "../Live";
 import ConsoleSprite from "../console/ConsoleSprite";
 import site from "@/content/site";
 import copy from "@/content/console/signin";
 
-// The frame of the sign in pages: a white card on grey with our name at the top, and the
-// company line, the policies and help under it.
 export default function AuthShell({ children }) {
   return (
-    <div className="auth">
+    <div className="si">
       <ConsoleSprite />
-      <main className="auth__card" id="main">
-        <Link className="auth__brand" href="/" aria-label={copy.homeLabel}>
-          <BrandMark />
-          <span>{copy.brand}</span>
+      <Wave kind="signin" className="si__wave" fade=".si__col" />
+      <div className="si__top">
+        <Link className="si__home" href="/" aria-label={copy.homeLabel}>
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M10 3 5 8l5 5" />
+          </svg>
+          {copy.home}
         </Link>
-        {children}
+        <ThemeSwitch />
+      </div>
+      <main className="si__main" id="main">
+        <div className="si__col">{children}</div>
       </main>
-      <footer className="afoot">
-        <p>
+      <footer className="si__foot">
+        <span>
           <Rich text={copy.footer.line} tokens={{ year: <Year initial={new Date().getFullYear()} /> }} />
-        </p>
-        <ul aria-label={copy.footer.label}>
-          <li>
-            <Link href="/privacy-policy">{copy.footer.privacy}</Link>
-          </li>
-          <li>
-            <Link href="/terms">{copy.footer.terms}</Link>
-          </li>
-          <li>
-            <CookiePrefs copy={site.cookies} />
-          </li>
-          <li>
-            <a href={site.whatsappUrl} target="_blank" rel="noopener">
-              {copy.footer.help}
-            </a>
-          </li>
-        </ul>
+        </span>
+        <nav aria-label={copy.footer.label}>
+          <Link href="/privacy-policy">{copy.footer.privacy}</Link>
+          <Link href="/terms">{copy.footer.terms}</Link>
+          <Link href="/support">{copy.footer.help}</Link>
+          <CookiePrefs copy={site.cookies} />
+        </nav>
       </footer>
     </div>
   );

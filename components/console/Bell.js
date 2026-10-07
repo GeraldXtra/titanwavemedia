@@ -7,8 +7,6 @@ import { postJson } from "@/lib/client";
 import { format } from "@/lib/text";
 import shell from "@/content/console/shell";
 
-// The bell: real unread items, checked every 15 seconds. The same check keeps the counts in the
-// side menu (invoices to pay, inbox messages) up to date through `onCounts`.
 export default function Bell({ mode, onCounts }) {
   const router = useRouter();
   const pathname = usePathname();

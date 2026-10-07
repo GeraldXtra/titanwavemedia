@@ -7,8 +7,6 @@ import { format } from "@/lib/text";
 import { toast } from "@/lib/toast";
 import copy from "@/content/console/products";
 
-// "Notify me" on a coming soon product. Pressed again, it takes the person off the list. Only
-// products on the way show it; the server refuses any other.
 export default function NotifyToggle({ slug, name, on: first, main = false }) {
   const [on, setOn] = useState(first);
   const [busy, setBusy] = useState(false);

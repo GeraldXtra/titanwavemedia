@@ -12,7 +12,6 @@ import copy from "@/content/console/settings";
 
 const t = copy.team;
 
-// Your team: everyone who can open the business on the console. Owners invite and remove.
 export default function TeamPanel({ owner, business, members }) {
   const router = useRouter();
   const [email, setEmail] = useState("");

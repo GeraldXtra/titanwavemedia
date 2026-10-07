@@ -11,7 +11,6 @@ import productList, { priceOf } from "@/content/product-list";
 import work from "@/content/work";
 import { format, isPh, ph } from "@/lib/text";
 
-// A full width block. `tone` is white, grey or black.
 export function Section({ tone = "white", id, children }) {
   return (
     <section className={`blk blk--${tone}`} id={id}>
@@ -20,7 +19,6 @@ export function Section({ tone = "white", id, children }) {
   );
 }
 
-// The big heading at the top of a block, with a line of text or a link beside it.
 export function BlkHead({ title, text, link }) {
   return (
     <div className="blk__head">
@@ -39,8 +37,6 @@ export function BlkHead({ title, text, link }) {
   );
 }
 
-// Text that may be a placeholder: a whole placeholder is plain text on an element with the
-// "ph" class (see ph() in lib/text.js); anything else can carry links and {tokens}.
 export function Copy({ text, linkClass }) {
   return isPh(text) ? text : <Rich text={text} linkClass={linkClass} />;
 }
@@ -59,7 +55,6 @@ export function Cards({ n, cards }) {
   );
 }
 
-// A numbered list of steps, as on the AI Setup page.
 export function StepList({ steps }) {
   return (
     <ol className="steps steps--list">
@@ -94,7 +89,6 @@ export function Faq({ items }) {
   );
 }
 
-// A thin bar with an icon and a line of text, and a link or button on the right.
 export function Strip({ icon, text, link, button, style, children }) {
   return (
     <div className="strip" style={style}>
@@ -113,12 +107,10 @@ export function Strip({ icon, text, link, button, style, children }) {
   );
 }
 
-// Space above a block that follows another one in the same section.
 export function Gap({ children }) {
   return <div style={{ marginTop: "var(--gap)" }}>{children}</div>;
 }
 
-// The closing "Tell us what you need" block. Pages can change the title and buttons.
 export function Cta({ cta }) {
   const c = { ...site.cta, ...cta };
   return (
@@ -142,7 +134,6 @@ export function Cta({ cta }) {
   );
 }
 
-// The "Get told when it launches" box with its email form.
 export function Notify({ title, text, thanks, inputId, source }) {
   return (
     <div className="notify">
@@ -155,7 +146,6 @@ export function Notify({ title, text, thanks, inputId, source }) {
   );
 }
 
-// A link to another website. It opens in a new tab, and screen readers are told so.
 export function OutLink({ href, label, className }) {
   return (
     <a className={className} href={href} target="_blank" rel="noopener noreferrer">
@@ -165,7 +155,6 @@ export function OutLink({ href, label, className }) {
   );
 }
 
-// A product's status: Live, Available now or Coming soon.
 export function StatusTag({ status }) {
   return (
     <span className="tag" data-status={status}>
@@ -174,8 +163,6 @@ export function StatusTag({ status }) {
   );
 }
 
-// One product from content/product-list.js. The second button depends on its status: open a
-// live product, talk to us about one that is available, or hear when one is ready.
 export function ProductCard({ item }) {
   const c = products.card;
   const values = { name: item.name, slug: item.slug };
@@ -202,8 +189,6 @@ export function ProductCard({ item }) {
   );
 }
 
-// The sideways row of product cards. With `list` (the Products page) every card shows, in rows
-// that wrap, and the filters above can hide them.
 export function ProductRow({ items, list }) {
   return (
     <div className="row" data-list={list ? "" : undefined}>
@@ -245,7 +230,6 @@ export function PostList({ items }) {
   );
 }
 
-// The "On this page" bar that follows you and lights the section you are in.
 export function Subnav({ links }) {
   return (
     <nav className="subnav" aria-label={site.onThisPage}>

@@ -20,8 +20,6 @@ const PAGES = [
   ["/refunds", 0.3],
 ];
 
-// Every product in content/product-list.js has a page. Project and post pages join the sitemap once
-// they are marked published in content/.
 function published(prefix, pages) {
   return Object.entries(pages)
     .filter(([, page]) => page.published)

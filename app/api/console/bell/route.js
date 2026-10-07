@@ -6,7 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Icons for the bell, by kind.
 const ICONS = {
   invoice_new: "card",
   payment_ok: "check",
@@ -15,6 +14,7 @@ const ICONS = {
   payment_review: "card",
   double_payment: "card",
   autopay_failed: "card",
+  assist_late: "card",
   refund_received: "card",
   refund_done: "card",
   refund_declined: "card",
@@ -35,8 +35,6 @@ function when(iso) {
   return lagosToday(0) === lagosToday(0, new Date(day)) ? lagosClock(new Date(iso)) : lagosShort(iso);
 }
 
-// The bell's items for the view the person is in, and the counts for the side menu. The
-// console asks every 15 seconds.
 export async function GET(request) {
   const { ctx, res } = await guard(request, { write: false });
   if (res) return res;
@@ -62,7 +60,6 @@ export async function GET(request) {
   return json({ ok: true, items, unread: unread.count || 0, counts: { due: due.count || 0, inbox: inbox.count || 0 } });
 }
 
-// Marks bell items as read: a list of ids, or "all".
 export async function POST(request) {
   const { ctx, res } = await guard(request);
   if (res) return res;

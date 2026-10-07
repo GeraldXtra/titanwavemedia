@@ -1,5 +1,3 @@
-// The page shown for an address that does not exist.
-
 const notFound = {
   meta: {
     title: "Page not found, Titan Wave Media",

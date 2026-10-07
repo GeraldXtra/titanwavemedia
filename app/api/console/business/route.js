@@ -6,7 +6,6 @@ import { getAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// Business details, from Settings, Profile. Owners only.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { owner: true });
   if (res) return res;

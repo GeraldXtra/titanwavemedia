@@ -9,7 +9,6 @@ import copy from "@/content/console/settings";
 
 const p = copy.profile;
 
-// Your details: your name. The email is shown but cannot be changed here.
 export function ProfileForm({ name: first, email }) {
   const router = useRouter();
   const [name, setName] = useState(first);
@@ -58,7 +57,6 @@ export function ProfileForm({ name: first, email }) {
   );
 }
 
-// Business details, for invoices. Only an owner can change them.
 export function BusinessForm({ business, owner }) {
   const router = useRouter();
   const [v, setV] = useState(business);

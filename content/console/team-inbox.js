@@ -1,5 +1,3 @@
-// Team view, Inbox: everything people send us, in one place.
-
 const teamInbox = {
   meta: { title: "Inbox, Titan Wave Media Console" },
   title: "Inbox",
@@ -11,7 +9,6 @@ const teamInbox = {
   pick: "Pick a message",
   pickText: "Choose a message on the left to read it and reply.",
 
-  // What each kind of conversation is called.
   kinds: {
     contact: "Contact form",
     quote: "Quote request",
@@ -22,7 +19,6 @@ const teamInbox = {
   },
   status: { new: "New", replied: "Replied", waiting: "Waiting on them", solved: "Solved" },
 
-  // The details shown above some messages.
   details: {
     need: "Needs",
     channel: "Answers on",
@@ -45,7 +41,6 @@ const teamInbox = {
     empty: "No messages.",
     you: "You",
     failed: "Your reply didn't send. Please try again.",
-    // Ready replies that fill the box.
     quick: ["Thanks. We'll get back to you properly today.", "Can we do a short call tomorrow?", "Your quote is ready in your console."],
     sentProject: "Sent. They see it in their project chat, and get an email.",
     sentEmail: "Sent. They get your reply by email.",

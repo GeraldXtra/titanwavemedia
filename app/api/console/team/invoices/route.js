@@ -9,8 +9,6 @@ import { getAdmin } from "@/lib/supabase";
 export const runtime = "nodejs";
 const DAYS = copy.form.dueOptions.map((o) => o.days);
 
-// Sends an invoice from Team view: it shows in the client's console straight away, and the
-// people who pay get it by email.
 export async function POST(request) {
   const { ctx, res } = await guard(request, { team: true });
   if (res) return res;

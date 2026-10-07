@@ -10,7 +10,6 @@ import { toast } from "@/lib/toast";
 import { isEmail } from "@/lib/validate";
 import copy from "@/content/console/team-members";
 
-// The owner adds and removes the people who can open Team view.
 export default function TeamMembersPanel({ owner, members }) {
   const router = useRouter();
   const [email, setEmail] = useState("");

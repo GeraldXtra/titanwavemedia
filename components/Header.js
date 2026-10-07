@@ -6,14 +6,12 @@ import { usePathname } from "next/navigation";
 import BrandMark from "./BrandMark";
 import Icon from "./Icon";
 import SiteSearch from "./SiteSearch";
+import ThemeSwitch from "./ThemeSwitch";
 import site from "@/content/site";
 import { cx } from "@/lib/text";
 
 const WIDE = "(min-width: 1000px)";
 
-// The header. From 1000px wide: the logo, the main links, Search and "Start a project".
-// Below that: the logo and a Menu button that opens a panel from the right with the search,
-// the same links and "Start a project". Neither panel traps focus: tabbing out closes it.
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,7 +32,6 @@ export default function Header() {
     if (focusBack && searchBtnRef.current) searchBtnRef.current.focus();
   }
 
-  // While the menu is open the page behind it stays still, and focus starts on its Close button.
   useEffect(() => {
     const root = document.documentElement;
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -45,7 +42,6 @@ export default function Header() {
     }
   }, [menuOpen]);
 
-  // The search panel puts focus straight into the search box.
   useEffect(() => {
     if (searchOpen) {
       const input = searchRef.current.querySelector("input");
@@ -53,7 +49,6 @@ export default function Header() {
     }
   }, [searchOpen]);
 
-  // Escape closes whichever is open and puts focus back on the button that opened it.
   useEffect(() => {
     if (!menuOpen && !searchOpen) return;
     function onKey(e) {
@@ -65,7 +60,6 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKey);
   }, [menuOpen, searchOpen]);
 
-  // A click outside the search panel closes it.
   useEffect(() => {
     if (!searchOpen) return;
     function onDown(e) {
@@ -75,14 +69,11 @@ export default function Header() {
     return () => document.removeEventListener("pointerdown", onDown);
   }, [searchOpen]);
 
-  // Going to another page closes both without moving focus.
   useEffect(() => {
     setMenuOpen(false);
     setSearchOpen(false);
   }, [pathname]);
 
-  // The menu belongs to narrow screens and the search panel to wide ones: turning a tablet or
-  // resizing the window across 1000px closes the one that no longer fits.
   useEffect(() => {
     const mq = window.matchMedia(WIDE);
     function onChange() {
@@ -93,7 +84,6 @@ export default function Header() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // Tabbing out of a panel closes it, so focus never sits behind it.
   function onMenuBlur(e) {
     if (menuOpen && e.relatedTarget && !menuRef.current.contains(e.relatedTarget)) closeMenu(false);
   }
@@ -188,6 +178,10 @@ export default function Header() {
             </li>
           ))}
         </ul>
+        <div className="mnav__theme">
+          <p id="mnav-theme">{site.theme.label}</p>
+          <ThemeSwitch labelledBy="mnav-theme" />
+        </div>
         <Link className="btn mnav__signin" href={site.header.signin.href}>
           {site.header.signin.label}
         </Link>

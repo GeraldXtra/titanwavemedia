@@ -5,10 +5,6 @@ import site from "@/content/site";
 import { clock12, workingStatus } from "@/lib/lagos";
 import { format } from "@/lib/text";
 
-// A line that follows the time in Lagos and the working hours in content/site.js, like the one
-// under the founder on About and at the top of Support. The server does not know the visitor's
-// moment, so it is worked out in the browser, then again at the start of every minute.
-// `copy` holds the two lines (open and closed) and the words for the next opening time.
 export default function WorkingLine({ copy, className, id }) {
   const [now, setNow] = useState(null);
 

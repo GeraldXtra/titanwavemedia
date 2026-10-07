@@ -2,8 +2,6 @@ import { ImageResponse } from "next/og";
 import site from "@/content/site";
 import { brandUri, font } from "@/lib/brandImages";
 
-// The logo at the top of every email: the wave mark and the company name on white, as a PNG
-// (email apps do not show SVG). Drawn at twice the size it is shown, for sharp screens.
 export const dynamic = "force-static";
 
 export async function GET() {

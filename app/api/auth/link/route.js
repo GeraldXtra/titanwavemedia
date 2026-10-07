@@ -9,8 +9,6 @@ import { isEmail } from "@/lib/validate";
 
 export const runtime = "nodejs";
 
-// Sends a sign in link, from Sign in, Create your account, Send it again and the expired page.
-// The answer is the same whether or not the email has an account.
 export async function POST(request) {
   if (!sameOrigin(request)) return json({ ok: false, error: "forbidden" }, 403);
   if (!accountsReady()) return json({ ok: false, error: "off" }, 503);

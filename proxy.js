@@ -3,11 +3,44 @@ import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { frameAncestors } from "@/lib/assist/sites";
 
-// Runs before the console, the sign in pages and the Wave Assist chat page (see the matcher
-// below; the rest of the public website is untouched).
+const PAGE_LIMIT = 60;
+const PAGE_WINDOW = 60 * 1000;
+const pageHits = new Map();
+let pageCalls = 0;
+
+function pageAllowed(request) {
+  const forwarded = request.headers.get("x-forwarded-for");
+  const ip = (forwarded ? forwarded.split(",")[0].trim() : request.headers.get("x-real-ip")) || "unknown";
+  const now = Date.now();
+  const recent = (pageHits.get(ip) || []).filter((t) => t > now - PAGE_WINDOW);
+  const ok = recent.length < PAGE_LIMIT;
+  if (ok) recent.push(now);
+  pageHits.set(ip, recent);
+  if (++pageCalls % 500 === 0 || pageHits.size > 20000) {
+    for (const [k, list] of pageHits) if (!list.length || list[list.length - 1] <= now - PAGE_WINDOW) pageHits.delete(k);
+  }
+  return ok ? 0 : Math.max(1, Math.ceil((recent[0] + PAGE_WINDOW - now) / 1000));
+}
+
 export async function proxy(request) {
   const chat = request.nextUrl.pathname === "/assist/chat";
   try {
+    if (chat) {
+      const wait = pageAllowed(request);
+      if (wait) {
+        return new NextResponse("Too many requests. Please try again in a minute.", {
+          status: 429,
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8",
+            "Retry-After": String(wait),
+            "Cache-Control": "no-store",
+            "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
+            "X-Content-Type-Options": "nosniff",
+            "X-Robots-Tag": "noindex, nofollow",
+          },
+        });
+      }
+    }
     return chat ? await assistChat(request) : await renewSession(request);
   } catch (error) {
     console.error("[proxy] Failed, so the page carries on without it:", error);
@@ -15,8 +48,6 @@ export async function proxy(request) {
   }
 }
 
-// The console and sign in: renews the sign in cookie when it is close to running out, so
-// pages, which cannot set cookies themselves, always see a fresh one.
 async function renewSession(request) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -42,24 +73,14 @@ async function renewSession(request) {
       },
     },
   });
-  // Loads the session and renews it if needed. Who the person is gets checked again, against
-  // the sign in service, by every page and every action.
   await supabase.auth.getClaims();
   return response;
 }
-
-// ---------------------------------------------------------------------------------------------
-// The Wave Assist chat page. It is shown in a frame on businesses' websites, so it gets its own
-// headers here instead of the site's (next.config.mjs leaves it out): frame-ancestors lists our
-// own site (for the console's test chat) and the websites the business added, so browsers refuse
-// to show it anywhere else. No sign in work happens for it.
 
 const SITES_TTL = 60 * 1000;
 const sitesKept = new Map();
 let db = null;
 
-// The business's websites for a chat's public id, kept for up to a minute. Throws when the
-// database cannot be read, so the page falls back to our own site only.
 async function chatSites(publicId) {
   if (!/^[a-z0-9]{8,32}$/.test(publicId)) return [];
   const now = Date.now();

@@ -8,8 +8,6 @@ import { addMessage } from "@/lib/threads";
 
 export const runtime = "nodejs";
 
-// One conversation in the Team inbox: read it (the inbox asks every 15 seconds), or reply.
-// "list" as the id gives the whole inbox, for the same refresh.
 export async function GET(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { write: false, team: true });

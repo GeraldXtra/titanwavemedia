@@ -6,7 +6,6 @@ import copy from "@/content/console/start";
 
 export const runtime = "nodejs";
 
-// Makes the business for someone who has none yet, with them as its owner.
 export async function POST(request) {
   const { ctx, res } = await guard(request);
   if (res) return res;
@@ -17,7 +16,6 @@ export async function POST(request) {
   if (!name || !business) return json({ ok: false, message: !name ? copy.errors.name : copy.errors.business }, 400);
 
   const admin = getAdmin();
-  // An invite waiting for this email is taken as the person's choice not to join it.
   await admin.from("business_members").delete().eq("email", ctx.email).is("joined_at", null);
   const { data: biz, error } = await admin.from("businesses").insert({ name: business, created_by: ctx.user.id }).select("id").single();
   if (error) {

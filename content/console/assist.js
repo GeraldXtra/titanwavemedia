@@ -1,7 +1,3 @@
-// Wave Assist in the console: setting it up, testing it, putting it on a website, and reading its
-// conversations. Team view shows the same pages for any business. {business} is the business's
-// name. The words customers see in the chat itself are in content/assist.js.
-
 const assist = {
   meta: {
     title: "Wave Assist, Titan Wave Media Console",
@@ -9,17 +5,16 @@ const assist = {
   },
   title: "Wave Assist",
   lede: "Your chat assistant. Teach it about your business, test it, put it on your website, and read every conversation it has.",
-  // Team view, above the same pages.
   teamTitle: "Wave Assist for {business}",
   teamLede: "You can change anything here for them. Every change you make goes in the team log.",
   teamCrumb: "Assistants",
 
-  // The on and off switch at the top.
   switch: {
     label: "Answer customers on your websites",
     on: "On. The chat shows on the websites in your setup.",
     off: "Off. The chat doesn't show anywhere. You can still test it.",
     noSites: "Add a website in Setup, or the chat has nowhere to show.",
+    noReach: "Add a WhatsApp number, a phone number or an email in Setup first, so customers can always reach a person.",
     turnedOn: "Wave Assist is on. It shows on your websites within a minute.",
     turnedOff: "Wave Assist is off. It goes from your websites within a minute.",
   },
@@ -34,7 +29,6 @@ const assist = {
     questions: "Questions it couldn't answer",
   },
 
-  // The numbers at the top. Test chats are never counted. Times are Lagos time.
   stats: {
     label: "Wave Assist in numbers",
     conversations: "Conversations, last 30 days",
@@ -54,7 +48,6 @@ const assist = {
     noneSub: "Nothing to count yet",
   },
 
-  // Setup: one form, saved with one button.
   setup: {
     title: "What your assistant knows",
     text: "It answers only from what you write here. Write it the way you'd explain it to someone new on your team.",
@@ -68,7 +61,7 @@ const assist = {
     hours: "Opening hours",
     areas: "Where you deliver or work",
     reach: "How customers reach a person",
-    reachText: "When it isn't sure, it offers your WhatsApp. It can also give your phone number and email when a customer asks.",
+    reachText: "Add at least one of these. Your assistant can't be switched on without one, because customers must always be able to reach a person. When it isn't sure, or a customer asks for a person, it shows every way you add here.",
     whatsapp: "WhatsApp number",
     whatsappHint: "With the country code. We add Nigeria's 234 to a number that starts with 0.",
     phone: "Phone number",
@@ -84,7 +77,43 @@ const assist = {
     qaEmpty: "No questions yet. Add the ones your customers ask most.",
     extra: "Anything else it should know",
     extraHint: "Paste anything that helps: how to pay, how long delivery takes, your returns policy.",
-    extraCount: "{count} of 20,000 characters",
+    knowledge: "{count} of 50,000 characters used, across everything it knows.",
+    docs: {
+      title: "Documents",
+      text: "Add a price list, a menu, a policy or a guide as a PDF, a Word file (.docx) or a plain text file (.txt). We take the text out, and you check it before it's added. Up to 5 documents, each up to 4 MB. We don't keep the file itself.",
+      count: "{count} of 5",
+      add: "Add a document",
+      reading: "Reading {name}",
+      rules: "PDF, Word (.docx) or plain text (.txt), up to 4 MB.",
+      empty: "No documents yet.",
+      chars: "{count} characters",
+      edit: "Check the text",
+      editLabel: "Check the text of {name}",
+      remove: "Remove {name}",
+      reviewTitle: "Check the text from {name}",
+      reviewText: "This is the text we took out of your document. Change anything that's wrong, and take out anything your assistant shouldn't say to customers. Then add it.",
+      nameLabel: "Name",
+      textLabel: "The text",
+      cut: "This document is longer than your assistant can keep, so only its first 50,000 characters are here.",
+      addIt: "Add it",
+      keep: "Keep these changes",
+      cancel: "Cancel",
+      added: "{name} was added. Save changes to keep it.",
+      changed: "{name} was changed. Save changes to keep it.",
+      removed: "{name} was removed. Save changes to keep it.",
+      full: "That's 5 documents, the most it can keep. Remove one to add another.",
+      errors: {
+        type: "We can read PDF, Word (.docx) and plain text (.txt) files. Save it as one of those, or paste the text in Anything else it should know.",
+        size: "That file is over 4 MB. Make it smaller, or paste its text in Anything else it should know.",
+        scan: "This PDF has no text we can read. It may be a scan or a photo of a page. Please paste its text in Anything else it should know instead.",
+        empty: "We couldn't find any text in that file. Please paste its text in Anything else it should know instead.",
+        locked: "That file is locked with a password. Save a copy without the password, or paste its text instead.",
+        read: "We couldn't read that file. Try saving it again as a PDF, Word or text file, or paste its text instead.",
+        slow: "That file took too long to read. Try a smaller file, or paste its text instead.",
+        limit: "You've added a lot of documents in the last hour. Please try again later.",
+        text: "Add some text, or press Cancel.",
+      },
+    },
     chat: "The chat",
     greeting: "Greeting",
     greetingHint: "The first message customers see. Left empty, it says: {greeting}",
@@ -99,7 +128,6 @@ const assist = {
     textOn: "Text on the button: {text}. Contrast {ratio} to 1.",
     white: "white",
     black: "black",
-    // When neither white nor black text reaches 4.6:1 on the colour picked.
     adjusted: "Neither white nor black text was easy to read on that colour, so we made it a little {way} to reach 4.6 to 1. The button uses {color}.",
     darker: "darker",
     lighter: "lighter",
@@ -129,7 +157,6 @@ const assist = {
     save: "Save changes",
     saved: "Saved. Your changes show on your websites within a minute.",
     savedAt: "Saved at {time}. Your changes show on your websites within a minute.",
-    // The words for the codes from lib/assist/setup.js.
     errors: {
       summary: "Some things need fixing before this can be saved. They're marked below.",
       long: "That's too long. It can be up to {max} characters.",
@@ -142,10 +169,12 @@ const assist = {
       startersLong: "A starter question can be up to 150 characters.",
       color: "That isn't a colour code. Use a # and 6 letters or numbers.",
       sites: "Check the websites list.",
+      reach: "Your assistant is on, so keep at least one way for customers to reach a person, or switch it off first.",
+      knowledge: "Everything it knows can be up to 50,000 characters, and this comes to {count}. Shorten something, or remove a document.",
+      docEmpty: "Each document needs a name and some text.",
     },
   },
 
-  // Test: the real chat page, in a frame.
   test: {
     title: "Try your assistant",
     text: "This is the real chat, with your saved setup. Ask it what your customers ask. Save any changes in Setup first.",
@@ -157,7 +186,6 @@ const assist = {
     noToken: "The test chat can't open right now. Please try again in a moment.",
   },
 
-  // Install: the one line of code, and where to paste it.
   install: {
     noSitesTitle: "Add your website first",
     noSitesText: "The chat only shows on the websites you list. Add yours in Setup, then come back here for the code.",
@@ -195,7 +223,6 @@ const assist = {
     csp: "Most websites don't set one. If yours does, add {site} to its script-src and frame-src, or the browser will block the chat.",
     send: "Send these steps to my web person",
     sendHelp: "Opens an email with the code and these steps, ready to send.",
-    // The email "Send these steps to my web person" opens. {code} is the line of code.
     mail: {
       subject: "Please add our website chat: one line of code",
       intro: "Hello,\r\n\r\nPlease add our website chat, Wave Assist from Titan Wave Media, to our website. It needs this one line on every page, just before the end of the body:",
@@ -205,7 +232,6 @@ const assist = {
     },
   },
 
-  // Conversations: every conversation, newest first.
   conversations: {
     waitingTitle: "Waiting for you",
     waitingText: "These customers left their details. Get back to them, then mark each one as handled.",
@@ -220,6 +246,7 @@ const assist = {
     open: "Open",
     openLabel: "Open the conversation from {date}",
     openWith: "Open the conversation with {name}",
+    noConversation: "Left without a conversation, so there is nothing to open.",
     chartTitle: "Conversations a day",
     chartSub: "Last 14 days, Lagos time",
     chartDay: "{day}: {count}",
@@ -245,7 +272,6 @@ const assist = {
     kept: "Conversations are kept for 6 months, then deleted.",
   },
 
-  // One conversation, in full.
   conversation: {
     crumb: "Conversations",
     title: "Conversation",
@@ -272,7 +298,6 @@ const assist = {
     missing: "This conversation isn't here. It may have been deleted.",
   },
 
-  // Questions it couldn't answer, grouped when they're the same.
   questions: {
     title: "Questions it couldn't answer",
     text: "What customers asked that your setup didn't answer. The same question asked more than once shows once. Add an answer, and it uses it from then on.",
@@ -298,13 +323,42 @@ const assist = {
     more: "These are the {count} questions asked most.",
   },
 
-  // Team view only, under the switch.
   team: {
     limit: "Monthly limit",
     limitHint: "Conversations a Lagos calendar month. After that, new conversations only offer a person.",
     limitSave: "Save the limit",
     limitSaved: "The monthly limit is now {limit}.",
     limitError: "Use a whole number from 0 to 1,000,000.",
+    planTitle: "Plan and billing",
+    planText: "The monthly price and the conversations it covers. A new price applies from the next invoice. Nothing is charged while the price is empty.",
+    price: "Monthly price in naira",
+    priceHint: "Leave it empty for no price yet. From ₦100.",
+    priceError: "Use a price from ₦100 to ₦1,000,000,000, or leave it empty.",
+    priceNeeded: "Billing is on, so keep a price, or switch billing off first.",
+    planSave: "Save the plan",
+    planSaved: "The plan is saved: {price} a month, up to {limit} conversations.",
+    planSavedNoPrice: "The plan is saved with no price, up to {limit} conversations a month.",
+    billing: "Send a Wave Assist invoice every month",
+    billingOn: "On. The next invoice is on {date}, for {price}. It goes out with the daily run at 8 am, Lagos time.",
+    billingOff: "Off. No Wave Assist invoices are sent.",
+    billingNoPrice: "Set a price first.",
+    billingNote: "Switching billing off stops new invoices. It doesn't cancel invoices already sent.",
+    billingTurnedOn: "Billing is on. The first invoice goes out on {date}.",
+    billingTurnedOff: "Billing is off. No new Wave Assist invoices will be sent.",
+  },
+
+  plan: {
+    title: "Your plan",
+    priceLabel: "Price",
+    limitLabel: "Conversations",
+    price: "{price} a month",
+    noPrice: "No price yet",
+    limit: "Up to {limit} conversations a month",
+    next: "Next invoice: {date}",
+    notBilled: "We haven't started monthly invoices for Wave Assist yet.",
+    change: "Your plan is set by our team. To change it, talk to us.",
+    talk: "Talk to us",
+    talkHref: "/contact?need=tool&product=wave-assist",
   },
 
   failed: "That didn't go through. Please try again in a moment.",

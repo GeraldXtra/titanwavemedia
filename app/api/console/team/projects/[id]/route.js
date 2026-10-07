@@ -11,17 +11,11 @@ import { format } from "@/lib/text";
 
 export const runtime = "nodejs";
 
-// The first day of next month in Lagos, when Care invoices start.
 function firstOfNextMonth() {
   const p = lagosParts();
   return new Date(Date.UTC(p.year, p.month, 1)).toISOString().slice(0, 10);
 }
 
-// Team actions on a project:
-// - step: moves it to a step. Step 5 sends the second half invoice and starts Care.
-// - note: what happens next, in our own words.
-// - quote: sends a quote (the setup price, paid in two halves, and Care a month).
-// - update: posts an update to the project's list.
 export async function POST(request, { params }) {
   const { id } = await params;
   const { ctx, res } = await guard(request, { team: true });
