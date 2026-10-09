@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Status from "@/components/console/Status";
 import { allRows } from "@/lib/assist/console";
 import { PRICES_CHECKED } from "@/lib/assist/prices";
 import { monthStart } from "@/lib/assist/store";
@@ -76,7 +77,7 @@ export default async function TeamAssistantsPage() {
                   </td>
                   <td>
                     {a ? (
-                      <span className={a.is_on ? "c-chip c-chip--ok" : "c-chip c-chip--grey"}>{a.is_on ? copy.status.on : copy.status.off}</span>
+                      <Status kind="assistant" value={a.is_on ? "on" : "off"} label={a.is_on ? copy.status.on : copy.status.off} />
                     ) : (
                       <span className="note">{copy.status.none}</span>
                     )}

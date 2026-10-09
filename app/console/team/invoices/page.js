@@ -1,5 +1,6 @@
 import Link from "next/link";
 import InvoiceBuilder from "@/components/console/team/InvoiceBuilder";
+import Status from "@/components/console/Status";
 import { teamContext } from "@/lib/console";
 import { lagosDay, naira } from "@/lib/format";
 import { getAdmin } from "@/lib/supabase";
@@ -73,7 +74,7 @@ export default async function TeamInvoicesPage() {
                     <td>{lagosDay(i.due_on)}</td>
                     <td className="num">{naira(i.total_kobo)}</td>
                     <td>
-                      <span className={`c-chip${i.status === "paid" ? " c-chip--ok" : ""}`}>{billing.invoiceStatus[i.status]}</span>
+                      <Status kind="invoice" value={i.status} label={billing.invoiceStatus[i.status]} />
                     </td>
                   </tr>
                 ))}

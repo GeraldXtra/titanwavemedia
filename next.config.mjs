@@ -1,8 +1,12 @@
+import { logMissing, missingSettings, settingUrl } from "./lib/settings.mjs";
+
 const isDev = process.env.NODE_ENV === "development";
+
+logMissing(missingSettings());
 
 function supabaseOrigin() {
   try {
-    return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).origin;
+    return new URL(settingUrl("NEXT_PUBLIC_SUPABASE_URL")).origin;
   } catch {
     return "https://*.supabase.co";
   }
@@ -48,6 +52,10 @@ const nextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
         ],
+      },
+      {
+        source: "/email/fonts/:file*",
+        headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
       },
     ];
   },

@@ -2,7 +2,7 @@ import "@/app/console.css";
 import Link from "next/link";
 import Rich from "../Rich";
 import CookiePrefs from "../CookiePrefs";
-import ThemeSwitch from "../ThemeSwitch";
+import ThemeFollow from "../ThemeFollow";
 import Wave from "../Wave";
 import { Year } from "../Live";
 import ConsoleSprite from "../console/ConsoleSprite";
@@ -13,6 +13,7 @@ export default function AuthShell({ children }) {
   return (
     <div className="si">
       <ConsoleSprite />
+      <ThemeFollow />
       <Wave kind="signin" className="si__wave" fade=".si__col" />
       <div className="si__top">
         <Link className="si__home" href="/" aria-label={copy.homeLabel}>
@@ -21,7 +22,6 @@ export default function AuthShell({ children }) {
           </svg>
           {copy.home}
         </Link>
-        <ThemeSwitch />
       </div>
       <main className="si__main" id="main">
         <div className="si__col">{children}</div>

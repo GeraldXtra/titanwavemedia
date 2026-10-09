@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { frameAncestors } from "@/lib/assist/sites";
+import { setting, settingUrl, supabaseUrl } from "@/lib/settings.mjs";
 
 const PAGE_LIMIT = 60;
 const PAGE_WINDOW = 60 * 1000;
@@ -49,8 +50,8 @@ export async function proxy(request) {
 }
 
 async function renewSession(request) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const url = settingUrl("NEXT_PUBLIC_SUPABASE_URL");
+  const key = setting("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
   if (!url || !key) return NextResponse.next({ request });
 
   let response = NextResponse.next({ request });
@@ -86,8 +87,8 @@ async function chatSites(publicId) {
   const now = Date.now();
   const hit = sitesKept.get(publicId);
   if (hit && now - hit.at < SITES_TTL) return hit.sites;
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_KEY;
+  const url = supabaseUrl();
+  const key = setting("SUPABASE_SERVICE_KEY");
   if (!url || !key) throw new Error("the database is not set up");
   if (!db) db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
   const { data, error } = await db.from("assistants").select("sites").eq("public_id", publicId).abortSignal(AbortSignal.timeout(4000)).maybeSingle();

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import { RemindButton } from "@/components/console/DocActions";
+import Status from "@/components/console/Status";
 import { paystackTestMode } from "@/lib/accounts";
 import { teamContext } from "@/lib/console";
 import { lagosDay, lagosParts, naira } from "@/lib/format";
@@ -177,7 +178,7 @@ export default async function TeamPaymentsPage() {
                       <td>{lagosDay(s.settlement_date || s.createdAt)}</td>
                       <td className="num">{naira(s.total_amount)}</td>
                       <td>
-                        <span className={`c-chip${s.status === "success" ? " c-chip--ok" : ""}`}>{copy.payouts.states[s.status] || s.status}</span>
+                        <Status kind="payout" value={s.status} label={copy.payouts.states[s.status] || s.status} />
                       </td>
                     </tr>
                   ))}

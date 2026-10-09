@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BillingMethods from "@/components/console/BillingMethods";
 import PlanCard from "@/components/console/assist/PlanCard";
+import Status from "@/components/console/Status";
 import { nextInvoiceOn } from "@/lib/assist/console";
 import { clientContext } from "@/lib/console";
 import { cardBadge, cardExpiry, cardLabel } from "@/lib/cards";
@@ -48,7 +49,7 @@ export default async function BillingPage({ searchParams }) {
   if (tab === "overview") {
     panel = (
       <>
-        <div className="c-stats" style={{ "--n": 3 }}>
+        <div className="c-stats c-stats--3">
           <div className={`c-stat${due.length ? " c-stat--strong" : ""}`}>
             <small>{o.toPay}</small>
             <b>{naira(dueTotal)}</b>
@@ -160,7 +161,7 @@ export default async function BillingPage({ searchParams }) {
                     <td>{lagosDay(i.due_on)}</td>
                     <td className="num">{naira(i.total_kobo)}</td>
                     <td>
-                      <span className={`c-chip${i.status === "paid" ? " c-chip--ok" : ""}`}>{copy.invoiceStatus[i.status]}</span>
+                      <Status kind="invoice" value={i.status} label={copy.invoiceStatus[i.status]} />
                     </td>
                     <td>
                       <span className="btns">
@@ -230,7 +231,7 @@ export default async function BillingPage({ searchParams }) {
                       <td>{methodLabel(p)}</td>
                       <td className="num">{naira(p.amount_kobo)}</td>
                       <td>
-                        <span className={`c-chip${p.status === "success" ? " c-chip--ok" : p.status === "failed" ? " c-chip--danger" : ""}`}>{copy.paymentStatus[p.status]}</span>
+                        <Status kind="payment" value={p.status} label={copy.paymentStatus[p.status]} />
                       </td>
                       <td>
                         {r ? (

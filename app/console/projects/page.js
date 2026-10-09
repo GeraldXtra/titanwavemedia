@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import { clientContext, projectStatus, stepName } from "@/lib/console";
+import Status from "@/components/console/Status";
+import { clientContext, projectStatus, projectStatusKey, stepName } from "@/lib/console";
 import { format } from "@/lib/text";
 import copy from "@/content/console/projects";
 
@@ -37,7 +38,7 @@ export default async function ProjectsPage() {
               {p.summary && <p>{p.summary.slice(0, 160)}</p>}
               <div className="c-tile__foot">
                 <span>{format(copy.stepOf, { n: p.step, step: stepName(p.step) })}</span>
-                <span className="c-chip c-chip--solid">{projectStatus(p, waiting.has(p.id) ? { status: "sent" } : null)}</span>
+                <Status kind="project" value={projectStatusKey(p, waiting.has(p.id) ? { status: "sent" } : null)} label={projectStatus(p, waiting.has(p.id) ? { status: "sent" } : null)} />
               </div>
             </Link>
           ))}

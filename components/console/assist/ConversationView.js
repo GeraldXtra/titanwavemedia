@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeleteConversation, MarkHandled } from "./AssistActions";
+import Status from "../Status";
 import { loadConversationView } from "@/lib/assist/console";
 import { isUuid } from "@/lib/assist/consoleApi";
 import { lagosDayTime } from "@/lib/format";
@@ -18,7 +19,6 @@ export default async function ConversationView({ db, business, id, base, team = 
   const t = copy.conversation;
   const r = copy.conversations;
   const back = `${base}?tab=conversations`;
-  const chip = { answered: "c-chip c-chip--ok", handed_over: "c-chip c-chip--solid", unanswered: "c-chip c-chip--grey" };
   const forTeam = team ? business.id : undefined;
 
   return (
@@ -33,7 +33,7 @@ export default async function ConversationView({ db, business, id, base, team = 
           <h1>{t.title}</h1>
           <p className="c-lede">{format(t.started, { date: lagosDayTime(c.created_at) })}</p>
         </div>
-        <span className={chip[c.outcome] || "c-chip"}>{r.results[c.outcome] || c.outcome}</span>
+        <Status kind="outcome" value={c.outcome} label={r.results[c.outcome] || c.outcome} />
       </div>
 
       <div className="c-split">
@@ -71,7 +71,7 @@ export default async function ConversationView({ db, business, id, base, team = 
                   <li key={h.id}>
                     <div className="c-row">
                       <b>{h.name}</b>
-                      <span className={h.handled_at ? "c-chip c-chip--ok" : "c-chip c-chip--solid"}>{h.handled_at ? format(t.handledOn, { date: lagosDayTime(h.handled_at) }) : t.waiting}</span>
+                      <Status kind="handover" value={h.handled_at ? "handled" : "waiting"} label={h.handled_at ? format(t.handledOn, { date: lagosDayTime(h.handled_at) }) : t.waiting} />
                     </div>
                     <dl className="as-dl">
                       <dt>{r.phone}</dt>

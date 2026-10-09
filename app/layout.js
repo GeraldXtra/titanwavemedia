@@ -1,4 +1,4 @@
-import { Open_Sans } from "next/font/google";
+import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import SvgSprite from "@/components/SvgSprite";
 import site from "@/content/site";
@@ -6,11 +6,11 @@ import home from "@/content/home";
 import { siteUrl } from "@/lib/seo";
 import { THEME_COLORS, THEME_SCRIPT } from "@/lib/theme";
 
-const openSans = Open_Sans({
+const plex = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-open-sans",
+  variable: "--font-plex",
 });
 
 export const metadata = {
@@ -37,7 +37,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={openSans.variable} suppressHydrationWarning>
+    <html lang="en" className={plex.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <script

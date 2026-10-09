@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import HelpForm from "@/components/console/HelpForm";
+import Status from "@/components/console/Status";
 import { clientContext } from "@/lib/console";
 import { lagosShort } from "@/lib/format";
 import { waLink } from "@/lib/whatsapp";
@@ -51,7 +52,7 @@ export default async function HelpPage() {
                       </td>
                       <td>{lagosShort(t.last_message_at)}</td>
                       <td>
-                        <span className={`c-chip ${t.status === "new" ? "c-chip--solid" : t.status === "solved" ? "c-chip--grey" : "c-chip--ok"}`}>{copy.status[t.status]}</span>
+                        <Status kind="help" value={t.status} label={copy.status[t.status]} />
                       </td>
                     </tr>
                   ))}

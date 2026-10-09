@@ -1,4 +1,5 @@
 import BrandMark from "../BrandMark";
+import Status from "./Status";
 import { lagosDay, naira } from "@/lib/format";
 import { fill, format } from "@/lib/text";
 import invoiceCopy from "@/content/console/invoice";
@@ -88,7 +89,9 @@ export function InvoiceDoc({ inv, lines, mini = false }) {
         </div>
         <div>
           <small>{d.status}</small>
-          <b>{billing.invoiceStatus[inv.status] || ""}</b>
+          <b>
+            <Status kind="invoice" value={inv.status} label={billing.invoiceStatus[inv.status] || ""} />
+          </b>
           {inv.paid_at && <span>{format(d.paidOn, { date: lagosDay(inv.paid_at) })}</span>}
         </div>
       </div>

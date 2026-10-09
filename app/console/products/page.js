@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import NotifyToggle from "@/components/console/NotifyToggle";
+import Status from "@/components/console/Status";
 import { clientContext } from "@/lib/console";
 import { format } from "@/lib/text";
 import copy, { priceOf } from "@/content/console/products";
@@ -32,7 +33,7 @@ export default async function ProductsPage() {
                     {p.name}
                   </Link>
                 </h2>
-                <span className={p.status === "soon" ? "c-chip c-chip--grey" : "c-chip c-chip--ok"}>{copy.status[p.status]}</span>
+                <Status kind="product" value={p.status} label={copy.status[p.status]} />
               </div>
               <p>{p.text}</p>
               <div className="c-tile__foot">

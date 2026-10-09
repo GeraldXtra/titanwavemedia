@@ -127,7 +127,7 @@ export default function DatasetBuilder({ copy, initial }) {
             readOnly
             value={csvText}
             aria-label={copy.csvLabel}
-            style={{ width: "100%", minHeight: 120, marginTop: 10, border: "2px solid var(--line)", padding: 10, fontSize: 14 }}
+            style={{ width: "100%", minHeight: 120, marginTop: 10, border: "1px solid var(--field-line)", borderRadius: 6, padding: 10, fontSize: 14 }}
           />
         )}
       </form>

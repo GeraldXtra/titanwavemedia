@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Chat from "../Chat";
 import Dialog from "../Dialog";
+import Status from "../Status";
 import { postJson } from "@/lib/client";
 import { format } from "@/lib/text";
 import { toast } from "@/lib/toast";
@@ -53,7 +54,7 @@ export default function InboxView({ items: firstItems, selected: firstSelected }
     }
   }
 
-  const chip = (status) => <span className={`c-chip${status === "new" ? " c-chip--solid" : " c-chip--grey"}`}>{copy.status[status]}</span>;
+  const chip = (status) => <Status kind="inbox" value={status} label={copy.status[status]} />;
   const r = copy.refund;
 
   return (
@@ -132,7 +133,7 @@ export default function InboxView({ items: firstItems, selected: firstSelected }
                     )}
                     {item.refund && (
                       <>
-                        <span className="c-chip">{r.states[item.refund.status]}</span>
+                        <Status kind="refund" value={item.refund.status} label={r.states[item.refund.status]} />
                         {item.refund.status === "requested" && (
                           <>
                             <button className="btn btn--sm btn--solid" type="button" disabled={busy} onClick={() => setConfirm("approve")}>

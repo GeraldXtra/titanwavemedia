@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Chat from "@/components/console/Chat";
+import Status from "@/components/console/Status";
 import ProjectFiles from "@/components/console/ProjectFiles";
 import ProjectControls from "@/components/console/team/ProjectControls";
 import { fileSize, teamContext } from "@/lib/console";
@@ -84,7 +85,7 @@ export default async function TeamProjectPage({ params }) {
                       , {inv.title}
                     </span>
                     <span className="c-list__end">
-                      {naira(inv.total_kobo)}, {billing.invoiceStatus[inv.status]}
+                      {naira(inv.total_kobo)}, <Status kind="invoice" value={inv.status} label={billing.invoiceStatus[inv.status]} />
                     </span>
                   </li>
                 ))}

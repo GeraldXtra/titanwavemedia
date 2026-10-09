@@ -40,7 +40,7 @@ export default function AiSetupPage() {
             </div>
           </div>
           <div>
-            <h2 style={{ fontSize: "clamp(2rem,1.3rem + 2.4vw,3.6rem)", marginBottom: 20 }}>{how.title}</h2>
+            <h2 style={{ marginBottom: 20 }}>{how.title}</h2>
             <StepList steps={how.steps} />
           </div>
         </div>

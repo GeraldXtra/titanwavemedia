@@ -6,6 +6,7 @@ import Icon from "../Icon";
 import Rich from "../Rich";
 import { Year } from "../Live";
 import Dialog from "./Dialog";
+import Status from "./Status";
 import { postJson } from "@/lib/client";
 import { remembering, setRemembering } from "@/lib/choices";
 import { format } from "@/lib/text";
@@ -84,7 +85,7 @@ export default function ConsoleFooter({ legal }) {
               <li key={k}>
                 <Icon name={k === "payments" ? "card" : "lock"} />
                 <span>{shell.status.checks[k]}</span>
-                <span className={`c-chip ${ok ? "c-chip--ok" : "c-chip--danger"} c-list__end`}>{ok ? shell.status.working : shell.status.notWorking}</span>
+                <Status kind="service" value={ok ? "working" : "down"} label={ok ? shell.status.working : shell.status.notWorking} className="c-list__end" />
               </li>
             );
           })}

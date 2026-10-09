@@ -7,6 +7,7 @@ import PlanForm from "./PlanForm";
 import SetupForm from "./SetupForm";
 import TestChat from "./TestChat";
 import CopyCode from "./CopyCode";
+import Status from "../Status";
 import { AddAnswer, MarkHandled } from "./AssistActions";
 import { FILTERS, assistStats, listConversations, nextInvoiceOn, openQuestions, waitingHandovers } from "@/lib/assist/console";
 import { hasReach } from "@/lib/assist/setup";
@@ -211,7 +212,6 @@ async function ConversationsPanel({ db, businessId, base, sp, team, stats }) {
     return `${base}?${params}`;
   };
   const business = team ? businessId : undefined;
-  const chip = { answered: "c-chip c-chip--ok", handed_over: "c-chip c-chip--solid", unanswered: "c-chip c-chip--grey" };
   const found = q ? format(list.count === 1 ? t.searchingOne : t.searching, { count: n(list.count), q }) : list.count === 1 ? t.foundOne : format(t.found, { count: n(list.count) });
 
   return (
@@ -327,7 +327,7 @@ async function ConversationsPanel({ db, businessId, base, sp, team, stats }) {
                       <td className="as-first">{c.first_message ? <span>{c.first_message}</span> : <span className="note">{t.noFirst}</span>}</td>
                       <td className="num">{n(c.message_count)}</td>
                       <td>
-                        <span className={chip[c.outcome] || "c-chip"}>{t.results[c.outcome] || c.outcome}</span>
+                        <Status kind="outcome" value={c.outcome} label={t.results[c.outcome] || c.outcome} />
                         {c.over_limit && <span className="note as-over-limit">{t.overLimit}</span>}
                       </td>
                       <td>

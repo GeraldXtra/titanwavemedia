@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Chat from "@/components/console/Chat";
+import Status from "@/components/console/Status";
 import { clientContext } from "@/lib/console";
 import { lagosDay } from "@/lib/format";
 import { format } from "@/lib/text";
@@ -28,7 +29,7 @@ export default async function TicketPage({ params }) {
           <h1>{t.subject}</h1>
           <p className="c-lede">{format(copy.ticket.opened, { date: lagosDay(t.created_at) })}</p>
         </div>
-        <span className={`c-chip ${t.status === "new" ? "c-chip--solid" : t.status === "solved" ? "c-chip--grey" : "c-chip--ok"}`}>{copy.status[t.status]}</span>
+        <Status kind="help" value={t.status} label={copy.status[t.status]} />
       </div>
       {t.status === "solved" && (
         <p className="c-card" style={{ marginBottom: 12 }}>

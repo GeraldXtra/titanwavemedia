@@ -8,6 +8,8 @@ import { getContext } from "@/lib/auth";
 import { getAdmin } from "@/lib/supabase";
 import shell from "@/content/console/shell";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: shell.title,
   robots: { index: false, follow: false },

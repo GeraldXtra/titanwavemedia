@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import Chat from "@/components/console/Chat";
 import ProjectFiles from "@/components/console/ProjectFiles";
 import QuoteCard from "@/components/console/QuoteCard";
-import { clientContext, fileSize, halves, projectStatus, stepName } from "@/lib/console";
+import Status from "@/components/console/Status";
+import { clientContext, fileSize, halves, projectStatus, projectStatusKey, stepName } from "@/lib/console";
 import { eventValues } from "@/lib/events";
 import { lagosDay, lagosShort, naira } from "@/lib/format";
 import { format } from "@/lib/text";
@@ -66,7 +67,7 @@ export default async function ProjectPage({ params }) {
           <h1>{project.title}</h1>
           {project.summary && <p className="c-lede">{project.summary.slice(0, 400)}</p>}
         </div>
-        <span className="c-chip c-chip--solid">{projectStatus(project, quote)}</span>
+        <Status kind="project" value={projectStatusKey(project, quote)} label={projectStatus(project, quote)} />
       </div>
 
       <ol className="c-steps" aria-label={copy.stepsLabel}>
@@ -167,7 +168,7 @@ export default async function ProjectPage({ params }) {
                         </td>
                         <td className="num">{naira(inv.total_kobo)}</td>
                         <td>
-                          <span className={`c-chip ${inv.status === "paid" ? "c-chip--ok" : ""}`}>{billing.invoiceStatus[inv.status]}</span>
+                          <Status kind="invoice" value={inv.status} label={billing.invoiceStatus[inv.status]} />
                         </td>
                         <td>
                           {inv.status === "due" && isOwner && (

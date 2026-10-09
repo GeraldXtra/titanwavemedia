@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import { clientContext, projectStatus, stepName } from "@/lib/console";
+import Status from "@/components/console/Status";
+import { clientContext, projectStatus, projectStatusKey, stepName } from "@/lib/console";
 import { eventText } from "@/lib/events";
 import { daysUntil, lagosClock, lagosDay, lagosParts, lagosShort, lagosToday, naira } from "@/lib/format";
 import { getAdmin } from "@/lib/supabase";
@@ -121,7 +122,7 @@ export default async function ConsoleHome() {
         {current ? (
           <div className="c-card c-card--accent">
             <div className="c-row">
-              <span className="c-chip c-chip--solid">{projectStatus(current, waitingQuote.has(current.id) ? { status: "sent" } : null)}</span>
+              <Status kind="project" value={projectStatusKey(current, waitingQuote.has(current.id) ? { status: "sent" } : null)} label={projectStatus(current, waitingQuote.has(current.id) ? { status: "sent" } : null)} />
               <span className="note">
                 {format(copy.project.stepOf, { n: current.step })}, {stepName(current.step)}
               </span>

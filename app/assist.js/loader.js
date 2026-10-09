@@ -112,8 +112,8 @@ export const LOADER = String.raw`(function () {
     button.setAttribute("aria-controls", "twm-assist-chat");
     css(button, {
       position: "fixed", "z-index": "1", margin: "0", "min-height": "48px", "max-width": "calc(100vw - 32px)",
-      padding: "12px 20px", border: "2px solid " + (text === "#000000" ? "#0b0b0b" : color), "border-radius": "24px", background: color, color: text,
-      font: "700 16px/1.25 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif", "letter-spacing": "normal",
+      padding: "12px 20px", border: "2px solid " + (text === "#000000" ? "#0b0b0b" : color), "border-radius": "6px", background: color, color: text,
+      font: "600 16px/1.25 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif", "letter-spacing": "normal",
       "text-transform": "none", "white-space": "nowrap", overflow: "hidden", "text-overflow": "ellipsis", cursor: "pointer",
       "box-shadow": shadow(), outline: "none"
     });

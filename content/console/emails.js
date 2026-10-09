@@ -2,6 +2,8 @@ const emails = {
   footer: "Titan Wave Media LTD, RC {rc}, Lagos, Nigeria.",
   reason: "You got this email because you have an account with Titan Wave Media.",
   logoAlt: "Titan Wave Media",
+  privacy: "Privacy Policy",
+  help: "Help",
   team: "Titan Wave Media",
   firstFallback: "there",
 
@@ -30,7 +32,7 @@ const emails = {
       blocks: [
         { h: "Welcome, {first}" },
         { p: "Your account for **{business}** is ready. Here's where to start:" },
-        { box: [["1", "Add your business details"], ["2", "Turn on two step sign in"], ["3", "Start a project, or follow the one we're building for you"]] },
+        { steps: ["Add your business details", "Turn on two step sign in", "Start a project, or follow the one we're building for you"] },
         { button: "Open your console" },
         { p: "Questions? Reply to this email, or message us on WhatsApp at {phone}." },
       ],
@@ -44,7 +46,9 @@ const emails = {
       blocks: [
         { h: "You have a new invoice" },
         { p: "Hi {first}, here's your invoice for **{title}**." },
-        { box: [["Invoice", "{number}"], ["Amount", "{amount}"], ["Due", "{due}"]] },
+        { amount: ["Amount", "{amount}", "Due {due}"] },
+        { box: [["Invoice", "{number}"], ["Issued", "{issued}"], ["Billed to", "{billed}"]] },
+        { lines: ["What it's for", "Amount", "Total"] },
         { button: "View and pay" },
         { p: "You can pay by card, bank transfer or USSD." },
       ],
@@ -192,6 +196,19 @@ const emails = {
       ],
       notGiven: "Not given",
       reason: "You got this email because your business uses Wave Assist from Titan Wave Media.",
+    },
+
+    contact: {
+      name: "Contact form message",
+      when: "When someone sends the contact form on the website",
+      subject: "New message from {name} ({need})",
+      preview: "{message}",
+      blocks: [
+        { h: "New message from {name}" },
+        { box: [["Name", "{name}"], ["Email", "{email}"], ["Needs", "{need}"], ["Answers on", "{channel}", true], ["Size", "{rows}", true], ["Product", "{product}", true], ["Came from", "{source}"]] },
+        { quote: "{message}" },
+      ],
+      reason: "You got this email because someone used the contact form on the Titan Wave Media website.",
     },
   },
 };

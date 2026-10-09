@@ -2,6 +2,7 @@ import { guard } from "@/lib/api";
 import { lagosClock } from "@/lib/format";
 import { json } from "@/lib/http";
 import { getAdmin } from "@/lib/supabase";
+import { setting } from "@/lib/settings.mjs";
 
 export const runtime = "nodejs";
 
@@ -19,7 +20,7 @@ async function checkDatabase() {
 async function checkPaystack() {
   try {
     const res = await fetch("https://api.paystack.co/balance", {
-      headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` },
+      headers: { Authorization: `Bearer ${setting("PAYSTACK_SECRET_KEY")}` },
       signal: AbortSignal.timeout(5000),
       cache: "no-store",
     });

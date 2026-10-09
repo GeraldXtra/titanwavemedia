@@ -17,7 +17,7 @@ export default async function TeamEmailsPage({ searchParams }) {
   const key = keys.includes(sp.e) ? sp.e : keys[0];
   const t = emails.templates[key];
   const ex = await emailExample(key);
-  const rendered = renderEmail(key, ex.data, { url: ex.url, noButtonText: key === "reply" ? emails.templates.reply.noAccount : null });
+  const rendered = renderEmail(key, ex.data, { url: ex.url, noButtonText: key === "reply" ? emails.templates.reply.noAccount : null, images: "preview" });
 
   return (
     <>
