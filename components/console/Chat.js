@@ -122,7 +122,7 @@ export default function Chat({ title, sub, status, url, initial = [], words, inp
           }}
           aria-describedby={error ? `${inputId}-err` : undefined}
         />
-        <button className="btn" type="submit" disabled={busy || !text.trim()}>
+        <button className="btn" type="submit" disabled={busy || !text.trim()} aria-busy={busy || undefined}>
           {words.send}
         </button>
       </form>

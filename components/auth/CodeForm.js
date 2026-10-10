@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import CodeBoxes from "./CodeBoxes";
 import { SignInMark } from "./Parts";
-import { postJson } from "@/lib/client";
+import { navStart, postJson } from "@/lib/client";
 import copy from "@/content/console/signin";
 
 export default function CodeForm() {
@@ -31,15 +31,17 @@ export default function CodeForm() {
     setError("");
     const { data } = await postJson("/api/auth/code", backupMode ? { backup: value } : { code: value });
     if (data.ok && data.next) {
+      navStart();
+      window.location.replace(data.next);
+      return;
+    }
+    if (data.next) {
+      navStart();
       window.location.replace(data.next);
       return;
     }
     sending.current = false;
     setBusy(false);
-    if (data.next) {
-      window.location.replace(data.next);
-      return;
-    }
     setError(data.message || copy.errors.failed);
     if (!backupMode) setCode("");
   }
@@ -79,7 +81,7 @@ export default function CodeForm() {
         <p className="si__err" id="code-err" role="alert">
           {error}
         </p>
-        <button className="btn btn--solid si__btn" type="submit" disabled={busy}>
+        <button className="btn btn--solid si__btn" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {busy ? copy.verify.code : t.button}
         </button>
       </form>

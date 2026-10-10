@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../../Icon";
 import Dialog from "../Dialog";
@@ -17,10 +17,14 @@ export default function TeamPanel({ owner, business, members }) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("member");
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [sending, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
+  const [doing, setDoing] = useState("");
   const [removing, setRemoving] = useState(null);
 
   async function invite(e) {
+    setDoing("add");
     e.preventDefault();
     if (!isEmail(email.trim())) {
       setError(t.errors.email);
@@ -34,16 +38,17 @@ export default function TeamPanel({ owner, business, members }) {
     setError("");
     setEmail("");
     toast(data.message);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   async function remove() {
+    setDoing("remove");
     setBusy(true);
     const { data } = await postJson("/api/console/members", { id: removing.id }, { method: "DELETE" });
     setBusy(false);
     setRemoving(null);
     toast(data.ok ? data.message : data.message || copy.failed);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -72,7 +77,7 @@ export default function TeamPanel({ owner, business, members }) {
             {error}
           </p>
           <div className="btns" style={{ marginTop: 10 }}>
-            <button className="btn btn--solid" type="submit" disabled={busy}>
+            <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={(busy && doing === "add") || undefined}>
               {t.invite}
             </button>
           </div>
@@ -107,7 +112,7 @@ export default function TeamPanel({ owner, business, members }) {
       <Dialog open={Boolean(removing)} onClose={() => setRemoving(null)} title={removing ? format(t.removeTitle, { email: removing.email }) : ""} labelId="tm-remove">
         <p>{format(t.removeText, { business })}</p>
         <div className="btns" style={{ marginTop: 14 }}>
-          <button className="btn btn--danger" type="button" onClick={remove} disabled={busy}>
+          <button className="btn btn--danger" type="button" onClick={remove} disabled={busy} aria-busy={(busy && doing === "remove") || undefined}>
             {t.removeButton}
           </button>
           <button className="btn" type="button" onClick={() => setRemoving(null)}>

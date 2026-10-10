@@ -3,6 +3,8 @@ import project from "@/content/project";
 import post from "@/content/post";
 import { siteUrl } from "@/lib/seo";
 
+export const revalidate = 60;
+
 const PAGES = [
   ["/", 1],
   ["/ai-setup", 0.9],

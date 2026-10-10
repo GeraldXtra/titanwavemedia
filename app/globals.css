@@ -638,3 +638,16 @@ details.promise[open] summary p{text-decoration:underline;text-decoration-thickn
 main .blk{content-visibility:auto;contain-intrinsic-size:auto 700px}
 .cv-all main .blk{content-visibility:visible}
 a[href^="mailto:"],.msg{overflow-wrap:anywhere}
+.nprog{position:fixed;top:0;left:0;right:0;z-index:2147483000;height:3px;pointer-events:none;opacity:0;transition:opacity .25s ease}
+.nprog.is-on{opacity:1;transition:none}
+.nprog i{display:block;height:100%;background:var(--action);transform:scaleX(0);transform-origin:0 50%;transition:transform .3s ease}
+.btn[aria-busy="true"],.btn[aria-busy="true"]:disabled,.btn[aria-busy="true"][aria-disabled="true"]{position:relative;overflow:hidden;opacity:.8;cursor:progress}
+.btn[aria-busy="true"]::after{content:"";position:absolute;left:0;bottom:0;width:40%;height:2px;background:currentColor;animation:btn-busy 1.1s ease-in-out infinite}
+@keyframes btn-busy{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+button[aria-busy="true"]:not(.btn){opacity:.7;cursor:progress}
+.skel{display:block;height:14px;max-width:100%;border-radius:var(--r-xs);background:var(--line-soft);animation:skel 1.6s ease-in-out infinite}
+@keyframes skel{0%,100%{opacity:1}50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){
+  .btn[aria-busy="true"]::after{animation:none;transform:none;width:100%;opacity:.5}
+  .skel{animation:none}
+}

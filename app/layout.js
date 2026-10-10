@@ -1,10 +1,13 @@
 import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import SvgSprite from "@/components/SvgSprite";
+import NavProgress from "@/components/NavProgress";
 import site from "@/content/site";
 import home from "@/content/home";
 import { siteUrl } from "@/lib/seo";
 import { THEME_COLORS, THEME_SCRIPT } from "@/lib/theme";
+
+export const revalidate = 60;
 
 const plex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -47,6 +50,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <SvgSprite />
+        <NavProgress />
         {children}
       </body>
     </html>

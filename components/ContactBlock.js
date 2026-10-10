@@ -7,6 +7,7 @@ import Icon from "./Icon";
 import LagosClock from "./LagosClock";
 import Rich from "./Rich";
 import Email from "./Email";
+import { navStart } from "@/lib/client";
 import { checkContact, LIMITS } from "@/lib/validate";
 import { emailHref, fill, isPh, ph } from "@/lib/text";
 import { contactMessage, waLink } from "@/lib/whatsapp";
@@ -83,6 +84,7 @@ export default function ContactBlock({ copy, site }) {
     if (sending) return;
     saveSummary();
     if (companyRef.current && companyRef.current.value) {
+      navStart();
       router.push("/thank-you");
       return;
     }
@@ -114,6 +116,7 @@ export default function ContactBlock({ copy, site }) {
       if (!res.ok || !data.ok) throw new Error("not sent");
       setValues(EMPTY);
       setFromBuilder(false);
+      navStart();
       router.push("/thank-you");
     } catch {
       setFailed(true);
@@ -263,7 +266,7 @@ export default function ContactBlock({ copy, site }) {
             {errors.message}
           </p>
         </div>
-        <button className="btn btn--solid" type="submit" aria-disabled={sending || undefined}>
+        <button className="btn btn--solid" type="submit" aria-disabled={sending || undefined} aria-busy={sending || undefined}>
           {f.submit}
         </button>
         {failed && (

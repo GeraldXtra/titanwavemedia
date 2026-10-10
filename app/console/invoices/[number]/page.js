@@ -25,6 +25,9 @@ export default async function InvoicePage({ params, searchParams }) {
   if (!ctx.user) redirect("/signin");
   let found = await loadInvoice(ctx, number);
   if (!found) notFound();
+  const loadCards = () => ctx.supabase.from("saved_cards").select("*").order("created_at");
+  const early = found.side === "client" && ctx.role === "owner" && found.inv.status === "due" ? Promise.resolve(loadCards()) : null;
+  if (early) early.catch(() => {});
   if (found.inv.status === "due" && (await settleWaitingFor(found.inv.id))) found = await loadInvoice(ctx, number);
   const { inv, lines, receipts, side } = found;
   const client = side === "client";
@@ -32,7 +35,7 @@ export default async function InvoicePage({ params, searchParams }) {
 
   let cards = [];
   if (canPay) {
-    const { data } = await ctx.supabase.from("saved_cards").select("*").order("created_at");
+    const { data } = await (early || loadCards());
     cards = (data || []).map((c) => ({ id: c.id, label: cardLabel(c), brand: cardBadge(c), isDefault: c.is_default }));
   }
   const paidReceipt = receipts.find((r) => r.status !== "refund_requested") || receipts[0];

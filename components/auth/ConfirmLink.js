@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignInMark } from "./Parts";
-import { postJson, rememberLink } from "@/lib/client";
+import { navStart, postJson, rememberLink } from "@/lib/client";
 import copy from "@/content/console/signin";
 
 export default function ConfirmLink() {
@@ -18,6 +18,7 @@ export default function ConfirmLink() {
     const token_hash = params.get("token_hash") || "";
     postJson("/api/auth/confirm", { token_hash }).then(({ status, data }) => {
       if (data.ok && data.next) {
+        navStart();
         window.location.replace(data.next);
         return;
       }
@@ -26,6 +27,7 @@ export default function ConfirmLink() {
         return;
       }
       rememberLink(data.email || "", 0);
+      navStart();
       router.replace("/signin/expired");
     });
   }, [router]);

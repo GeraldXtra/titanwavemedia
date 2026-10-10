@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SignInMark, TermsLine } from "./Parts";
-import { postJson, rememberLink } from "@/lib/client";
+import { navStart, postJson, rememberLink } from "@/lib/client";
 import { isEmail } from "@/lib/validate";
 import copy from "@/content/console/signin";
 
@@ -17,13 +17,24 @@ export const GOOGLE = (
   </svg>
 );
 
-export default function SignInForm({ google = false, notice = null, email: initial = "", heading = true, button = copy.signin.button }) {
+export default function SignInForm({ google = false, notice: firstNotice = null, email: initial = "", heading = true, button = copy.signin.button, fromAddress = false }) {
   const router = useRouter();
   const t = copy.signin;
   const [email, setEmail] = useState(initial);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState(firstNotice);
+
+  useEffect(() => {
+    router.prefetch("/signin/check");
+    if (!fromAddress) return;
+    const sp = new URLSearchParams(window.location.search);
+    const found = sp.get("deleted") ? t.deleted : sp.get("signed_out") ? t.signedOut : sp.get("error") === "google" ? t.googleFailed : null;
+    if (found) setNotice(found);
+    const given = sp.get("email");
+    if (given && isEmail(given)) setEmail(given);
+  }, [fromAddress, router, t]);
 
   async function submit(e) {
     e.preventDefault();
@@ -37,12 +48,13 @@ export default function SignInForm({ google = false, notice = null, email: initi
     }
     setBusy(true);
     const { data } = await postJson("/api/auth/link", { email: value, intent: "signin" });
-    setBusy(false);
     if (data.ok) {
       rememberLink(value, data.seconds);
+      navStart();
       router.push("/signin/check");
       return;
     }
+    setBusy(false);
     if (data.errors && data.errors.email) setError(data.errors.email);
     else setFormError(data.message || copy.errors.failed);
   }
@@ -92,7 +104,7 @@ export default function SignInForm({ google = false, notice = null, email: initi
             {error}
           </p>
         </div>
-        <button className="btn btn--solid si__btn" type="submit" disabled={busy}>
+        <button className="btn btn--solid si__btn" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {busy ? t.sending : button}
         </button>
         <p className="si__err" role="alert">

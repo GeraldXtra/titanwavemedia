@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../Icon";
 import { postJson } from "@/lib/client";
@@ -12,7 +12,10 @@ import copy from "@/content/console/project";
 export default function ProjectFiles({ projectId, files, words = copy.files }) {
   const router = useRouter();
   const input = useRef(null);
-  const [busy, setBusy] = useState("");
+  const [uploading, setBusy] = useState("");
+  const [last, setLast] = useState("");
+  const [pending, startTransition] = useTransition();
+  const busy = uploading || (pending ? last : "");
   const [error, setError] = useState("");
 
   async function upload(file) {
@@ -20,6 +23,7 @@ export default function ProjectFiles({ projectId, files, words = copy.files }) {
     if (!fileType(file.name)) return setError(format(words.wrongType, { name: file.name }));
     if (file.size > MAX_FILE_BYTES) return setError(format(words.tooBig, { name: file.name }));
     setBusy(file.name);
+    setLast(file.name);
     const failed = () => {
       setBusy("");
       setError(format(words.failed, { name: file.name }));
@@ -39,7 +43,7 @@ export default function ProjectFiles({ projectId, files, words = copy.files }) {
     setBusy("");
     if (!done.data.ok) return setError(done.data.message || format(words.failed, { name: file.name }));
     toast(format(words.sent, { name: file.name }));
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -47,7 +51,7 @@ export default function ProjectFiles({ projectId, files, words = copy.files }) {
       <div className="c-row">
         <h2>{words.title}</h2>
         <span className="c-upload">
-          <label className="btn btn--sm" htmlFor={`up-${projectId}`}>
+          <label className="btn btn--sm" htmlFor={`up-${projectId}`} aria-busy={busy ? "true" : undefined}>
             <Icon name="upload" />
             {busy ? format(words.sending, { name: busy }) : words.send}
           </label>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { postJson } from "@/lib/client";
 import { toast } from "@/lib/toast";
@@ -14,7 +14,9 @@ export default function InviteClient() {
   const t = copy.invite;
   const [v, setV] = useState({ business: "", name: "", email: "" });
   const [errors, setErrors] = useState({});
-  const [busy, setBusy] = useState(false);
+  const [sending, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
 
   async function submit(e) {
     e.preventDefault();
@@ -31,7 +33,7 @@ export default function InviteClient() {
     if (!data.ok) return setErrors({ [data.field || "form"]: data.message || t.errors.failed });
     setV({ business: "", name: "", email: "" });
     toast(data.message);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -62,7 +64,7 @@ export default function InviteClient() {
         {errors.form}
       </p>
       <div className="btns" style={{ marginTop: 12 }}>
-        <button className="btn btn--solid" type="submit" disabled={busy}>
+        <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {t.button}
         </button>
       </div>

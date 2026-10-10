@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import BrandMark from "./BrandMark";
 import Icon from "./Icon";
 import SiteSearch from "./SiteSearch";
@@ -14,6 +14,7 @@ const WIDE = "(min-width: 1000px)";
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const menuRef = useRef(null);
@@ -22,6 +23,10 @@ export default function Header() {
   const searchBtnRef = useRef(null);
   const section = pathname.replace(/^\/+/, "").split("/")[0] || "home";
   const current = (l) => (l.section && l.section === section ? "page" : undefined);
+
+  useEffect(() => {
+    router.prefetch(site.header.signin.href);
+  }, [router]);
 
   function closeMenu(focusBack = true) {
     setMenuOpen(false);

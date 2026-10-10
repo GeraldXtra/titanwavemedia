@@ -5,6 +5,7 @@ const shell = {
   skip: "Skip to content",
   titleEnd: ", Titan Wave Media Console",
   title: "Titan Wave Media Console",
+  loading: "Loading the page",
 
   menu: "Open the menu",
   menuClose: "Close the menu",

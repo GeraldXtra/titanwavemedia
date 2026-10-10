@@ -20,6 +20,7 @@ export default function InboxView({ items: firstItems, selected: firstSelected }
   const [item, setItem] = useState(firstSelected);
   const [confirm, setConfirm] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [doing, setDoing] = useState("");
 
   const loadList = useCallback(async () => {
     if (document.hidden) return;
@@ -43,15 +44,17 @@ export default function InboxView({ items: firstItems, selected: firstSelected }
   }
 
   async function act(action) {
+    if (busy) return;
     setBusy(true);
+    setDoing(action);
     const { data } = await postJson(`/api/console/team/threads/${item.id}/action`, { action });
-    setBusy(false);
     setConfirm(null);
     toast(data.message || copy.reply.failed);
     if (data.ok) {
-      open(item.id);
       loadList();
+      await open(item.id);
     }
+    setBusy(false);
   }
 
   const chip = (status) => <Status kind="inbox" value={status} label={copy.status[status]} />;
@@ -127,7 +130,7 @@ export default function InboxView({ items: firstItems, selected: firstSelected }
                       </Link>
                     )}
                     {item.kind === "help" && item.status !== "solved" && (
-                      <button className="btn btn--sm" type="button" disabled={busy} onClick={() => act("solve")}>
+                      <button className="btn btn--sm" type="button" disabled={busy} aria-busy={(busy && doing === "solve") || undefined} onClick={() => act("solve")}>
                         {copy.solve}
                       </button>
                     )}
@@ -162,7 +165,7 @@ export default function InboxView({ items: firstItems, selected: firstSelected }
         <Dialog open={Boolean(confirm)} onClose={() => setConfirm(null)} title={confirm === "approve" ? format(r.approveTitle, { amount: item.refund.amount }) : r.declineTitle} labelId="rf-confirm">
           <p>{confirm === "approve" ? format(r.approveText, { amount: item.refund.amount, business: item.business || item.who }) : r.declineText}</p>
           <div className="btns" style={{ marginTop: 14 }}>
-            <button className={`btn ${confirm === "approve" ? "btn--solid" : "btn--danger"}`} type="button" disabled={busy} onClick={() => act(confirm)}>
+            <button className={`btn ${confirm === "approve" ? "btn--solid" : "btn--danger"}`} type="button" disabled={busy} aria-busy={busy || undefined} onClick={() => act(confirm)}>
               {confirm === "approve" ? format(r.approveButton, { amount: item.refund.amount }) : r.declineButton}
             </button>
             <button className="btn" type="button" onClick={() => setConfirm(null)}>

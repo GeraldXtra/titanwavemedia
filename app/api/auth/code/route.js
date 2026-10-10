@@ -1,6 +1,6 @@
 import copy from "@/content/console/signin";
 import { accountsReady } from "@/lib/accounts";
-import { afterSignIn, cleanEmail, firstStep, landingFor } from "@/lib/auth";
+import { afterSignIn, cleanEmail, firstStep, getSession, landingFor, sessionEnded } from "@/lib/auth";
 import { lagosDayTime } from "@/lib/format";
 import { json, readJson, str } from "@/lib/http";
 import { check, clear, hit } from "@/lib/limits";
@@ -8,7 +8,6 @@ import { sendEmail } from "@/lib/mail";
 import { backupCodeMatches, cleanBackupCode, sameOrigin } from "@/lib/security";
 import { siteUrl } from "@/lib/seo";
 import { getAdmin } from "@/lib/supabase";
-import { createUserClient } from "@/lib/supabaseUser";
 
 export const runtime = "nodejs";
 
@@ -18,9 +17,9 @@ export async function POST(request) {
   const body = await readJson(request, 2 * 1024);
   const data = body.data && typeof body.data === "object" ? body.data : {};
 
-  const supabase = await createUserClient();
-  const { data: got } = await supabase.auth.getUser();
-  const user = got && got.user;
+  const { supabase, claims } = await getSession();
+  const { data: got } = claims ? await getAdmin().auth.admin.getUserById(claims.sub) : { data: null };
+  const user = got && got.user && got.user.id === (claims && claims.sub) && !sessionEnded(got.user, claims) ? got.user : null;
   if (!user) return json({ ok: false, next: "/signin" }, 401);
   const factors = (user.factors || []).filter((f) => f.factor_type === "totp" && f.status === "verified");
   if (!factors.length) return json({ ok: true, next: "/console" });
@@ -28,8 +27,7 @@ export async function POST(request) {
   const limit = await check("code", user.id);
   if (!limit.ok) return json({ ok: false, message: copy.errors.codeTooMany }, 429, { "Retry-After": String(limit.retryAfter) });
 
-  const { data: claims } = await supabase.auth.getClaims();
-  const first = firstStep(claims && claims.claims && claims.claims.amr);
+  const first = firstStep(claims.amr);
   const userAgent = request.headers.get("user-agent");
 
   if (data.backup !== undefined) {

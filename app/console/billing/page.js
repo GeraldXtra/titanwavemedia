@@ -21,17 +21,18 @@ export default async function BillingPage({ searchParams }) {
   const db = ctx.supabase;
   const owner = ctx.role === "owner";
 
-  const [invoices, payments, projects, cards, assist] = await Promise.all([
+  const [invoices, payments, projects, cards, assist, receiptRows] = await Promise.all([
     db.from("invoices").select("id, number, title, due_on, total_kobo, status, issued_at").order("issued_at", { ascending: false }),
     db.from("payments").select("reference, invoice_id, method, channel, card_type, card_last4, amount_kobo, refunded_kobo, status, paid_at, created_at, failure_reason").order("created_at", { ascending: false }),
     db.from("projects").select("id, title, care_kobo, care_started_on, care_next_on, care_ended_on").gt("care_kobo", 0).not("care_started_on", "is", null),
     owner ? db.from("saved_cards").select("*").order("created_at") : { data: [] },
     db.from("assistants").select("monthly_limit, plan_kobo, billing_on, billing_next_on").eq("business_id", ctx.business.id).maybeSingle(),
+    db.from("receipts").select("number, payment_id, payments(reference)"),
   ]);
   const plan = assist.data && (assist.data.plan_kobo || assist.data.billing_on) ? assist.data : null;
   const inv = invoices.data || [];
   const byId = new Map(inv.map((i) => [i.id, i]));
-  const { data: receipts } = await db.from("receipts").select("number, payment_id, payments(reference)");
+  const receipts = receiptRows.data;
   const receiptFor = new Map((receipts || []).map((r) => [r.payments && r.payments.reference, r.number]));
   const due = inv.filter((i) => i.status === "due").sort((a, b) => String(a.due_on).localeCompare(String(b.due_on)));
   const dueTotal = due.reduce((a, i) => a + Number(i.total_kobo), 0);

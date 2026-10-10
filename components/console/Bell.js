@@ -13,6 +13,7 @@ export default function Bell({ mode, onCounts }) {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [unread, setUnread] = useState(0);
+  const [reading, setReading] = useState(false);
   const wrap = useRef(null);
   const btn = useRef(null);
 
@@ -54,8 +55,10 @@ export default function Bell({ mode, onCounts }) {
   }, [open]);
 
   async function read(ids) {
+    if (ids === "all") setReading(true);
     await postJson("/api/console/bell", { mode, ids });
-    load();
+    await load();
+    if (ids === "all") setReading(false);
   }
 
   return (
@@ -81,7 +84,7 @@ export default function Bell({ mode, onCounts }) {
           <div className="c-menu__head">
             <b>{shell.bell.title}</b>
             {unread > 0 && (
-              <button className="linkbtn" type="button" onClick={() => read("all")}>
+              <button className="linkbtn" type="button" disabled={reading} aria-busy={reading || undefined} onClick={() => read("all")}>
                 {shell.bell.readAll}
               </button>
             )}

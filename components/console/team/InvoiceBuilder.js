@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../../Icon";
 import { InvoiceDoc } from "../Docs";
@@ -21,7 +21,9 @@ export default function InvoiceBuilder({ clients }) {
   const [days, setDays] = useState(7);
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [sending, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
 
   const c = clients.find((x) => x.id === client);
   const priced = lines.map((l) => ({ description: l.d.trim(), quantity: Math.max(1, parseInt(l.q, 10) || 1), unit_kobo: toKobo(l.p) || 0 }));
@@ -55,7 +57,7 @@ export default function InvoiceBuilder({ clients }) {
     toast(format(f.sent, { business: c.name }));
     setLines([blank()]);
     setNote("");
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -128,7 +130,7 @@ export default function InvoiceBuilder({ clients }) {
         </div>
         <div className="c-row" style={{ marginTop: 16 }}>
           <b style={{ fontSize: 20 }}>{format(f.total, { total: naira(total) })}</b>
-          <button className="btn btn--solid" type="submit" disabled={busy}>
+          <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
             {f.send}
           </button>
         </div>

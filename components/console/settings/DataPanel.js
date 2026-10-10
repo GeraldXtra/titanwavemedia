@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Icon from "../../Icon";
 import Dialog from "../Dialog";
-import { postJson } from "@/lib/client";
+import { navStart, postJson } from "@/lib/client";
 import { format } from "@/lib/text";
 import copy from "@/content/console/settings";
 
@@ -25,6 +25,7 @@ export default function DataPanel({ owner, business, unpaid }) {
     setBusy(true);
     const { data } = await postJson("/api/console/account", { confirm: typed.trim() }, { method: "DELETE" });
     if (data.ok) {
+      navStart();
       window.location.assign("/signin?deleted=1");
       return;
     }
@@ -73,7 +74,7 @@ export default function DataPanel({ owner, business, unpaid }) {
             </p>
           </div>
           <div className="btns" style={{ marginTop: 14 }}>
-            <button className="btn btn--danger" type="submit" disabled={busy}>
+            <button className="btn btn--danger" type="submit" disabled={busy} aria-busy={busy || undefined}>
               {t.confirmButton}
             </button>
             <button className="btn" type="button" onClick={() => setOpen(false)}>

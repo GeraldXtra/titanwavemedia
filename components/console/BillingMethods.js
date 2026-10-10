@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../Icon";
 import { postJson } from "@/lib/client";
@@ -13,22 +13,28 @@ const m = copy.methods;
 
 export default function BillingMethods({ cards, autopay, autoLine }) {
   const router = useRouter();
-  const [busy, setBusy] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [doing, setDoing] = useState("");
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
+  const shows = (key) => (busy && doing === key) || undefined;
 
   async function act(action, id) {
-    setBusy(true);
+    setSending(true);
+    setDoing(`${action}:${id}`);
     const { data } = await postJson("/api/console/cards", { action, id });
-    setBusy(false);
+    setSending(false);
     toast(data.message || (data.ok ? "" : shell.failed));
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   async function auto(on) {
-    setBusy(true);
+    setSending(true);
+    setDoing("auto");
     const { data } = await postJson("/api/console/autopay", { on });
-    setBusy(false);
+    setSending(false);
     toast(data.message || (data.ok ? "" : shell.failed));
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -52,11 +58,11 @@ export default function BillingMethods({ cards, autopay, autoLine }) {
                   {c.isDefault ? (
                     <span className="c-chip c-chip--solid">{m.default}</span>
                   ) : (
-                    <button className="btn btn--sm" type="button" disabled={busy} onClick={() => act("default", c.id)}>
+                    <button className="btn btn--sm" type="button" disabled={busy} aria-busy={shows(`default:${c.id}`)} onClick={() => act("default", c.id)}>
                       {m.makeDefault}
                     </button>
                   )}
-                  <button className="btn btn--sm" type="button" disabled={busy} onClick={() => act("remove", c.id)} aria-label={`${m.remove} ${c.label}`}>
+                  <button className="btn btn--sm" type="button" disabled={busy} aria-busy={shows(`remove:${c.id}`)} onClick={() => act("remove", c.id)} aria-label={`${m.remove} ${c.label}`}>
                     {m.remove}
                   </button>
                 </span>
@@ -79,7 +85,7 @@ export default function BillingMethods({ cards, autopay, autoLine }) {
               <small id="ap-line">{autoLine}</small>
             </span>
             <label className="switch">
-              <input type="checkbox" role="switch" checked={autopay} disabled={busy || (!cards.length && !autopay)} onChange={(e) => auto(e.target.checked)} aria-labelledby="ap-label" aria-describedby="ap-line" />
+              <input type="checkbox" role="switch" checked={autopay} disabled={busy || (!cards.length && !autopay)} aria-busy={shows("auto")} onChange={(e) => auto(e.target.checked)} aria-labelledby="ap-label" aria-describedby="ap-line" />
               <span className="switch__track" aria-hidden="true" />
             </label>
           </div>

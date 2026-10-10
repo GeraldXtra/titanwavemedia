@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { postJson } from "@/lib/client";
 import { toast } from "@/lib/toast";
@@ -14,11 +14,15 @@ export default function ProjectControls({ projectId, step, nextNote, quoteLine }
   const [note, setNote] = useState(nextNote || "");
   const [q, setQ] = useState({ setup: "", care: "", summary: "" });
   const [update, setUpdate] = useState("");
-  const [busy, setBusy] = useState("");
+  const [sending, setBusy] = useState("");
+  const [last, setLast] = useState("");
+  const [pending, startTransition] = useTransition();
+  const busy = sending || (pending ? last : "");
   const [error, setError] = useState("");
 
   async function send(action, payload, done) {
     setBusy(action);
+    setLast(action);
     setError("");
     const { data } = await postJson(`/api/console/team/projects/${projectId}`, { action, ...payload });
     setBusy("");
@@ -28,7 +32,7 @@ export default function ProjectControls({ projectId, step, nextNote, quoteLine }
     }
     toast(data.message);
     if (done) done();
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -55,7 +59,7 @@ export default function ProjectControls({ projectId, step, nextNote, quoteLine }
           </p>
         </div>
         <div className="btns" style={{ marginTop: 12 }}>
-          <button className="btn btn--solid" type="submit" disabled={busy === "step"}>
+          <button className="btn btn--solid" type="submit" disabled={busy === "step"} aria-busy={busy === "step" || undefined}>
             {copy.step.button}
           </button>
         </div>
@@ -79,7 +83,7 @@ export default function ProjectControls({ projectId, step, nextNote, quoteLine }
           </p>
         </div>
         <div className="btns" style={{ marginTop: 12 }}>
-          <button className="btn" type="submit" disabled={busy === "note"}>
+          <button className="btn" type="submit" disabled={busy === "note"} aria-busy={busy === "note" || undefined}>
             {copy.next.save}
           </button>
         </div>
@@ -115,7 +119,7 @@ export default function ProjectControls({ projectId, step, nextNote, quoteLine }
           <textarea id="tp-summary" value={q.summary} maxLength={4000} onChange={(e) => setQ({ ...q, summary: e.target.value })} style={{ minHeight: 80 }} />
         </div>
         <div className="btns" style={{ marginTop: 12 }}>
-          <button className="btn" type="submit" disabled={busy === "quote"}>
+          <button className="btn" type="submit" disabled={busy === "quote"} aria-busy={busy === "quote" || undefined}>
             {copy.quote.send}
           </button>
         </div>
@@ -134,7 +138,7 @@ export default function ProjectControls({ projectId, step, nextNote, quoteLine }
           <textarea id="tp-update" value={update} maxLength={4000} placeholder={copy.update.placeholder} onChange={(e) => setUpdate(e.target.value)} style={{ minHeight: 80 }} />
         </div>
         <div className="btns" style={{ marginTop: 12 }}>
-          <button className="btn" type="submit" disabled={busy === "update" || !update.trim()}>
+          <button className="btn" type="submit" disabled={busy === "update" || !update.trim()} aria-busy={busy === "update" || undefined}>
             {copy.update.send}
           </button>
         </div>

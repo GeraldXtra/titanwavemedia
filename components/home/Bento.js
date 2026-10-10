@@ -148,7 +148,7 @@ export default function Bento({ copy, productRows = [] }) {
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
             />
-            <button className="btn btn--line btn--sm" type="submit" disabled={pending > 0}>
+            <button className="btn btn--line btn--sm" type="submit" disabled={pending > 0} aria-busy={pending > 0 || undefined}>
               {c.send}
             </button>
           </form>

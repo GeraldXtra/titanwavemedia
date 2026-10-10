@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, use, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import BrandMark from "../BrandMark";
 import Icon from "../Icon";
 import ConsoleSprite from "./ConsoleSprite";
@@ -14,10 +14,26 @@ import site from "@/content/site";
 import shell from "@/content/console/shell";
 import products from "@/content/console/products";
 
+function MenuLink({ href, children, ...rest }) {
+  const router = useRouter();
+  const warm = () => router.prefetch(href);
+  return (
+    <Link href={href} prefetch={false} onMouseEnter={warm} onFocus={warm} onTouchStart={warm} {...rest}>
+      {children}
+    </Link>
+  );
+}
+
+function SideCount({ name, live, first }) {
+  const start = use(first);
+  const n = name in live ? live[name] : start[name];
+  return n > 0 ? <span className="c-side__count">{n}</span> : null;
+}
+
 export default function ConsoleShell({ me, counts: firstCounts, legal, children }) {
   const pathname = usePathname();
   const mode = pathname.startsWith("/console/team") ? "team" : "client";
-  const [counts, setCounts] = useState(firstCounts || {});
+  const [counts, setCounts] = useState({});
   const [sideOpen, setSideOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -107,22 +123,22 @@ export default function ConsoleShell({ me, counts: firstCounts, legal, children 
         >
           <Icon name={sideOpen ? "close" : "menu"} className={null} />
         </button>
-        <Link className="c-brand" href={home} aria-label={shell.homeLabel}>
+        <MenuLink className="c-brand" href={home} aria-label={shell.homeLabel}>
           <BrandMark />
           <span className="c-brand__name">{shell.brand}</span>
           <span className="c-brand__tag">{shell.tag}</span>
-        </Link>
+        </MenuLink>
         <ConsoleSearch mode={mode} />
         {me.isTeam && (
           <nav className="c-views" aria-label={shell.views.label}>
-            <Link href="/console" aria-current={mode === "client" ? "page" : undefined}>
+            <MenuLink href="/console" aria-current={mode === "client" ? "page" : undefined}>
               {shell.views.client}
               <span className="c-views__more">{shell.views.more}</span>
-            </Link>
-            <Link href="/console/team/inbox" aria-current={mode === "team" ? "page" : undefined}>
+            </MenuLink>
+            <MenuLink href="/console/team/inbox" aria-current={mode === "team" ? "page" : undefined}>
               {shell.views.team}
               <span className="c-views__more">{shell.views.more}</span>
-            </Link>
+            </MenuLink>
           </nav>
         )}
         <Bell mode={mode} onCounts={onCounts} />
@@ -150,17 +166,17 @@ export default function ConsoleShell({ me, counts: firstCounts, legal, children 
                 {mode === "client" && (
                   <>
                     <li>
-                      <Link href="/console/settings">
+                      <MenuLink href="/console/settings">
                         <Icon name="gear" />
                         {shell.account.settings}
-                      </Link>
+                      </MenuLink>
                     </li>
                     {me.business && (
                       <li>
-                        <Link href="/console/billing">
+                        <MenuLink href="/console/billing">
                           <Icon name="card" />
                           {shell.account.billing}
-                        </Link>
+                        </MenuLink>
                       </li>
                     )}
                   </>
@@ -199,12 +215,16 @@ export default function ConsoleShell({ me, counts: firstCounts, legal, children 
                   : group.items.filter((i) => !i.owner || me.isOwner)
                 ).map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} aria-current={current(item)}>
+                    <MenuLink href={item.href} aria-current={current(item)}>
                       <Icon name={item.icon} />
                       {item.label}
                       {item.chip && <span className="c-side__soon">{item.chip}</span>}
-                      {item.count && counts[item.count] > 0 && <span className="c-side__count">{counts[item.count]}</span>}
-                    </Link>
+                      {item.count && (
+                        <Suspense fallback={null}>
+                          <SideCount name={item.count} live={counts} first={firstCounts} />
+                        </Suspense>
+                      )}
+                    </MenuLink>
                   </li>
                 ))}
               </ul>

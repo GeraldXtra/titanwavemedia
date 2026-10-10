@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Dialog from "./Dialog";
 import { postJson } from "@/lib/client";
@@ -12,14 +12,19 @@ export default function QuoteCard({ projectId, quote, isOwner, business }) {
   const router = useRouter();
   const t = copy.quote;
   const [confirm, setConfirm] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [doing, setDoing] = useState("");
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
+  const shows = (key) => (busy && doing === key) || undefined;
   const [error, setError] = useState("");
 
   async function answer(action) {
-    setBusy(true);
+    setSending(true);
+    setDoing(action);
     setError("");
     const { data } = await postJson(`/api/console/projects/${projectId}/quote`, { action });
-    setBusy(false);
+    setSending(false);
     setConfirm(false);
     if (!data.ok) {
       setError(data.message || copy.chat.failed);
@@ -27,9 +32,9 @@ export default function QuoteCard({ projectId, quote, isOwner, business }) {
     }
     if (action === "accept") {
       toast(t.acceptedToast);
-      router.refresh();
+      startTransition(() => router.refresh());
     } else {
-      router.refresh();
+      startTransition(() => router.refresh());
       const box = document.getElementById("pj-in");
       if (box) box.focus();
     }
@@ -56,10 +61,10 @@ export default function QuoteCard({ projectId, quote, isOwner, business }) {
       {quote.status === "sent" &&
         (isOwner ? (
           <div className="btns" style={{ marginTop: 14 }}>
-            <button className="btn btn--solid" type="button" onClick={() => setConfirm(true)} disabled={busy}>
+            <button className="btn btn--solid" type="button" onClick={() => setConfirm(true)} disabled={busy} aria-busy={shows("accept")}>
               {t.accept}
             </button>
-            <button className="btn" type="button" onClick={() => answer("changes")} disabled={busy}>
+            <button className="btn" type="button" onClick={() => answer("changes")} disabled={busy} aria-busy={shows("changes")}>
               {t.changes}
             </button>
           </div>
@@ -76,7 +81,7 @@ export default function QuoteCard({ projectId, quote, isOwner, business }) {
       <Dialog open={confirm} onClose={() => setConfirm(false)} title={t.confirmTitle}>
         <p>{format(t.confirmText, { first: quote.first })}</p>
         <div className="btns" style={{ marginTop: 16 }}>
-          <button className="btn btn--solid" type="button" onClick={() => answer("accept")} disabled={busy}>
+          <button className="btn btn--solid" type="button" onClick={() => answer("accept")} disabled={busy} aria-busy={shows("accept")}>
             {t.confirmButton}
           </button>
           <button className="btn" type="button" onClick={() => setConfirm(false)}>

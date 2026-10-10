@@ -9,10 +9,14 @@ const n = copy.notifications;
 
 export default function EmailPrefs({ prefs }) {
   const [v, setV] = useState(prefs);
+  const [saving, setSaving] = useState({});
 
   async function change(key, on) {
+    if (saving[key]) return;
+    setSaving((old) => ({ ...old, [key]: true }));
     setV((old) => ({ ...old, [key]: on }));
     const { data } = await postJson("/api/console/prefs", { key, on });
+    setSaving((old) => ({ ...old, [key]: false }));
     if (data.ok) toast(copy.saved);
     else {
       setV((old) => ({ ...old, [key]: !on }));
@@ -30,7 +34,7 @@ export default function EmailPrefs({ prefs }) {
             <small id={`np-${key}-help`}>{item.help}</small>
           </span>
           <label className="switch">
-            <input type="checkbox" role="switch" checked={v[key]} onChange={(e) => change(key, e.target.checked)} aria-labelledby={`np-${key}`} aria-describedby={`np-${key}-help`} />
+            <input type="checkbox" role="switch" checked={v[key]} disabled={Boolean(saving[key])} aria-busy={saving[key] || undefined} onChange={(e) => change(key, e.target.checked)} aria-labelledby={`np-${key}`} aria-describedby={`np-${key}-help`} />
             <span className="switch__track" aria-hidden="true" />
           </label>
         </div>

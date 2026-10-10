@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Dialog from "../Dialog";
 import { postJson } from "@/lib/client";
@@ -16,7 +16,9 @@ export default function TwoStep({ on }) {
   const [code, setCode] = useState("");
   const [codes, setCodes] = useState([]);
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [sending, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
 
   async function start() {
     setBusy(true);
@@ -57,13 +59,13 @@ export default function TwoStep({ on }) {
     setWin(null);
     if (!data.ok) return toast(copy.failed);
     toast(t.turnedOff);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   function closeCodes() {
     setWin(null);
     setCodes([]);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -80,6 +82,7 @@ export default function TwoStep({ on }) {
             role="switch"
             checked={on}
             disabled={busy}
+            aria-busy={busy || undefined}
             aria-labelledby="ts-label"
             aria-describedby="ts-help ts-state"
             onChange={() => (on ? setWin("off") : start())}
@@ -123,7 +126,7 @@ export default function TwoStep({ on }) {
               </p>
             </div>
             <div className="btns" style={{ marginTop: 14 }}>
-              <button className="btn btn--solid" type="submit" disabled={busy}>
+              <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
                 {t.confirm}
               </button>
             </div>
@@ -158,7 +161,7 @@ export default function TwoStep({ on }) {
       <Dialog open={win === "new"} onClose={() => setWin(null)} title={t.newCodes}>
         <p>{t.newCodesText}</p>
         <div className="btns" style={{ marginTop: 14 }}>
-          <button className="btn btn--solid" type="button" onClick={newCodes} disabled={busy}>
+          <button className="btn btn--solid" type="button" onClick={newCodes} disabled={busy} aria-busy={busy || undefined}>
             {t.newCodes}
           </button>
           <button className="btn" type="button" onClick={() => setWin(null)}>
@@ -170,7 +173,7 @@ export default function TwoStep({ on }) {
       <Dialog open={win === "off"} onClose={() => setWin(null)} title={t.offTitle}>
         <p>{t.offText}</p>
         <div className="btns" style={{ marginTop: 14 }}>
-          <button className="btn btn--danger" type="button" onClick={turnOff} disabled={busy}>
+          <button className="btn btn--danger" type="button" onClick={turnOff} disabled={busy} aria-busy={busy || undefined}>
             {t.offButton}
           </button>
           <button className="btn" type="button" onClick={() => setWin(null)}>

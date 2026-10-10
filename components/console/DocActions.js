@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../Icon";
 import Dialog from "./Dialog";
@@ -28,7 +28,7 @@ export function RemindButton({ number, solid = false }) {
     toast(data.message || shell.failed);
   }
   return (
-    <button className={`btn${solid ? " btn--solid" : " btn--sm"}`} type="button" onClick={send} disabled={busy}>
+    <button className={`btn${solid ? " btn--solid" : " btn--sm"}`} type="button" onClick={send} disabled={busy} aria-busy={busy || undefined}>
       {invoiceCopy.remind}
     </button>
   );
@@ -40,35 +40,41 @@ export function ReceiptActions({ number, canRefund, what }) {
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState(r.reasons[0]);
   const [details, setDetails] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [doing, setDoing] = useState("");
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
   const [error, setError] = useState("");
 
   async function email() {
-    setBusy(true);
+    setSending(true);
+    setDoing("email");
     const { data } = await postJson(`/api/console/receipts/${number}`, { action: "email" });
-    setBusy(false);
+    setSending(false);
     toast(data.message || shell.failed);
   }
 
   async function refund(e) {
     e.preventDefault();
-    setBusy(true);
+    if (busy) return;
+    setSending(true);
+    setDoing("refund");
     const { data } = await postJson(`/api/console/receipts/${number}`, { action: "refund", reason, details });
-    setBusy(false);
+    setSending(false);
     if (!data.ok) return setError(data.message || shell.failed);
     setOpen(false);
     toast(data.message);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
     <>
-      <button className="btn" type="button" onClick={email} disabled={busy}>
+      <button className="btn" type="button" onClick={email} disabled={busy} aria-busy={(busy && doing === "email") || undefined}>
         <Icon name="mail" />
         {receiptCopy.email}
       </button>
       {canRefund && (
-        <button className="btn" type="button" onClick={() => setOpen(true)}>
+        <button className="btn" type="button" onClick={() => setOpen(true)} disabled={busy} aria-busy={(busy && doing === "refund") || undefined}>
           {r.button}
         </button>
       )}
@@ -94,7 +100,7 @@ export function ReceiptActions({ number, canRefund, what }) {
             {error}
           </p>
           <div className="btns" style={{ marginTop: 14 }}>
-            <button className="btn btn--solid" type="submit" disabled={busy}>
+            <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={(busy && doing === "refund") || undefined}>
               {r.send}
             </button>
             <button className="btn" type="button" onClick={() => setOpen(false)}>

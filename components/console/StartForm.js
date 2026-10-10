@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { postJson } from "@/lib/client";
+import { navStart, postJson } from "@/lib/client";
 import copy from "@/content/console/start";
 
 export default function StartForm({ name: firstName = "" }) {
@@ -23,6 +23,7 @@ export default function StartForm({ name: firstName = "" }) {
     setBusy(true);
     const { data } = await postJson("/api/console/start", { name: v.name.trim(), business: v.business.trim() });
     if (data.ok) {
+      navStart();
       window.location.assign("/console");
       return;
     }
@@ -50,7 +51,7 @@ export default function StartForm({ name: firstName = "" }) {
         </div>
       ))}
       <div className="btns" style={{ marginTop: 16 }}>
-        <button className="btn btn--solid" type="submit" disabled={busy}>
+        <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {copy.button}
         </button>
       </div>

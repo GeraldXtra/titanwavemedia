@@ -2,7 +2,7 @@ import { accountsReady } from "@/lib/accounts";
 import { afterSignIn, landingFor, useLink } from "@/lib/auth";
 import { json, readJson, str } from "@/lib/http";
 import { sameOrigin } from "@/lib/security";
-import { createUserClient } from "@/lib/supabaseUser";
+import { createUserClient, markSession } from "@/lib/supabaseUser";
 
 export const runtime = "nodejs";
 
@@ -24,6 +24,7 @@ export async function POST(request) {
   }
 
   const user = data.user;
+  await markSession();
   const twoStep = (user.factors || []).some((f) => f.factor_type === "totp" && f.status === "verified");
   if (twoStep) return json({ ok: true, next: "/signin/code" });
 

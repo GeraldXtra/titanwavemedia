@@ -219,7 +219,7 @@ function FeedbackForm({ page, onDone }) {
         </p>
       </div>
       <div className="btns" style={{ marginTop: 14 }}>
-        <button className="btn btn--solid" type="submit" disabled={busy}>
+        <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {t.send}
         </button>
         <button className="btn" type="button" onClick={onDone}>

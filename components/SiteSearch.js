@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { navStart } from "@/lib/client";
 import { cx } from "@/lib/text";
 import site from "@/content/site";
 
@@ -14,7 +15,9 @@ export default function SiteSearch({ inputId, label, placeholder, light = false 
 
   function onSubmit(e) {
     e.preventDefault();
-    if (matches.length) router.push(matches[0].href);
+    if (!matches.length) return;
+    navStart(matches[0].href);
+    router.push(matches[0].href);
   }
 
   return (

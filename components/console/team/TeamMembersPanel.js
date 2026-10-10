@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../../Icon";
 import Dialog from "../Dialog";
@@ -14,10 +14,14 @@ export default function TeamMembersPanel({ owner, members }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [sending, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
+  const [doing, setDoing] = useState("");
   const [removing, setRemoving] = useState(null);
 
   async function add(e) {
+    setDoing("add");
     e.preventDefault();
     if (!isEmail(email.trim())) {
       setError(copy.errors.email);
@@ -30,16 +34,17 @@ export default function TeamMembersPanel({ owner, members }) {
     setError("");
     setEmail("");
     toast(data.message);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   async function remove() {
+    setDoing("remove");
     setBusy(true);
     const { data } = await postJson("/api/console/team/members", { id: removing.id }, { method: "DELETE" });
     setBusy(false);
     setRemoving(null);
     toast(data.message || copy.errors.failed);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -57,7 +62,7 @@ export default function TeamMembersPanel({ owner, members }) {
           </p>
         </div>
         <div className="btns" style={{ marginTop: 12 }}>
-          <button className="btn btn--solid" type="submit" disabled={busy}>
+          <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={(busy && doing === "add") || undefined}>
             {copy.form.button}
           </button>
         </div>
@@ -96,7 +101,7 @@ export default function TeamMembersPanel({ owner, members }) {
       <Dialog open={Boolean(removing)} onClose={() => setRemoving(null)} title={copy.list.remove} labelId="tmb-remove">
         <p>{removing ? format(copy.list.confirm, { email: removing.email }) : ""}</p>
         <div className="btns" style={{ marginTop: 14 }}>
-          <button className="btn btn--danger" type="button" onClick={remove} disabled={busy}>
+          <button className="btn btn--danger" type="button" onClick={remove} disabled={busy} aria-busy={(busy && doing === "remove") || undefined}>
             {copy.list.remove}
           </button>
           <button className="btn" type="button" onClick={() => setRemoving(null)}>

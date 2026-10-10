@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { postJson } from "@/lib/client";
 import { format } from "@/lib/text";
@@ -13,7 +13,9 @@ export function ProfileForm({ name: first, email }) {
   const router = useRouter();
   const [name, setName] = useState(first);
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [sending, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
 
   async function submit(e) {
     e.preventDefault();
@@ -28,7 +30,7 @@ export function ProfileForm({ name: first, email }) {
     if (!data.ok) return setError(data.message || copy.failed);
     setError("");
     toast(copy.saved);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   return (
@@ -49,7 +51,7 @@ export function ProfileForm({ name: first, email }) {
         </p>
       </div>
       <div className="btns" style={{ marginTop: 14 }}>
-        <button className="btn btn--solid" type="submit" disabled={busy}>
+        <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {p.save}
         </button>
       </div>
@@ -61,7 +63,9 @@ export function BusinessForm({ business, owner }) {
   const router = useRouter();
   const [v, setV] = useState(business);
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [sending, setBusy] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const busy = sending || pending;
 
   async function submit(e) {
     e.preventDefault();
@@ -76,7 +80,7 @@ export function BusinessForm({ business, owner }) {
     if (!data.ok) return setError(data.message || copy.failed);
     setError("");
     toast(copy.saved);
-    router.refresh();
+    startTransition(() => router.refresh());
   }
 
   const input = (k, label, props = {}) => (
@@ -104,7 +108,7 @@ export function BusinessForm({ business, owner }) {
       </p>
       {owner && (
         <div className="btns" style={{ marginTop: 14 }}>
-          <button className="btn" type="submit" disabled={busy}>
+          <button className="btn" type="submit" disabled={busy} aria-busy={busy || undefined}>
             {p.save}
           </button>
         </div>

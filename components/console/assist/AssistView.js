@@ -416,6 +416,8 @@ async function QuestionsPanel({ db, businessId, team }) {
 
 export default async function AssistView({ db, business, sp = {}, base, team = false }) {
   const tab = TABS.includes(sp.tab) ? sp.tab : "setup";
+  const early = assistStats(db, { business_id: business.id, monthly_limit: null });
+  early.catch(() => {});
   let assistant = null;
   if (!team) {
     const { data } = await db.from("assistants").select("*").eq("business_id", business.id).maybeSingle();
@@ -423,7 +425,7 @@ export default async function AssistView({ db, business, sp = {}, base, team = f
   }
   if (!assistant) assistant = await ensureAssistant(business.id);
   if (!assistant) notFound();
-  const stats = assistStats(db, assistant);
+  const stats = early.then((s) => ({ ...s, month: { ...s.month, limit: assistant.monthly_limit } }));
   stats.catch(() => {});
   const sites = Array.isArray(assistant.sites) ? assistant.sites : [];
 

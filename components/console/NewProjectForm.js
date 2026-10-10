@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { postJson } from "@/lib/client";
+import { navStart, postJson } from "@/lib/client";
 import { toast } from "@/lib/toast";
 import copy from "@/content/console/new-project";
 
@@ -25,6 +25,7 @@ export default function NewProjectForm() {
     const { data } = await postJson("/api/console/projects", { title: v.title.trim(), where: v.where, more: v.more.trim() });
     if (data.ok) {
       toast(copy.done);
+      navStart();
       router.push(`/console/projects/${data.id}`);
       router.refresh();
       return;
@@ -56,7 +57,7 @@ export default function NewProjectForm() {
         {error}
       </p>
       <div className="btns" style={{ marginTop: 14 }}>
-        <button className="btn btn--solid" type="submit" disabled={busy}>
+        <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {copy.send}
         </button>
         <Link className="btn" href="/console/projects">

@@ -21,7 +21,7 @@ export default function NotifyToggle({ slug, name, on: first, main = false }) {
   }
 
   return (
-    <button className={`btn${main && !on ? " btn--solid" : ""}${main ? "" : " btn--sm"}`} type="button" aria-pressed={on ? "true" : "false"} onClick={toggle} disabled={busy}>
+    <button className={`btn${main && !on ? " btn--solid" : ""}${main ? "" : " btn--sm"}`} type="button" aria-pressed={on ? "true" : "false"} onClick={toggle} disabled={busy} aria-busy={busy || undefined}>
       {on && <Icon name="check" />}
       {on ? copy.notified : copy.notify}
     </button>

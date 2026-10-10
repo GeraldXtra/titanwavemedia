@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { accountsReady } from "@/lib/accounts";
 import { afterSignIn, landingFor } from "@/lib/auth";
-import { createUserClient } from "@/lib/supabaseUser";
+import { createUserClient, markSession } from "@/lib/supabaseUser";
 
 export const runtime = "nodejs";
 
@@ -24,6 +24,7 @@ export async function GET(request) {
     return failed();
   }
   const user = data.user;
+  await markSession();
   if ((user.factors || []).some((f) => f.factor_type === "totp" && f.status === "verified")) {
     return NextResponse.redirect(new URL("/signin/code?via=google", request.url), 303);
   }

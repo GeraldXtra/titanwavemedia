@@ -12,6 +12,7 @@ const signin = {
   brand: "Titan Wave Media",
   homeLabel: "Titan Wave Media, home",
   home: "Home",
+  loading: "Loading the page",
 
   fields: {
     email: "Email",

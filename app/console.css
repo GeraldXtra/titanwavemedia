@@ -559,3 +559,17 @@ a.c-tile:hover h3{text-decoration:underline;text-underline-offset:4px}
   .c-main{margin:0;padding:0}
   .c-doc{border:0;max-width:none;box-shadow:none}
 }
+.skel-grow{flex:1;min-width:0}
+.skel--h{width:min(260px,70%);height:26px}
+.skel--lede{width:min(440px,90%);margin-top:12px}
+.skel--label{width:50%;height:12px}
+.skel--num{width:40%;height:24px;margin-top:10px}
+.skel--sub{width:70%;height:12px;margin-top:10px}
+.skel--h2{width:min(200px,60%);height:18px}
+.skel--row{margin-top:14px}
+.skel--mark{width:56px;height:56px;margin:0 auto 20px;border-radius:var(--r-md)}
+.skel--si-h{width:60%;height:28px;margin:0 auto}
+.skel--si-sub{width:80%;height:16px;margin:14px auto 0}
+.skel--si-label{width:30%;height:14px}
+.skel--si-field{height:44px;margin-top:8px;border-radius:var(--r-sm)}
+.skel--si-btn{height:44px;margin-top:20px;border-radius:var(--r-sm)}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { postJson } from "@/lib/client";
+import { navStart, postJson } from "@/lib/client";
 import { toast } from "@/lib/toast";
 import copy from "@/content/console/help";
 
@@ -26,12 +26,13 @@ export default function HelpForm() {
     }
     setBusy(true);
     const { data } = await postJson("/api/console/help", { subject: v.subject.trim(), message: v.message.trim() });
-    setBusy(false);
     if (!data.ok) {
+      setBusy(false);
       setErrors({ form: data.message || f.errors.failed });
       return;
     }
     toast(f.done);
+    navStart();
     router.push(`/console/help/${data.id}`);
     router.refresh();
   }
@@ -57,7 +58,7 @@ export default function HelpForm() {
         </p>
       </div>
       <div className="btns" style={{ marginTop: 14 }}>
-        <button className="btn btn--solid" type="submit" disabled={busy}>
+        <button className="btn btn--solid" type="submit" disabled={busy} aria-busy={busy || undefined}>
           {f.send}
         </button>
       </div>

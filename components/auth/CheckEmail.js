@@ -61,7 +61,7 @@ export default function CheckEmail() {
       <p className="si__help">{t.spam}</p>
       <div className="si__actions">
         {email && (
-          <button className="btn si__btn" type="button" onClick={resend} disabled={busy || left > 0}>
+          <button className="btn si__btn" type="button" onClick={resend} disabled={busy || left > 0} aria-busy={busy || undefined}>
             {left > 0 ? format(t.resendIn, { time: clock(left) }) : t.resend}
           </button>
         )}
